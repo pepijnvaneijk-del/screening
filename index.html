@@ -437,6 +437,11 @@
   .rl-knoppen .knop { font-size: 14px; padding: 8px 14px; }
   .rl-knoppen .knop-primair { flex: 0 0 auto; }
   @media (prefers-reduced-motion: reduce) { .rl-gat { transition: none; } }
+  .nm-kaart { left: 50%; top: 50%; transform: translate(-50%, -50%); }
+  .nm-kaart .knop { width: 100%; }
+  .nm-kaart .uitleg { font-size: 13px; color: var(--grijs); margin-top: -4px; }
+  .nm-kaart .linkknop { justify-self: center; color: var(--grijs); margin-top: 4px; }
+  .nm-fout { font-size: 14px; color: var(--magenta); }
 </style>
 </head>
 <body>
@@ -505,12 +510,22 @@
         <label>Rechters<textarea id="nm-rechters" spellcheck="false"></textarea></label>
         <label>Screeners<textarea id="nm-screeners" spellcheck="false"></textarea></label>
       </div>
-      <p class="hint">Delen met collega's: sla de namenlijst op als bestand en laat collega's dat bestand hier inlezen.</p>
-      <div class="knoprij">
-        <button type="button" class="knop knop-secundair" id="nm-export">Namenlijst opslaan als bestand</button>
-        <label class="knop knop-secundair bestandknop">Namenlijst inlezen
-          <input type="file" id="nm-import" accept=".json,application/json">
-        </label>
+      <div id="nm-koppeling" hidden>
+        <p class="hint">Koppel een namenbestand, bij voorkeur in een gedeelde teammap. Wijzigingen hier worden direct in dat bestand opgeslagen, zodat collega's die hetzelfde bestand koppelen dezelfde lijst gebruiken.</p>
+        <p id="nm-koppeling-status"></p>
+        <div class="knoprij">
+          <button type="button" class="knop knop-secundair" id="nm-koppel">Namenbestand koppelen</button>
+          <button type="button" class="knop knop-secundair" id="nm-ontkoppel" hidden>Ontkoppelen</button>
+        </div>
+      </div>
+      <div id="nm-handmatig">
+        <p class="hint">Delen met collega's: sla de namenlijst op als bestand en laat collega's dat bestand hier inlezen.</p>
+        <div class="knoprij">
+          <button type="button" class="knop knop-secundair" id="nm-export">Namenlijst opslaan als bestand</button>
+          <label class="knop knop-secundair bestandknop">Namenlijst inlezen
+            <input type="file" id="nm-import" accept=".json,application/json">
+          </label>
+        </div>
       </div>
       <div class="melding" id="nm-melding" role="status"></div>
     </div>
@@ -585,8 +600,9 @@
       <h3>Zakenlijst importeren</h3>
       <p>Maak in Joris een uitdraai van de zakenlijst als CSV-bestand en kies dat bestand bij <span class="ui">Instellingen</span>. Het formulier herkent de kolommen voor zaaknummer, rolnummer, rechter, eiser en gedaagde aan hun naam. Klopt een kolom niet, kies dan zelf de juiste kolom. De zakenlijst blijft alleen staan tot je de pagina sluit.</p>
       <h3>Rechters en screeners</h3>
-      <p>Zet de namen onder elkaar, één per regel. Ze verschijnen dan als keuzelijst in het formulier en blijven op deze computer bewaard.</p>
-      <p>Om de lijst met collega's te delen, klik je op <span class="ui">Namenlijst opslaan als bestand</span> en stuur je dat bestand rond. Collega's lezen het in met <span class="ui">Namenlijst inlezen</span>.</p>
+      <p>Zet de namen onder elkaar, één per regel. Ze verschijnen dan als keuzelijst in het formulier.</p>
+      <p>Bij het opstarten vraagt het formulier om het <strong>namenbestand</strong>, net als de toolkit om het databestand vraagt. Eén collega maakt het bestand aan met <span class="ui">Nieuwe namenlijst aanmaken</span>, het liefst in een gedeelde teammap. De anderen kiezen <span class="ui">Bestaande namenlijst openen</span> en koppelen hetzelfde bestand. Daarna klik je bij elke start alleen op de naam van het bestand. Wijzigingen in Instellingen worden direct in het bestand opgeslagen.</p>
+      <p class="hint">Werkt koppelen niet in jouw browser, dan zie je in Instellingen de knoppen <span class="ui">Namenlijst opslaan als bestand</span> en <span class="ui">Namenlijst inlezen</span>. Hiermee deel je de lijst handmatig.</p>
     </div>
   </section>
 
@@ -598,7 +614,7 @@
       <h3>Kan een collega mijn screening afmaken of bekijken?</h3>
       <p>Alleen via de PDF of de actielijst in Joris. Het formulier zelf deelt niets.</p>
       <h3>Mijn namenlijst is weg.</h3>
-      <p>Dat gebeurt op een andere computer of in een andere browser, of als de browsergeschiedenis is gewist. Lees de namenlijst dan opnieuw in vanuit het gedeelde bestand.</p>
+      <p>Dat gebeurt op een andere computer of in een andere browser, of als de browsergeschiedenis is gewist. Koppel dan opnieuw het namenbestand uit de teammap via <span class="ui">Instellingen</span> → <span class="ui">Namenbestand koppelen</span>.</p>
       <h3>Het kopiëren werkt niet.</h3>
       <p>Selecteer de tekst van de actielijst met de muis en kopieer met Ctrl+C.</p>
     </div>
@@ -620,13 +636,18 @@
   </div>
 </div>
 
+<div class="rl-laag" id="nm-venster" hidden>
+  <div class="rl-dek"></div>
+  <div class="rl-kaart nm-kaart" id="nm-kaart" role="dialog" aria-modal="true" aria-labelledby="nm-titel" tabindex="-1"></div>
+</div>
+
 <section id="afdruk" aria-hidden="true"></section>
 
 <script>
 // =====================================================================
 // VERSIE
 // =====================================================================
-const SCREENING_VERSIE = '2026.10.6';
+const SCREENING_VERSIE = '2026.10.7';
 
 // =====================================================================
 // FORMULIER — vragen en acties
@@ -840,6 +861,174 @@ function nmGewijzigd() {
   lsZet(LS_NAMEN, namen);
   scRenderFormulier();
   scBijwerken();
+  if (nmHandle) {
+    clearTimeout(nmGewijzigd.timer);
+    nmGewijzigd.timer = setTimeout(nmSchrijf, 600);
+  }
+}
+
+// ---------------------------------------------------------------------
+// Namenbestand koppelen (File System Access API, Edge/Chrome) — zoals het
+// databestand in de toolkit. Het koppelingsadres wordt in IndexedDB bewaard;
+// bij elke start vraagt de browser eenmalig toestemming om het te openen.
+// ---------------------------------------------------------------------
+const NM_KAN_KOPPELEN = typeof window.showOpenFilePicker === 'function';
+const NM_BESTANDSTYPE = [{ description: 'Namenlijst screeningsformulier', accept: { 'application/json': ['.json'] } }];
+let nmHandle = null;     // gekoppeld en geopend
+let nmPending = null;    // eerder gekoppeld, nog geen toestemming in deze sessie
+
+function nmIdb(modus, actie) {
+  return new Promise((ok, fout) => {
+    const req = indexedDB.open('griffiescreening', 1);
+    req.onupgradeneeded = () => req.result.createObjectStore('bestanden');
+    req.onerror = () => fout(req.error);
+    req.onsuccess = () => {
+      const tx = req.result.transaction('bestanden', modus);
+      let r;
+      try { r = actie(tx.objectStore('bestanden')); } catch (e) { fout(e); req.result.close(); return; }
+      tx.oncomplete = () => { ok(r && r.result); req.result.close(); };
+      tx.onerror = () => fout(tx.error);
+    };
+  });
+}
+async function nmIdbLees() { try { return await nmIdb('readonly', s => s.get('namen')); } catch (e) { return null; } }
+async function nmIdbZet(h) { try { await nmIdb('readwrite', s => h ? s.put(h, 'namen') : s.delete('namen')); } catch (e) { /* niet te bewaren: volgende keer opnieuw kiezen */ } }
+
+function nmData() { return { soort: 'griffie-screening-namen', versie: 1, ...namen }; }
+
+async function nmLeesBestand(handle) {
+  const data = JSON.parse(await (await handle.getFile()).text());
+  if (!data || data.soort !== 'griffie-screening-namen') throw new Error('geen namenlijst');
+  return data;
+}
+
+async function nmSchrijf() {
+  if (!nmHandle) return;
+  try {
+    const w = await nmHandle.createWritable();
+    await w.write(JSON.stringify(nmData(), null, 2));
+    await w.close();
+    nmRenderKoppeling();
+  } catch (e) {
+    nmMelding('Opslaan in ' + nmHandle.name + ' lukte niet. De wijziging staat wel in deze browser. Koppel het bestand opnieuw.', 'fout');
+  }
+}
+
+async function nmToestemming(handle) {
+  if (await handle.queryPermission({ mode: 'readwrite' }) === 'granted') return true;
+  return await handle.requestPermission({ mode: 'readwrite' }) === 'granted';
+}
+
+// Koppelt een bestand en leest de namen eruit. Geeft een foutmelding (tekst) of null.
+async function nmKoppel(handle) {
+  try {
+    if (!(await nmToestemming(handle))) return 'Geen toestemming gekregen om het bestand te openen. Probeer het opnieuw.';
+    const data = await nmLeesBestand(handle);
+    namen = { rechters: nmSchoon(data.rechters), screeners: nmSchoon(data.screeners) };
+  } catch (e) {
+    return handle.name + ' is geen namenlijst van het screeningsformulier.';
+  }
+  nmHandle = handle;
+  nmPending = null;
+  lsZet(LS_NAMEN, namen);
+  await nmIdbZet(handle);
+  nmVulVelden();
+  nmRenderKoppeling();
+  scRenderFormulier();
+  scBijwerken();
+  return null;
+}
+
+async function nmKiesBestaand() {
+  let handle;
+  try { [handle] = await window.showOpenFilePicker({ types: NM_BESTANDSTYPE, multiple: false }); }
+  catch (e) { return; }   // kiezen geannuleerd
+  const fout = await nmKoppel(handle);
+  if (fout) nmToonVenster(fout); else nmSluitVenster();
+}
+
+async function nmMaakNieuw() {
+  let handle;
+  try { handle = await window.showSaveFilePicker({ suggestedName: 'screening-namenlijst.json', types: NM_BESTANDSTYPE }); }
+  catch (e) { return; }
+  try {
+    const w = await handle.createWritable();
+    await w.write(JSON.stringify(nmData(), null, 2));
+    await w.close();
+  } catch (e) { nmToonVenster('Het bestand kon niet worden aangemaakt.'); return; }
+  const fout = await nmKoppel(handle);
+  if (fout) { nmToonVenster(fout); return; }
+  nmSluitVenster();
+  toonView('instellingen');
+  nmMelding('Namenlijst aangemaakt. Vul hieronder de namen in; ze worden direct in ' + handle.name + ' opgeslagen.', 'goed');
+}
+
+async function nmHeropen() {
+  const fout = await nmKoppel(nmPending);
+  if (fout) nmToonVenster(fout); else nmSluitVenster();
+}
+
+async function nmOntkoppel() {
+  nmHandle = null;
+  nmPending = null;
+  await nmIdbZet(null);
+  nmRenderKoppeling();
+  nmMelding('Namenbestand ontkoppeld. De namen blijven in deze browser staan.', '');
+}
+
+function nmRenderKoppeling() {
+  document.getElementById('nm-koppeling').hidden = !NM_KAN_KOPPELEN;
+  document.getElementById('nm-handmatig').hidden = NM_KAN_KOPPELEN;
+  if (!NM_KAN_KOPPELEN) return;
+  const status = document.getElementById('nm-koppeling-status');
+  status.textContent = nmHandle ? '✓ Gekoppeld aan ' + nmHandle.name + '. Wijzigingen worden direct in dit bestand opgeslagen.'
+    : nmPending ? 'Eerder gekoppeld aan ' + nmPending.name + ', maar nog niet geopend in deze sessie.'
+    : 'Geen namenbestand gekoppeld. De namen staan alleen in deze browser.';
+  document.getElementById('nm-koppel').textContent = nmHandle ? 'Ander bestand koppelen' : 'Namenbestand koppelen';
+  document.getElementById('nm-ontkoppel').hidden = !(nmHandle || nmPending);
+}
+
+function nmToonVenster(fout) {
+  const kaart = document.getElementById('nm-kaart');
+  kaart.innerHTML = '';
+  const knop = (tekst, klasse, actie) => {
+    const b = uEl('button', { type: 'button', class: klasse }, tekst);
+    b.addEventListener('click', actie);
+    return b;
+  };
+  if (nmPending) {
+    kaart.appendChild(uEl('h2', { id: 'nm-titel' }, 'Namenlijst openen'));
+    kaart.appendChild(uEl('p', null, 'Ga verder met de namenlijst die je eerder hebt gekoppeld. De browser vraagt eenmalig om toestemming.'));
+    kaart.appendChild(knop('📂 ' + nmPending.name, 'knop knop-primair', nmHeropen));
+    kaart.appendChild(knop('Ander bestand kiezen', 'knop knop-secundair', nmKiesBestaand));
+  } else {
+    kaart.appendChild(uEl('h2', { id: 'nm-titel' }, 'Namenlijst van rechters en screeners'));
+    kaart.appendChild(uEl('p', null, 'Koppel het namenbestand van je team, zodat rechters en screeners in een keuzelijst staan. Het bestand blijft op je computer of in de teammap; er gaat niets naar internet.'));
+    kaart.appendChild(knop('📂 Bestaande namenlijst openen', 'knop knop-primair', nmKiesBestaand));
+    kaart.appendChild(uEl('p', { class: 'uitleg' }, 'Heeft een collega de namenlijst al gemaakt? Kies dan deze.'));
+    kaart.appendChild(knop('Nieuwe namenlijst aanmaken', 'knop knop-secundair', nmMaakNieuw));
+    kaart.appendChild(uEl('p', { class: 'uitleg' }, 'Zet het bestand bij voorkeur in een gedeelde teammap.'));
+  }
+  if (fout) kaart.appendChild(uEl('p', { class: 'nm-fout', role: 'alert' }, fout));
+  kaart.appendChild(knop('Zonder namenlijst doorgaan', 'linkknop', nmSluitVenster));
+  document.getElementById('nm-venster').hidden = false;
+  kaart.focus();
+}
+
+function nmSluitVenster() {
+  document.getElementById('nm-venster').hidden = true;
+  nmRenderKoppeling();
+}
+
+// Bij het opstarten (na de rondleiding): vragen om het namenbestand te openen.
+let nmGestart = false;
+async function nmStart() {
+  if (nmGestart) return;
+  nmGestart = true;
+  if (!NM_KAN_KOPPELEN) return;
+  nmPending = await nmIdbLees();
+  nmRenderKoppeling();
+  nmToonVenster();
 }
 function nmMelding(tekst, soort) {
   const m = document.getElementById('nm-melding');
@@ -1452,7 +1641,7 @@ const RL_STAPPEN = [
   { titel: 'Altijd de PDF opslaan', doel: '#knop-pdf', view: 'screening', privacy: true,
     tekst: '<p>Sla het ingevulde formulier op als PDF. Je krijgt eerst te zien of er nog vragen openstaan. Kies daarna in het afdrukvenster <strong>Opslaan als PDF</strong>; de bestandsnaam staat al klaar.</p>' },
   { titel: 'Instellingen', doel: '.app-nav-btn[data-view="instellingen"]', view: 'screening',
-    tekst: '<p>Importeer hier de zakenlijst (CSV) en zet de namen van rechters en screeners in een keuzelijst. De namenlijst kun je als bestand delen met collega\'s.</p>' },
+    tekst: '<p>Importeer hier de zakenlijst (CSV) en beheer de namen van rechters en screeners. Na de rondleiding vraagt het formulier om het namenbestand van je team.</p>' },
   { titel: 'Handleiding', doel: '.app-nav-btn[data-view="handleiding"]', view: 'screening',
     tekst: '<p>In de handleiding lees je alles nog eens na. Daar kun je deze rondleiding ook opnieuw starten.</p>' },
 ];
@@ -1470,6 +1659,7 @@ function rlStop() {
   document.getElementById('rondleiding').hidden = true;
   lsZet(LS_RONDLEIDING, true);
   if (rlTerugFocus && rlTerugFocus.focus) rlTerugFocus.focus();
+  nmStart();
 }
 
 function rlToon() {
@@ -1578,7 +1768,11 @@ document.getElementById('knop-wis').addEventListener('click', scWis);
 scStandaard();
 scRenderFormulier();
 scBijwerken();
-if (!lsLees(LS_RONDLEIDING, false)) rlStart();
+document.getElementById('nm-koppel').addEventListener('click', () => nmToonVenster());
+document.getElementById('nm-ontkoppel').addEventListener('click', nmOntkoppel);
+document.getElementById('nm-venster').addEventListener('keydown', e => { if (e.key === 'Escape') nmSluitVenster(); });
+nmRenderKoppeling();
+if (!lsLees(LS_RONDLEIDING, false)) rlStart(); else nmStart();
 </script>
 </body>
 </html>
