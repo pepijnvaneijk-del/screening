@@ -437,11 +437,16 @@
   .rl-knoppen .knop { font-size: 14px; padding: 8px 14px; }
   .rl-knoppen .knop-primair { flex: 0 0 auto; }
   @media (prefers-reduced-motion: reduce) { .rl-gat { transition: none; } }
-  .nm-kaart { left: 50%; top: 50%; transform: translate(-50%, -50%); }
-  .nm-kaart .knop { width: 100%; }
-  .nm-kaart .uitleg { font-size: 13px; color: var(--grijs); margin-top: -4px; }
-  .nm-kaart .linkknop { justify-self: center; color: var(--grijs); margin-top: 4px; }
-  .nm-fout { font-size: 14px; color: var(--magenta); }
+  .namen-inzage { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; }
+  .namen-inzage h3 { font-size: 16px; color: var(--indigo); margin-bottom: 4px; }
+  .namen-inzage ul { list-style: none; display: grid; gap: 2px; }
+  .namen-inzage li { padding: 4px 10px; background: var(--indigo-50); border-radius: 6px; }
+  .beheer { border: 1px solid var(--kaartlijn); border-radius: 8px; }
+  .beheer summary { cursor: pointer; padding: 10px 14px; font-weight: 700; color: var(--indigo); }
+  .beheer summary:focus-visible { outline: 2px solid var(--magenta); outline-offset: 2px; border-radius: 8px; }
+  .beheer-inhoud { padding: 0 14px 14px; display: grid; gap: 12px; }
+  .beheer-veld { display: grid; gap: 4px; font-weight: 700; color: var(--indigo); max-width: 320px; }
+  .knoprij .knop-primair { flex: 0 0 auto; }
 
   /* === Grotere tekst (voorkeur per computer) === */
   html.groot body { zoom: 1.15; }
@@ -625,32 +630,29 @@
     </div>
   </section>
 
-  <section class="blok">
+  <section class="blok" id="nm-blok">
     <h2 class="blok-titel">Rechters en screeners</h2>
     <div class="blok-inhoud">
-      <p>Deze namen verschijnen in het formulier als keuzelijst. Zet één naam per regel.</p>
-      <p class="hint">De namen worden bewaard in deze browser op deze computer, zodat je ze niet elke keer opnieuw hoeft in te voeren. Ze worden niet verstuurd. Ook de laatst gekozen screener wordt onthouden. Zaakgegevens worden nooit bewaard.</p>
-      <div class="namen">
-        <label>Rechters<textarea id="nm-rechters" spellcheck="false"></textarea></label>
-        <label>Screeners<textarea id="nm-screeners" spellcheck="false"></textarea></label>
+      <p>Deze namen verschijnen in het formulier als keuzelijst.</p>
+      <p class="hint" id="nm-status"></p>
+      <div class="namen-inzage">
+        <div><h3>Rechters</h3><ul id="nm-lijst-rechters"></ul></div>
+        <div><h3>Screeners</h3><ul id="nm-lijst-screeners"></ul></div>
       </div>
-      <div id="nm-koppeling" hidden>
-        <p class="hint">Open de namenlijst van je team, bij voorkeur uit een gedeelde teammap. Wat je hier verandert, wordt meteen in dat bestand bewaard, zodat iedereen in het team dezelfde lijst gebruikt.</p>
-        <p id="nm-koppeling-status"></p>
-        <div class="knoprij">
-          <button type="button" class="knop knop-secundair" id="nm-koppel">Namenlijst openen</button>
-          <button type="button" class="knop knop-secundair" id="nm-ontkoppel" hidden>Niet meer gebruiken</button>
+      <details class="beheer" id="nm-beheer">
+        <summary>Namenlijst beheren (alleen voor de beheerder)</summary>
+        <div class="beheer-inhoud">
+          <p class="hint">Hier past de beheerder de namenlijst aan. Er verandert pas iets als je op <span class="ui">Namenlijst opslaan</span> klikt en het bestand <strong>namen.js</strong> opslaat in de teammap, naast screening.html. Collega's zien de nieuwe namen de volgende keer dat ze het formulier openen.</p>
+          <label class="beheer-veld">Beheerder<input type="text" id="nm-beheerder" placeholder="Jouw naam"></label>
+          <div class="namen">
+            <label>Rechters (één per regel)<textarea id="nm-rechters" spellcheck="false"></textarea></label>
+            <label>Screeners (één per regel)<textarea id="nm-screeners" spellcheck="false"></textarea></label>
+          </div>
+          <div class="knoprij">
+            <button type="button" class="knop knop-primair" id="nm-opslaan">Namenlijst opslaan</button>
+          </div>
         </div>
-      </div>
-      <div id="nm-handmatig">
-        <p class="hint">Delen met collega's: sla de namenlijst op als bestand en laat collega's dat bestand hier inlezen.</p>
-        <div class="knoprij">
-          <button type="button" class="knop knop-secundair" id="nm-export">Namenlijst opslaan als bestand</button>
-          <label class="knop knop-secundair bestandknop">Namenlijst inlezen
-            <input type="file" id="nm-import" accept=".json,application/json">
-          </label>
-        </div>
-      </div>
+      </details>
       <div class="melding" id="nm-melding" role="status"></div>
     </div>
   </section>
@@ -688,7 +690,7 @@
       <p><strong>Sla daarom bij elke screening de PDF op</strong> en bewaar die op de plek die in jullie team is afgesproken, zoals het digitale dossier. De PDF is het enige blijvende verslag van de screening. Plak daarnaast de actielijst in Joris, zodat de griffie ermee aan de slag kan.</p>
       <h3>Wat wordt er wel bewaard?</h3>
       <ul>
-        <li>De namenlijst van rechters en screeners, en de laatst gekozen screener. Die blijven op deze computer bewaard, zodat je ze niet steeds opnieuw hoeft in te voeren.</li>
+        <li>Alleen een paar voorkeuren op deze computer: de laatst gekozen screener en of je grotere tekst wilt.</li>
         <li>Zaakgegevens worden nooit bewaard. Ook de geïmporteerde zakenlijst niet: die is weg als je de pagina sluit.</li>
       </ul>
     </div>
@@ -728,8 +730,8 @@
       <p>Maak in Joris een uitdraai van de zakenlijst als CSV-bestand en kies dat bestand bij <span class="ui">Instellingen</span>. Het formulier herkent de kolommen voor zaaknummer, rolnummer, rechter, eiser en gedaagde aan hun naam. Klopt een kolom niet, kies dan zelf de juiste kolom. De zakenlijst blijft alleen staan tot je de pagina sluit.</p>
       <h3>Rechters en screeners</h3>
       <p>Zet de namen onder elkaar, één per regel. Ze verschijnen dan als keuzelijst in het formulier.</p>
-      <p>Bij het opstarten vraagt het formulier om de <strong>namenlijst</strong> van je team. Eén collega maakt die één keer aan met <span class="ui">Nieuwe namenlijst aanmaken</span>, het liefst in de gedeelde teammap. De anderen kiezen <span class="ui">Bestaande namenlijst openen</span> en kiezen hetzelfde bestand. Daarna klik je bij elke start alleen nog op de naam van het bestand. Wat je in Instellingen aan de namen verandert, wordt meteen in dat bestand bewaard.</p>
-      <p class="hint">Werkt koppelen niet in jouw browser, dan zie je in Instellingen de knoppen <span class="ui">Namenlijst opslaan als bestand</span> en <span class="ui">Namenlijst inlezen</span>. Hiermee deel je de lijst handmatig.</p>
+      <p>De keuzelijsten voor rechter en screener komen uit de namenlijst van het team. Die wordt bijgehouden door één beheerder. In <span class="ui">Instellingen</span> zie je wie dat is en welke namen erin staan. Mist er een naam, laat het de beheerder dan weten.</p>
+      <p class="hint">Voor de beheerder: open in Instellingen <span class="ui">Namenlijst beheren</span>, pas de namen aan en klik op <span class="ui">Namenlijst opslaan</span>. Sla het bestand op als <strong>namen.js</strong> in de teammap, naast screening.html, en vervang het oude bestand.</p>
     </div>
   </section>
 
@@ -738,7 +740,7 @@
     <div class="blok-inhoud">
       <ul>
         <li><strong>Favoriet:</strong> druk op Ctrl+D terwijl het formulier open is. Het staat dan bij je favorieten.</li>
-        <li><strong>Als app in Edge:</strong> klik rechtsboven op <span class="ui">···</span> → <span class="ui">Apps</span> → <span class="ui">Deze site als app installeren</span>. Het formulier krijgt dan een eigen icoon in de taakbalk en het startmenu.</li>
+        <li><strong>Snelkoppeling op het bureaublad:</strong> klik in de teammap met de rechtermuisknop op <span class="ui">screening.html</span> en kies <span class="ui">Snelkoppeling maken</span> (soms onder <span class="ui">Meer opties weergeven</span>). Sleep de snelkoppeling naar je bureaublad. Kopieer het bestand zelf niet, want dan mis je nieuwe versies en de namenlijst.</li>
         <li><strong>Grotere letters:</strong> klik rechtsboven op <span class="ui">A+ Grotere tekst</span>. Deze keuze wordt onthouden.</li>
         <li><strong>Op papier:</strong> druk het spiekbriefje af met de knop bovenaan deze handleiding en leg het naast je toetsenbord.</li>
       </ul>
@@ -752,8 +754,8 @@
       <p>Nee. Er wordt niets bewaard, dus begin opnieuw. Om dat te voorkomen, vraagt de browser of je de pagina echt wilt verlaten als er een ingevuld formulier openstaat dat nog niet is opgeslagen. Sla het formulier dus op zodra je klaar bent.</p>
       <h3>Kan een collega mijn screening afmaken of bekijken?</h3>
       <p>Alleen via het opgeslagen formulier (PDF) in het dossier of de actielijst in Joris. Het formulier zelf deelt niets.</p>
-      <h3>Mijn namenlijst is weg.</h3>
-      <p>Dat gebeurt op een andere computer of in een andere browser, of als de browsergeschiedenis is gewist. Open dan opnieuw de namenlijst uit de teammap via <span class="ui">Instellingen</span> → <span class="ui">Namenlijst openen</span>.</p>
+      <h3>Er staan geen namen in de keuzelijst.</h3>
+      <p>Dan kon het formulier de namenlijst niet vinden. Open het formulier via de teammap, niet via een kopie op je bureaublad. Lukt het dan nog niet, laat het de beheerder weten. Je kunt rechter en screener in de tussentijd zelf intypen.</p>
       <h3>Het kopiëren werkt niet.</h3>
       <p>Selecteer de tekst van de actielijst met de muis en kopieer met Ctrl+C.</p>
     </div>
@@ -775,18 +777,17 @@
   </div>
 </div>
 
-<div class="rl-laag" id="nm-venster" hidden>
-  <div class="rl-dek"></div>
-  <div class="rl-kaart nm-kaart" id="nm-kaart" role="dialog" aria-modal="true" aria-labelledby="nm-titel" tabindex="-1"></div>
-</div>
-
 <section id="afdruk" aria-hidden="true"></section>
 
+<!-- Namenlijst van rechters en screeners: staat naast dit bestand in de teammap en wordt
+     door de beheerder bijgehouden (Instellingen → Namenlijst beheren). Ontbreekt hij, dan
+     werkt het formulier met vrije tekstvelden. -->
+<script src="namen.js"></script>
 <script>
 // =====================================================================
 // VERSIE
 // =====================================================================
-const SCREENING_VERSIE = '2026.10.9';
+const SCREENING_VERSIE = '2026.10.10';
 
 // =====================================================================
 // FORMULIER — vragen en acties
@@ -968,10 +969,9 @@ function uEl(tag, attrs, tekst) {
 }
 
 // =====================================================================
-// OPSLAG — alleen namen van rechters/screeners en de laatste screener.
+// OPSLAG — alleen voorkeuren (laatste screener, tekstgrootte, rondleiding gezien).
 // Zaakgegevens worden nooit bewaard.
 // =====================================================================
-const LS_NAMEN = 'griffiescreening_namen';
 const LS_SCREENER = 'griffiescreening_laatste_screener';
 function lsLees(sleutel, standaard) {
   try { const v = localStorage.getItem(sleutel); return v === null ? standaard : JSON.parse(v); }
@@ -981,11 +981,10 @@ function lsZet(sleutel, waarde) {
   try { localStorage.setItem(sleutel, JSON.stringify(waarde)); } catch (e) { /* opslag geblokkeerd: werkt dan alleen deze sessie */ }
 }
 
+// Namenlijst: staat in namen.js naast dit formulier en wordt door de beheerder bijgehouden.
+// Collega's kunnen hem alleen inzien; wijzigen kan alleen via "Namenlijst beheren".
 let namen = { rechters: [], screeners: [] };
-function nmLaad() {
-  const n = lsLees(LS_NAMEN, {});
-  namen = { rechters: nmSchoon(n.rechters), screeners: nmSchoon(n.screeners) };
-}
+let nmInfo = null;   // { beheerder, bijgewerkt } uit namen.js, of null als er geen lijst is
 function nmSchoon(lijst) {
   if (!Array.isArray(lijst)) return [];
   const gezien = new Set();
@@ -993,217 +992,84 @@ function nmSchoon(lijst) {
 }
 function nmUitTekst(tekst) { return nmSchoon(tekst.split(/\r?\n/)); }
 
-function nmVulVelden() {
+function nmLaad() {
+  const n = window.SCREENING_NAMEN;
+  if (!n || n.soort !== 'griffie-screening-namen') { nmInfo = null; return; }
+  namen = { rechters: nmSchoon(n.rechters), screeners: nmSchoon(n.screeners) };
+  nmInfo = { beheerder: String(n.beheerder || '').trim(), bijgewerkt: String(n.bijgewerkt || '') };
+}
+
+function nmRender() {
+  const wie = nmInfo && nmInfo.beheerder ? nmInfo.beheerder : 'de beheerder';
+  document.getElementById('nm-status').textContent = nmInfo
+    ? 'Deze lijst wordt beheerd door ' + wie + (nmInfo.bijgewerkt ? ' (bijgewerkt op ' + uDatumNL(nmInfo.bijgewerkt) + ')' : '') +
+      '. Klopt er iets niet of mist er een naam? Laat het ' + wie + ' weten.'
+    : 'Er is geen namenlijst gevonden. Rechter en screener vul je dan zelf in.';
+  for (const soort of ['rechters', 'screeners']) {
+    const ul = document.getElementById('nm-lijst-' + soort);
+    ul.innerHTML = '';
+    (namen[soort].length ? namen[soort] : ['–']).forEach(n => ul.appendChild(uEl('li', null, n)));
+  }
+}
+
+function nmVulBeheer() {
+  document.getElementById('nm-beheerder').value = nmInfo ? nmInfo.beheerder : '';
   document.getElementById('nm-rechters').value = namen.rechters.join('\n');
   document.getElementById('nm-screeners').value = namen.screeners.join('\n');
 }
-function nmGewijzigd() {
-  namen = {
-    rechters: nmUitTekst(document.getElementById('nm-rechters').value),
-    screeners: nmUitTekst(document.getElementById('nm-screeners').value),
-  };
-  lsZet(LS_NAMEN, namen);
-  scRenderFormulier();
-  scBijwerken();
-  if (nmHandle) {
-    clearTimeout(nmGewijzigd.timer);
-    nmGewijzigd.timer = setTimeout(nmSchrijf, 600);
-  }
-}
 
-// ---------------------------------------------------------------------
-// Namenbestand koppelen (File System Access API, Edge/Chrome) — zoals het
-// databestand in de toolkit. Het koppelingsadres wordt in IndexedDB bewaard;
-// bij elke start vraagt de browser eenmalig toestemming om het te openen.
-// ---------------------------------------------------------------------
-const NM_KAN_KOPPELEN = typeof window.showOpenFilePicker === 'function';
-const NM_BESTANDSTYPE = [{ description: 'Namenlijst screeningsformulier', accept: { 'application/json': ['.json'] } }];
-let nmHandle = null;     // gekoppeld en geopend
-let nmPending = null;    // eerder gekoppeld, nog geen toestemming in deze sessie
-
-function nmIdb(modus, actie) {
-  return new Promise((ok, fout) => {
-    const req = indexedDB.open('griffiescreening', 1);
-    req.onupgradeneeded = () => req.result.createObjectStore('bestanden');
-    req.onerror = () => fout(req.error);
-    req.onsuccess = () => {
-      const tx = req.result.transaction('bestanden', modus);
-      let r;
-      try { r = actie(tx.objectStore('bestanden')); } catch (e) { fout(e); req.result.close(); return; }
-      tx.oncomplete = () => { ok(r && r.result); req.result.close(); };
-      tx.onerror = () => fout(tx.error);
-    };
-  });
-}
-async function nmIdbLees() { try { return await nmIdb('readonly', s => s.get('namen')); } catch (e) { return null; } }
-async function nmIdbZet(h) { try { await nmIdb('readwrite', s => h ? s.put(h, 'namen') : s.delete('namen')); } catch (e) { /* niet te bewaren: volgende keer opnieuw kiezen */ } }
-
-function nmData() { return { soort: 'griffie-screening-namen', versie: 1, ...namen }; }
-
-async function nmLeesBestand(handle) {
-  const data = JSON.parse(await (await handle.getFile()).text());
-  if (!data || data.soort !== 'griffie-screening-namen') throw new Error('geen namenlijst');
-  return data;
-}
-
-async function nmSchrijf() {
-  if (!nmHandle) return;
-  try {
-    const w = await nmHandle.createWritable();
-    await w.write(JSON.stringify(nmData(), null, 2));
-    await w.close();
-    nmRenderKoppeling();
-  } catch (e) {
-    nmMelding('Opslaan in ' + nmHandle.name + ' lukte niet. De wijziging staat wel in deze browser. Koppel het bestand opnieuw.', 'fout');
-  }
-}
-
-async function nmToestemming(handle) {
-  if (await handle.queryPermission({ mode: 'readwrite' }) === 'granted') return true;
-  return await handle.requestPermission({ mode: 'readwrite' }) === 'granted';
-}
-
-// Koppelt een bestand en leest de namen eruit. Geeft een foutmelding (tekst) of null.
-async function nmKoppel(handle) {
-  try {
-    if (!(await nmToestemming(handle))) return 'Geen toestemming gekregen om het bestand te openen. Probeer het opnieuw.';
-    const data = await nmLeesBestand(handle);
-    namen = { rechters: nmSchoon(data.rechters), screeners: nmSchoon(data.screeners) };
-  } catch (e) {
-    return handle.name + ' is geen namenlijst van het screeningsformulier.';
-  }
-  nmHandle = handle;
-  nmPending = null;
-  lsZet(LS_NAMEN, namen);
-  await nmIdbZet(handle);
-  nmVulVelden();
-  nmRenderKoppeling();
-  scRenderFormulier();
-  scBijwerken();
-  return null;
-}
-
-async function nmKiesBestaand() {
-  let handle;
-  try { [handle] = await window.showOpenFilePicker({ types: NM_BESTANDSTYPE, multiple: false }); }
-  catch (e) { return; }   // kiezen geannuleerd
-  const fout = await nmKoppel(handle);
-  if (fout) nmToonVenster(fout); else nmSluitVenster();
-}
-
-async function nmMaakNieuw() {
-  let handle;
-  try { handle = await window.showSaveFilePicker({ suggestedName: 'screening-namenlijst.json', types: NM_BESTANDSTYPE }); }
-  catch (e) { return; }
-  try {
-    const w = await handle.createWritable();
-    await w.write(JSON.stringify(nmData(), null, 2));
-    await w.close();
-  } catch (e) { nmToonVenster('Het bestand kon niet worden aangemaakt.'); return; }
-  const fout = await nmKoppel(handle);
-  if (fout) { nmToonVenster(fout); return; }
-  nmSluitVenster();
-  toonView('instellingen');
-  nmMelding('Namenlijst aangemaakt. Vul hieronder de namen in; ze worden direct in ' + handle.name + ' opgeslagen.', 'goed');
-}
-
-async function nmHeropen() {
-  const fout = await nmKoppel(nmPending);
-  if (fout) nmToonVenster(fout); else nmSluitVenster();
-}
-
-async function nmOntkoppel() {
-  nmHandle = null;
-  nmPending = null;
-  await nmIdbZet(null);
-  nmRenderKoppeling();
-  nmMelding('De namenlijst wordt niet meer gebruikt. De namen blijven op deze computer staan.', '');
-}
-
-function nmRenderKoppeling() {
-  document.getElementById('nm-koppeling').hidden = !NM_KAN_KOPPELEN;
-  document.getElementById('nm-handmatig').hidden = NM_KAN_KOPPELEN;
-  if (!NM_KAN_KOPPELEN) return;
-  const status = document.getElementById('nm-koppeling-status');
-  status.textContent = nmHandle ? '✓ Namenlijst geopend: ' + nmHandle.name + '. Wat je hier verandert, wordt meteen in dit bestand bewaard.'
-    : nmPending ? 'De namenlijst ' + nmPending.name + ' is nog niet geopend.'
-    : 'Er is geen namenlijst geopend. De namen staan alleen op deze computer.';
-  document.getElementById('nm-koppel').textContent = nmHandle ? 'Andere namenlijst openen' : 'Namenlijst openen';
-  document.getElementById('nm-ontkoppel').hidden = !(nmHandle || nmPending);
-}
-
-function nmToonVenster(fout) {
-  const kaart = document.getElementById('nm-kaart');
-  kaart.innerHTML = '';
-  const knop = (tekst, klasse, actie) => {
-    const b = uEl('button', { type: 'button', class: klasse }, tekst);
-    b.addEventListener('click', actie);
-    return b;
-  };
-  if (nmPending) {
-    kaart.appendChild(uEl('h2', { id: 'nm-titel' }, 'Namenlijst openen'));
-    kaart.appendChild(uEl('p', null, 'Ga verder met de namenlijst die je eerder hebt gekoppeld. De browser vraagt eenmalig om toestemming.'));
-    kaart.appendChild(knop('📂 ' + nmPending.name, 'knop knop-primair', nmHeropen));
-    kaart.appendChild(knop('Ander bestand kiezen', 'knop knop-secundair', nmKiesBestaand));
-  } else {
-    kaart.appendChild(uEl('h2', { id: 'nm-titel' }, 'Namenlijst van rechters en screeners'));
-    kaart.appendChild(uEl('p', null, 'Open de namenlijst van je team, zodat je rechter en screener uit een lijst kunt kiezen. Het bestand staat op je computer of in de teammap; er gaat niets naar internet.'));
-    kaart.appendChild(knop('📂 Bestaande namenlijst openen', 'knop knop-primair', nmKiesBestaand));
-    kaart.appendChild(uEl('p', { class: 'uitleg' }, 'Heeft een collega de namenlijst al gemaakt? Kies dan deze.'));
-    kaart.appendChild(knop('Nieuwe namenlijst aanmaken', 'knop knop-secundair', nmMaakNieuw));
-    kaart.appendChild(uEl('p', { class: 'uitleg' }, 'Zet het bestand bij voorkeur in een gedeelde teammap.'));
-  }
-  if (fout) kaart.appendChild(uEl('p', { class: 'nm-fout', role: 'alert' }, fout));
-  kaart.appendChild(knop('Zonder namenlijst doorgaan', 'linkknop', nmSluitVenster));
-  document.getElementById('nm-venster').hidden = false;
-  kaart.focus();
-}
-
-function nmSluitVenster() {
-  document.getElementById('nm-venster').hidden = true;
-  nmRenderKoppeling();
-}
-
-// Bij het opstarten (na de rondleiding): vragen om het namenbestand te openen.
-let nmGestart = false;
-async function nmStart() {
-  if (nmGestart) return;
-  nmGestart = true;
-  if (!NM_KAN_KOPPELEN) return;
-  nmPending = await nmIdbLees();
-  nmRenderKoppeling();
-  nmToonVenster();
-}
 function nmMelding(tekst, soort) {
   const m = document.getElementById('nm-melding');
   m.className = 'melding' + (soort ? ' ' + soort : '');
   m.textContent = tekst;
 }
-function nmExporteer() {
-  const data = JSON.stringify({ soort: 'griffie-screening-namen', versie: 1, ...namen }, null, 2);
-  const a = uEl('a', { href: URL.createObjectURL(new Blob([data], { type: 'application/json' })),
-    download: 'screening-namenlijst.json' });
-  document.body.appendChild(a);
-  a.click();
-  setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 1000);
-  nmMelding('Namenlijst opgeslagen als screening-namenlijst.json.', 'goed');
+
+function nmBestandInhoud(data) {
+  return '// Namenlijst voor het screeningsformulier kanton.\n' +
+    '// Niet met de hand wijzigen: gebruik in het formulier Instellingen > Namenlijst beheren.\n' +
+    'window.SCREENING_NAMEN = ' + JSON.stringify(data, null, 2) + ';\n';
 }
-async function nmImporteer(e) {
-  const bestand = e.target.files[0];
-  if (!bestand) return;
-  try {
-    const data = JSON.parse(await bestand.text());
-    if (!data || data.soort !== 'griffie-screening-namen') throw new Error();
-    namen = { rechters: nmSchoon(data.rechters), screeners: nmSchoon(data.screeners) };
-    lsZet(LS_NAMEN, namen);
-    nmVulVelden();
-    scRenderFormulier();
-    scBijwerken();
-    nmMelding(namen.rechters.length + ' rechters en ' + namen.screeners.length + ' screeners ingelezen.', 'goed');
-  } catch (err) {
-    nmMelding('Dit bestand is geen namenlijst van het screeningsformulier.', 'fout');
+
+// Slaat namen.js op via een "Opslaan als"-venster (of als download) en gebruikt de nieuwe lijst meteen.
+async function nmOpslaan() {
+  const data = {
+    soort: 'griffie-screening-namen', versie: 1,
+    beheerder: document.getElementById('nm-beheerder').value.trim(),
+    bijgewerkt: uVandaagISO(),
+    rechters: nmUitTekst(document.getElementById('nm-rechters').value),
+    screeners: nmUitTekst(document.getElementById('nm-screeners').value),
+  };
+  if (!data.rechters.length && !data.screeners.length) { nmMelding('Vul minstens één naam in.', 'fout'); return; }
+  const inhoud = nmBestandInhoud(data);
+  let waar = 'namen.js';
+  if (typeof window.showSaveFilePicker === 'function') {
+    try {
+      const handle = await window.showSaveFilePicker({ id: 'screening-namen', suggestedName: 'namen.js',
+        types: [{ description: 'Namenlijst screeningsformulier', accept: { 'text/javascript': ['.js'] } }] });
+      const w = await handle.createWritable();
+      await w.write(inhoud);
+      await w.close();
+      waar = handle.name;
+    } catch (e) {
+      if (e.name === 'AbortError') return;
+      nmMelding('Opslaan lukte niet: ' + e.message, 'fout');
+      return;
+    }
+  } else {
+    const a = uEl('a', { href: URL.createObjectURL(new Blob([inhoud], { type: 'text/javascript' })), download: 'namen.js' });
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 1000);
+    waar = 'namen.js in je map Downloads';
   }
-  e.target.value = '';
+  window.SCREENING_NAMEN = data;
+  nmLaad();
+  nmRender();
+  nmVulBeheer();
+  scRenderFormulier();
+  scBijwerken();
+  nmMelding('Opgeslagen als ' + waar + '. Staat het bestand nog niet in de teammap naast screening.html, zet het daar dan neer. ' +
+    'Collega’s zien de nieuwe namen de volgende keer dat ze het formulier openen.', 'goed');
 }
 
 // =====================================================================
@@ -2100,11 +1966,9 @@ const RL_STAPPEN = [
   { titel: 'Sla het formulier altijd op', doel: '#knop-pdf', view: 'screening', privacy: true,
     tekst: '<p>Sla het ingevulde formulier op als PDF. Je krijgt eerst te zien of er nog vragen openstaan. Daarna kies je de map van het dossier; de bestandsnaam staat al klaar.</p>' },
   { titel: 'Instellingen', doel: '.app-nav-btn[data-view="instellingen"]', view: 'screening',
-    tekst: '<p>Hier kies je de zakenlijst uit Joris en beheer je de namen van rechters en screeners.</p>' },
+    tekst: '<p>Hier kies je de zakenlijst uit Joris en zie je welke rechters en screeners in de keuzelijst staan.</p>' },
   { titel: 'Handleiding', doel: '.app-nav-btn[data-view="handleiding"]', view: 'screening',
     tekst: '<p>In de handleiding lees je alles nog eens na. Daar kun je ook een spiekbriefje afdrukken en deze rondleiding opnieuw starten.</p>' },
-  { titel: 'Nog één ding: de namenlijst',
-    tekst: '<p>Na deze rondleiding vraagt het formulier om de namenlijst van je team. Dan kun je rechter en screener uit een lijst kiezen.</p><p>Heeft een collega de namenlijst al in de teammap gezet? Kies dan <strong>Bestaande namenlijst openen</strong>. Daarna klik je bij elke start alleen nog op de naam van het bestand.</p>' },
 ];
 let rlIndex = 0;
 let rlTerugFocus = null;
@@ -2120,7 +1984,6 @@ function rlStop() {
   document.getElementById('rondleiding').hidden = true;
   lsZet(LS_RONDLEIDING, true);
   if (rlTerugFocus && rlTerugFocus.focus) rlTerugFocus.focus();
-  nmStart();
 }
 
 function rlToon() {
@@ -2221,9 +2084,11 @@ function spiekBouw() {
   };
   const knopje = t => el('span', 'knopje', t);
   af.appendChild(el('h1', null, 'Screeningsformulier kanton: zo werkt het'));
-  af.appendChild(el('p', 'afdruk-meta', 'Open het formulier via ' + location.href.split('#')[0]));
+  const adres = location.protocol === 'file:'
+    ? decodeURIComponent(location.pathname).replace(/^\/([A-Za-z]:)/, '$1').replace(/\//g, '\\')
+    : location.href.split('#')[0];
+  af.appendChild(el('p', 'afdruk-meta', 'Open het formulier via ' + adres));
   const stappen = [
-    ['Klik bij het openen op de naam van de namenlijst (bijvoorbeeld ', knopje('📂 screening-namenlijst.json'), ').'],
     ['Kies de zaak: typ bovenaan het rolnummer of de naam van een partij. Of vul zaaknummer en rolnummer zelf in.'],
     ['Beantwoord de vragen. Alleen wat bijzonder is? Klik dan op ', knopje('Overige ja/nee-vragen op Nee zetten'), '.'],
     ['Klik op ', knopje('Kopieer actielijst voor Joris'), ' en plak de lijst in Joris met Ctrl+V.'],
@@ -2234,10 +2099,9 @@ function spiekBouw() {
   stappen.forEach((s, i) => ol.appendChild(el('li', null, [el('span', 'nr', String(i + 1)), el('div', null, s)])));
   af.appendChild(ol);
   af.appendChild(el('div', 'let-op', [el('strong', null, 'Let op: '),
-    'alles wat je invult blijft op je eigen computer. Collega’s kunnen het niet zien, en sluit je de pagina dan is het weg. Sla daarom altijd het formulier op in het dossier (stap 5).']));
+    'alles wat je invult blijft op je eigen computer. Collega’s kunnen het niet zien, en sluit je de pagina dan is het weg. Sla daarom altijd het formulier op in het dossier (stap 4).']));
   const tips = uEl('ul', { class: 'tips' });
   ['Zet het formulier in je favorieten: druk op Ctrl+D als het formulier open is.',
-   'Of maak er een app van in Edge: klik rechtsboven op ··· → Apps → Deze site als app installeren.',
    'Letters te klein? Klik rechtsboven in het formulier op A+ Grotere tekst.',
    'Een i-knopje naast een vraag geeft uitleg.'].forEach(t => tips.appendChild(el('li', null, t)));
   af.appendChild(el('h2', null, 'Handig om te weten'));
@@ -2264,23 +2128,17 @@ document.getElementById('knop-ongedaan').addEventListener('click', scOngedaan);
 document.getElementById('knop-tekst').addEventListener('click', () => scZetTekstGroot(!document.documentElement.classList.contains('groot')));
 document.getElementById('hdl-spiek').addEventListener('click', spiekAfdrukken);
 scZetTekstGroot(!!lsLees(LS_TEKST_GROOT, false));
-document.getElementById('nm-rechters').addEventListener('input', nmGewijzigd);
-document.getElementById('nm-screeners').addEventListener('input', nmGewijzigd);
-document.getElementById('nm-export').addEventListener('click', nmExporteer);
-document.getElementById('nm-import').addEventListener('change', nmImporteer);
+document.getElementById('nm-opslaan').addEventListener('click', nmOpslaan);
 nmLaad();
-nmVulVelden();
+nmRender();
+nmVulBeheer();
 document.getElementById('versie').textContent = 'versie ' + SCREENING_VERSIE;
 document.getElementById('knop-kopieer').addEventListener('click', scKopieer);
 document.getElementById('knop-wis').addEventListener('click', scWis);
 scStandaard();
 scRenderFormulier();
 scBijwerken();
-document.getElementById('nm-koppel').addEventListener('click', () => nmToonVenster());
-document.getElementById('nm-ontkoppel').addEventListener('click', nmOntkoppel);
-document.getElementById('nm-venster').addEventListener('keydown', e => { if (e.key === 'Escape') nmSluitVenster(); });
-nmRenderKoppeling();
-if (!lsLees(LS_RONDLEIDING, false)) rlStart(); else nmStart();
+if (!lsLees(LS_RONDLEIDING, false)) rlStart();
 </script>
 </body>
 </html>
