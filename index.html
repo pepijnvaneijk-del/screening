@@ -442,6 +442,98 @@
   .nm-kaart .uitleg { font-size: 13px; color: var(--grijs); margin-top: -4px; }
   .nm-kaart .linkknop { justify-self: center; color: var(--grijs); margin-top: 4px; }
   .nm-fout { font-size: 14px; color: var(--magenta); }
+
+  /* === Grotere tekst (voorkeur per computer) === */
+  html.groot body { zoom: 1.15; }
+  .app-header-rechts { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; }
+  .tekstknop { font-size: 13px; padding: 6px 12px; }
+  .tekstknop[aria-pressed="true"] { background: var(--indigo); color: var(--wit); }
+  .vraag-uitleg, .hint, .stap-hint, .status { font-size: 14px; }
+
+  /* === Uitleg-knopje bij een vraag === */
+  .info-knop {
+    font: inherit;
+    font-size: 15px;
+    line-height: 1;
+    margin-left: 6px;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    border: 1px solid var(--petrol);
+    background: var(--wit);
+    color: var(--petrol);
+    cursor: pointer;
+    vertical-align: 1px;
+  }
+  .info-knop[aria-expanded="true"] { background: var(--petrol); color: var(--wit); }
+  .info-knop:focus-visible { outline: 2px solid var(--magenta); outline-offset: 2px; }
+  .vraag-info {
+    margin-top: 6px;
+    padding: 8px 12px;
+    background: var(--petrol-50);
+    border-radius: 8px;
+    font-size: 14px;
+    color: var(--petrol-800);
+    max-width: 60ch;
+  }
+  .vraag-waarschuwing { margin-top: 6px; font-size: 14px; color: var(--magenta); }
+
+  /* === Snel op Nee === */
+  .snel-nee { padding: 12px 20px; border-bottom: 1px solid var(--lijn); display: grid; gap: 4px; }
+  .snel-nee .knop { width: 100%; white-space: normal; }
+
+  /* === Afronden in stappen === */
+  .afronden { border-top: 1px solid var(--lijn); padding: 14px 20px 6px; }
+  .afronden h3 { font-size: 17px; color: var(--indigo); margin-bottom: 10px; }
+  .stappen { list-style: none; display: grid; gap: 12px; }
+  .stap { display: grid; grid-template-columns: 30px 1fr; gap: 10px; align-items: start; }
+  .stap-nr {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: 2px solid var(--indigo-200);
+    color: var(--indigo);
+    font-weight: 700;
+    display: grid;
+    place-items: center;
+    margin-top: 4px;
+  }
+  .stap.klaar .stap-nr { background: var(--groen); border-color: var(--groen); color: var(--wit); }
+  .stap.klaar .stap-hint { color: var(--groen); font-weight: 600; }
+  .stap-inhoud { display: grid; gap: 4px; min-width: 0; }
+  .stap-inhoud .knop { width: 100%; }
+  .stap-hint { color: var(--grijs); }
+  .knop-primair.gekopieerd { background: var(--groen); }
+  .ongedaan {
+    margin: 0 20px 14px;
+    padding: 10px 14px;
+    border-radius: 8px;
+    background: var(--indigo-50);
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    font-size: 14px;
+  }
+
+  /* === Spiekbriefje (afdruk) === */
+  @media print {
+    #afdruk.spiek { font-size: 12pt; }
+    #afdruk.spiek h1 { font-size: 20pt; }
+    #afdruk.spiek ol { padding-left: 0; list-style: none; display: grid; gap: 9pt; margin-top: 10pt; }
+    #afdruk.spiek li { display: grid; grid-template-columns: 26pt 1fr; gap: 8pt; break-inside: avoid; }
+    #afdruk.spiek .nr {
+      width: 22pt; height: 22pt; border-radius: 50%; border: 1.5pt solid var(--indigo);
+      color: var(--indigo); font-weight: 700; display: grid; place-items: center;
+    }
+    #afdruk.spiek .knopje {
+      display: inline-block; border: 1pt solid var(--indigo); border-radius: 5pt;
+      padding: 0 5pt; font-weight: 700; color: var(--indigo);
+    }
+    #afdruk.spiek .let-op { border: 2pt solid var(--magenta); border-radius: 8pt; padding: 8pt 10pt; margin-top: 14pt; }
+    #afdruk.spiek .let-op strong { color: var(--magenta); }
+    #afdruk.spiek .tips { margin-top: 12pt; color: #333; }
+    #afdruk.spiek .tips li { display: list-item; margin-left: 14pt; }
+  }
 </style>
 </head>
 <body>
@@ -452,7 +544,10 @@
       <div class="app-header-label">Rechtbank · Kanton</div>
       <h1>Screeningsformulier</h1>
     </div>
-    <div class="app-header-versie" id="versie"></div>
+    <div class="app-header-rechts">
+      <button type="button" class="knop knop-secundair tekstknop" id="knop-tekst" aria-pressed="false">A+ Grotere tekst</button>
+      <div class="app-header-versie" id="versie"></div>
+    </div>
   </div>
 </header>
 <nav class="app-nav" aria-label="Onderdelen">
@@ -471,14 +566,43 @@
       <h2>Actielijst griffie</h2>
     </div>
     <div class="status" id="status" role="status"></div>
+    <div class="snel-nee" id="snel-nee" hidden>
+      <button type="button" class="knop knop-secundair" id="knop-nee"></button>
+      <div class="stap-hint">Vragen waarbij Nee een actie oplevert, blijven open.</div>
+    </div>
     <div id="uitvoer-tekst"></div>
-    <div class="knoppen">
-      <button type="button" class="knop knop-primair" id="knop-kopieer">Kopieer naar klembord</button>
-      <button type="button" class="knop knop-secundair" id="knop-pdf">Opslaan als PDF</button>
-      <button type="button" class="knop knop-secundair" id="knop-wis">Nieuwe screening</button>
+    <div class="afronden">
+      <h3>Afronden</h3>
+      <ol class="stappen">
+        <li class="stap" id="stap-kopie">
+          <span class="stap-nr" aria-hidden="true">1</span>
+          <div class="stap-inhoud">
+            <button type="button" class="knop knop-primair" id="knop-kopieer">Kopieer actielijst voor Joris</button>
+            <div class="stap-hint" id="hint-kopie">Plak hem daarna in Joris met Ctrl+V.</div>
+          </div>
+        </li>
+        <li class="stap" id="stap-pdf">
+          <span class="stap-nr" aria-hidden="true">2</span>
+          <div class="stap-inhoud">
+            <button type="button" class="knop knop-primair" id="knop-pdf">Formulier opslaan in het dossier</button>
+            <div class="stap-hint" id="hint-pdf">Het formulier wordt opgeslagen als PDF.</div>
+          </div>
+        </li>
+        <li class="stap" id="stap-volgende">
+          <span class="stap-nr" aria-hidden="true">3</span>
+          <div class="stap-inhoud">
+            <button type="button" class="knop knop-secundair" id="knop-wis">Volgende zaak</button>
+            <div class="stap-hint">Maakt het formulier leeg voor de volgende zaak.</div>
+          </div>
+        </li>
+      </ol>
     </div>
     <div class="pdf-waarschuwing" id="pdf-waarschuwing" role="alert" hidden></div>
-    <p class="privacy">Zaakgegevens blijven alleen in deze browser en worden niet opgeslagen of verstuurd. Sluit je de pagina, dan zijn de antwoorden weg.</p>
+    <div class="ongedaan" id="ongedaan" role="status" hidden>
+      <span>Formulier leeggemaakt.</span>
+      <button type="button" class="linkknop" id="knop-ongedaan">Ongedaan maken</button>
+    </div>
+    <p class="privacy">Wat je invult, blijft op deze computer en wordt nergens naartoe gestuurd. Sla het formulier op voordat je de pagina sluit.</p>
   </aside>
 </main>
 
@@ -486,9 +610,9 @@
   <section class="blok">
     <h2 class="blok-titel">Zakenlijst importeren</h2>
     <div class="blok-inhoud">
-      <p>Importeer een CSV-uitdraai van de zakenlijst uit Joris. In het screeningsformulier kun je daarna een zaak kiezen; zaaknummer, rolnummer en rechter worden dan automatisch ingevuld.</p>
+      <p>Maak in Joris een uitdraai van de zakenlijst en sla die op als CSV-bestand. Kies dat bestand hieronder. In het formulier kun je daarna een zaak kiezen; zaaknummer, rolnummer en rechter worden dan vanzelf ingevuld.</p>
       <p class="hint">De lijst blijft alleen in deze browser en verdwijnt als je de pagina sluit. Er wordt niets verstuurd.</p>
-      <label class="knop knop-secundair bestandknop">CSV-bestand kiezen
+      <label class="knop knop-secundair bestandknop">Zakenlijst uit Joris kiezen
         <input type="file" id="zl-bestand" accept=".csv,.txt,text/csv">
       </label>
       <div class="melding" id="zl-melding" role="status"></div>
@@ -511,11 +635,11 @@
         <label>Screeners<textarea id="nm-screeners" spellcheck="false"></textarea></label>
       </div>
       <div id="nm-koppeling" hidden>
-        <p class="hint">Koppel een namenbestand, bij voorkeur in een gedeelde teammap. Wijzigingen hier worden direct in dat bestand opgeslagen, zodat collega's die hetzelfde bestand koppelen dezelfde lijst gebruiken.</p>
+        <p class="hint">Open de namenlijst van je team, bij voorkeur uit een gedeelde teammap. Wat je hier verandert, wordt meteen in dat bestand bewaard, zodat iedereen in het team dezelfde lijst gebruikt.</p>
         <p id="nm-koppeling-status"></p>
         <div class="knoprij">
-          <button type="button" class="knop knop-secundair" id="nm-koppel">Namenbestand koppelen</button>
-          <button type="button" class="knop knop-secundair" id="nm-ontkoppel" hidden>Ontkoppelen</button>
+          <button type="button" class="knop knop-secundair" id="nm-koppel">Namenlijst openen</button>
+          <button type="button" class="knop knop-secundair" id="nm-ontkoppel" hidden>Niet meer gebruiken</button>
         </div>
       </div>
       <div id="nm-handmatig">
@@ -542,9 +666,11 @@
         <a href="#hdl-screenen">Een zaak screenen</a>
         <a href="#hdl-afronden">Afronden: kopiëren en PDF</a>
         <a href="#hdl-instellingen">Instellingen</a>
+        <a href="#hdl-openen">Snel openen</a>
         <a href="#hdl-vragen">Veelgestelde vragen</a>
       </nav>
       <div class="knoprij">
+        <button type="button" class="knop knop-secundair" id="hdl-spiek">Spiekbriefje afdrukken (1 A4)</button>
         <button type="button" class="knop knop-secundair" id="hdl-rondleiding">Rondleiding opnieuw starten</button>
       </div>
     </div>
@@ -574,7 +700,8 @@
       <ol>
         <li><strong>Kies de zaak.</strong> Heb je een zakenlijst geïmporteerd, typ dan bovenaan een rolnummer, zaaknummer of partijnaam en kies de zaak. Zaaknummer, rolnummer en rechter worden dan ingevuld. Anders vul je ze zelf in. Bij het rolnummer staat <span class="ui">CV EXPL</span> er al voor.</li>
         <li><strong>Kies rechter en screener</strong> uit de keuzelijst. De screener wordt onthouden voor de volgende keer.</li>
-        <li><strong>Beantwoord de vragen.</strong> Vervolgvragen verschijnen vanzelf, bijvoorbeeld het adres bij een descente. Kies je bij <span class="ui">Mondelinge behandeling</span> voor nee, dan volgen de vragen over de tweede schriftelijke ronde.</li>
+        <li><strong>Beantwoord de vragen.</strong> Vervolgvragen verschijnen vanzelf, bijvoorbeeld het adres bij een descente. Kies je bij <span class="ui">Mondelinge behandeling</span> voor nee, dan volgen de vragen over de tweede schriftelijke ronde. Staat er een <span class="ui">i</span>-knopje naast een vraag, dan krijg je daarmee uitleg.</li>
+        <li><strong>Alleen een paar dingen bijzonder?</strong> Beantwoord die vragen en klik daarna bij de actielijst op <span class="ui">Overige ja/nee-vragen op Nee zetten</span>. Vragen waarbij Nee juist een actie oplevert (zoals <span class="ui">AT akkoord?</span> of <span class="ui">Spoedeisend?</span>), blijven open zodat je ze bewust beantwoordt.</li>
         <li><strong>Houd de actielijst rechts in de gaten.</strong> Die groeit mee met je antwoorden. Een magenta stip bij een vraag betekent dat die nog niet beantwoord is. Bovenaan de actielijst zie je hoeveel vragen nog openstaan.</li>
       </ol>
       <p class="hint">Staat er <span class="ui">[nog invullen]</span> in de actielijst? Dan ontbreekt een gegeven dat bij die actie hoort, zoals een adres of zaal.</p>
@@ -582,15 +709,15 @@
   </section>
 
   <section class="blok" id="hdl-afronden">
-    <h2 class="blok-titel">Afronden: kopiëren en PDF</h2>
+    <h2 class="blok-titel">Afronden in drie stappen</h2>
     <div class="blok-inhoud">
+      <p>Onder de actielijst staan drie stappen. Elke stap krijgt een groen vinkje als hij klaar is.</p>
       <ol>
-        <li>Klik op <span class="ui">Kopieer naar klembord</span> en plak de actielijst in Joris (Ctrl+V).</li>
-        <li>Klik op <span class="ui">Opslaan als PDF</span>. Zijn er nog vragen open, dan zie je welke. Kies <span class="ui">Verder invullen</span> of <span class="ui">Toch opslaan</span>. Open vragen staan dan als <em>niet ingevuld</em> in de PDF.</li>
-        <li>De PDF wordt gedownload met een bestandsnaam als <em>Screening CV EXPL 26-1234 2026-10-28.pdf</em>. Je vindt hem in je map Downloads, tenzij je browser vraagt waar je hem wilt opslaan.</li>
-        <li>Verplaats of bewaar de PDF op de afgesproken plek, zoals het digitale dossier.</li>
-        <li>Klik op <span class="ui">Nieuwe screening</span> om met de volgende zaak te beginnen. Ter beveiliging moet je twee keer klikken.</li>
+        <li><span class="ui">Kopieer actielijst voor Joris</span>. Ga naar Joris en plak de lijst met Ctrl+V.</li>
+        <li><span class="ui">Formulier opslaan in het dossier</span>. Zijn er nog vragen open, dan zie je welke; kies <span class="ui">Verder invullen</span> of <span class="ui">Toch opslaan</span>. Daarna verschijnt een venster <em>Opslaan als</em>. Kies de map van het dossier; de bestandsnaam staat al klaar, bijvoorbeeld <em>Screening CV EXPL 26-1234 2026-10-28.pdf</em>. De volgende keer opent het venster weer in dezelfde map.</li>
+        <li><span class="ui">Volgende zaak</span> maakt het formulier leeg. Is het formulier nog niet opgeslagen, dan krijg je eerst een waarschuwing. Per ongeluk geklikt? Klik dan binnen 10 seconden op <span class="ui">Ongedaan maken</span>.</li>
       </ol>
+      <p class="hint">Verander je iets na het kopiëren of opslaan, dan verdwijnt het vinkje. Kopieer of sla dan opnieuw op.</p>
     </div>
   </section>
 
@@ -601,8 +728,20 @@
       <p>Maak in Joris een uitdraai van de zakenlijst als CSV-bestand en kies dat bestand bij <span class="ui">Instellingen</span>. Het formulier herkent de kolommen voor zaaknummer, rolnummer, rechter, eiser en gedaagde aan hun naam. Klopt een kolom niet, kies dan zelf de juiste kolom. De zakenlijst blijft alleen staan tot je de pagina sluit.</p>
       <h3>Rechters en screeners</h3>
       <p>Zet de namen onder elkaar, één per regel. Ze verschijnen dan als keuzelijst in het formulier.</p>
-      <p>Bij het opstarten vraagt het formulier om het <strong>namenbestand</strong>, net als de toolkit om het databestand vraagt. Eén collega maakt het bestand aan met <span class="ui">Nieuwe namenlijst aanmaken</span>, het liefst in een gedeelde teammap. De anderen kiezen <span class="ui">Bestaande namenlijst openen</span> en koppelen hetzelfde bestand. Daarna klik je bij elke start alleen op de naam van het bestand. Wijzigingen in Instellingen worden direct in het bestand opgeslagen.</p>
+      <p>Bij het opstarten vraagt het formulier om de <strong>namenlijst</strong> van je team. Eén collega maakt die één keer aan met <span class="ui">Nieuwe namenlijst aanmaken</span>, het liefst in de gedeelde teammap. De anderen kiezen <span class="ui">Bestaande namenlijst openen</span> en kiezen hetzelfde bestand. Daarna klik je bij elke start alleen nog op de naam van het bestand. Wat je in Instellingen aan de namen verandert, wordt meteen in dat bestand bewaard.</p>
       <p class="hint">Werkt koppelen niet in jouw browser, dan zie je in Instellingen de knoppen <span class="ui">Namenlijst opslaan als bestand</span> en <span class="ui">Namenlijst inlezen</span>. Hiermee deel je de lijst handmatig.</p>
+    </div>
+  </section>
+
+  <section class="blok" id="hdl-openen">
+    <h2 class="blok-titel">Snel openen en goed leesbaar</h2>
+    <div class="blok-inhoud">
+      <ul>
+        <li><strong>Favoriet:</strong> druk op Ctrl+D terwijl het formulier open is. Het staat dan bij je favorieten.</li>
+        <li><strong>Als app in Edge:</strong> klik rechtsboven op <span class="ui">···</span> → <span class="ui">Apps</span> → <span class="ui">Deze site als app installeren</span>. Het formulier krijgt dan een eigen icoon in de taakbalk en het startmenu.</li>
+        <li><strong>Grotere letters:</strong> klik rechtsboven op <span class="ui">A+ Grotere tekst</span>. Deze keuze wordt onthouden.</li>
+        <li><strong>Op papier:</strong> druk het spiekbriefje af met de knop bovenaan deze handleiding en leg het naast je toetsenbord.</li>
+      </ul>
     </div>
   </section>
 
@@ -610,11 +749,11 @@
     <h2 class="blok-titel">Veelgestelde vragen</h2>
     <div class="blok-inhoud">
       <h3>Ik heb de pagina per ongeluk gesloten. Is mijn screening terug te halen?</h3>
-      <p>Nee. Er wordt niets bewaard, dus begin opnieuw. Om dat te voorkomen, vraagt de browser of je de pagina echt wilt verlaten als er een ingevulde screening openstaat die nog niet als PDF is opgeslagen. Sla de PDF dus op zodra je klaar bent.</p>
+      <p>Nee. Er wordt niets bewaard, dus begin opnieuw. Om dat te voorkomen, vraagt de browser of je de pagina echt wilt verlaten als er een ingevuld formulier openstaat dat nog niet is opgeslagen. Sla het formulier dus op zodra je klaar bent.</p>
       <h3>Kan een collega mijn screening afmaken of bekijken?</h3>
-      <p>Alleen via de PDF of de actielijst in Joris. Het formulier zelf deelt niets.</p>
+      <p>Alleen via het opgeslagen formulier (PDF) in het dossier of de actielijst in Joris. Het formulier zelf deelt niets.</p>
       <h3>Mijn namenlijst is weg.</h3>
-      <p>Dat gebeurt op een andere computer of in een andere browser, of als de browsergeschiedenis is gewist. Koppel dan opnieuw het namenbestand uit de teammap via <span class="ui">Instellingen</span> → <span class="ui">Namenbestand koppelen</span>.</p>
+      <p>Dat gebeurt op een andere computer of in een andere browser, of als de browsergeschiedenis is gewist. Open dan opnieuw de namenlijst uit de teammap via <span class="ui">Instellingen</span> → <span class="ui">Namenlijst openen</span>.</p>
       <h3>Het kopiëren werkt niet.</h3>
       <p>Selecteer de tekst van de actielijst met de muis en kopieer met Ctrl+C.</p>
     </div>
@@ -647,7 +786,7 @@
 // =====================================================================
 // VERSIE
 // =====================================================================
-const SCREENING_VERSIE = '2026.10.8';
+const SCREENING_VERSIE = '2026.10.9';
 
 // =====================================================================
 // FORMULIER — vragen en acties
@@ -661,6 +800,8 @@ const SCREENING_VERSIE = '2026.10.8';
 //   onthouden   true = laatst gekozen waarde wordt op deze computer onthouden
 //   opties   (alleen bij 'keuze') de keuzemogelijkheden
 //   uitleg   (optioneel) kleine toelichting onder de vraag
+//   info     (optioneel) uitleg achter een ⓘ-knopje, bijv. wat een afkorting betekent
+//   patroon / patroonHint  (bij 'tekst', optioneel) controle op de vorm, met waarschuwing
 //   ja / nee (bij 'janee') de actie voor de griffie bij dat antwoord
 //   actie    (bij 'keuze', 'tekst', 'getal') de actie zodra er iets is ingevuld
 //   acties   (bij 'keuze', optioneel) afwijkende actie per keuze, bijv. { anders: '…' }
@@ -688,7 +829,8 @@ const FORMULIER = {
       titel: 'Zaak',
       vragen: [
         { id: 'zaaknummer', vraag: 'Zaaknummer', type: 'tekst', uitvoer: 'kop' },
-        { id: 'rolnummer', vraag: 'Rolnummer', type: 'tekst', uitvoer: 'kop', voorvoegsel: 'CV EXPL' },
+        { id: 'rolnummer', vraag: 'Rolnummer', type: 'tekst', uitvoer: 'kop', voorvoegsel: 'CV EXPL',
+          patroon: /^\d{2}-\d{1,6}$/, patroonHint: 'Een rolnummer ziet eruit als 26-1234. Controleer of het klopt.' },
         { id: 'rechter', vraag: 'Rechter', type: 'naam', lijst: 'rechters', uitvoer: 'kop' },
         { id: 'screener', vraag: 'Screener', type: 'naam', lijst: 'screeners', onthouden: true, uitvoer: 'kop' },
         { id: 'datum', vraag: 'Datum screening', type: 'datum', uitvoer: 'kop' },
@@ -700,6 +842,7 @@ const FORMULIER = {
       titel: 'Algemeen',
       vragen: [
         { id: 'atAkkoord', vraag: 'AT akkoord?', type: 'janee', uitleg: 'Ambtshalve toetsing',
+          info: 'Ambtshalve toetsing: punten die de rechtbank uit zichzelf moet toetsen, ook als geen van de partijen erover begint of er een beroep op doet.',
           nee: 'Voorleggen aan JJM/JM: controle ambtshalve toetsing (AT niet akkoord)' },
         { id: 'bewind', vraag: 'Sprake van bewindvoering bij gedaagde?', type: 'janee' },
         { id: 'bewindOpgeroepen', vraag: 'Is de bewindvoerder opgeroepen?', type: 'janee', toonAls: { bewind: 'ja' },
@@ -748,6 +891,7 @@ const FORMULIER = {
       toonAls: [{ mondeling: 'ja' }, { mondelingNa: 'ja' }],
       vragen: [
         { id: 'oo', vraag: 'O&O geschikt voor standaardzitting?', type: 'janee',
+          info: 'Bij ja wordt het specifieke tussenvonnis O04 gebruikt.',
           ja: 'Specifiek tussenvonnis O04 gebruiken (O&O-standaardzitting)' },
         { id: 'spoed', vraag: 'Spoedeisend?', type: 'janee',
           ja: 'Plannen tussen 4 en 8 weken na beraad (spoedeisend)',
@@ -973,7 +1117,7 @@ async function nmOntkoppel() {
   nmPending = null;
   await nmIdbZet(null);
   nmRenderKoppeling();
-  nmMelding('Namenbestand ontkoppeld. De namen blijven in deze browser staan.', '');
+  nmMelding('De namenlijst wordt niet meer gebruikt. De namen blijven op deze computer staan.', '');
 }
 
 function nmRenderKoppeling() {
@@ -981,10 +1125,10 @@ function nmRenderKoppeling() {
   document.getElementById('nm-handmatig').hidden = NM_KAN_KOPPELEN;
   if (!NM_KAN_KOPPELEN) return;
   const status = document.getElementById('nm-koppeling-status');
-  status.textContent = nmHandle ? '✓ Gekoppeld aan ' + nmHandle.name + '. Wijzigingen worden direct in dit bestand opgeslagen.'
-    : nmPending ? 'Eerder gekoppeld aan ' + nmPending.name + ', maar nog niet geopend in deze sessie.'
-    : 'Geen namenbestand gekoppeld. De namen staan alleen in deze browser.';
-  document.getElementById('nm-koppel').textContent = nmHandle ? 'Ander bestand koppelen' : 'Namenbestand koppelen';
+  status.textContent = nmHandle ? '✓ Namenlijst geopend: ' + nmHandle.name + '. Wat je hier verandert, wordt meteen in dit bestand bewaard.'
+    : nmPending ? 'De namenlijst ' + nmPending.name + ' is nog niet geopend.'
+    : 'Er is geen namenlijst geopend. De namen staan alleen op deze computer.';
+  document.getElementById('nm-koppel').textContent = nmHandle ? 'Andere namenlijst openen' : 'Namenlijst openen';
   document.getElementById('nm-ontkoppel').hidden = !(nmHandle || nmPending);
 }
 
@@ -1003,7 +1147,7 @@ function nmToonVenster(fout) {
     kaart.appendChild(knop('Ander bestand kiezen', 'knop knop-secundair', nmKiesBestaand));
   } else {
     kaart.appendChild(uEl('h2', { id: 'nm-titel' }, 'Namenlijst van rechters en screeners'));
-    kaart.appendChild(uEl('p', null, 'Koppel het namenbestand van je team, zodat rechters en screeners in een keuzelijst staan. Het bestand blijft op je computer of in de teammap; er gaat niets naar internet.'));
+    kaart.appendChild(uEl('p', null, 'Open de namenlijst van je team, zodat je rechter en screener uit een lijst kunt kiezen. Het bestand staat op je computer of in de teammap; er gaat niets naar internet.'));
     kaart.appendChild(knop('📂 Bestaande namenlijst openen', 'knop knop-primair', nmKiesBestaand));
     kaart.appendChild(uEl('p', { class: 'uitleg' }, 'Heeft een collega de namenlijst al gemaakt? Kies dan deze.'));
     kaart.appendChild(knop('Nieuwe namenlijst aanmaken', 'knop knop-secundair', nmMaakNieuw));
@@ -1352,8 +1496,27 @@ function scRenderVraag(v) {
   const rij = uEl('div', { class: 'vraag' + (v.toonAls ? ' sub' : '') + (v.meerregels ? ' breed' : ''), 'data-vraag': v.id });
   const tekst = uEl('div', { class: 'vraag-tekst' });
   const labelId = 'lbl-' + v.id;
-  tekst.appendChild(uEl('div', { class: 'vraag-label', id: labelId }, v.vraag + (v.optioneel ? ' (optioneel)' : '')));
+  const label = uEl('div', { class: 'vraag-label', id: labelId }, v.vraag + (v.optioneel ? ' (optioneel)' : ''));
+  tekst.appendChild(label);
   if (v.uitleg) tekst.appendChild(uEl('div', { class: 'vraag-uitleg' }, v.uitleg));
+  if (v.info) {
+    const infoId = 'info-' + v.id;
+    const knop = uEl('button', { type: 'button', class: 'info-knop', 'aria-expanded': 'false',
+      'aria-controls': infoId, 'aria-label': 'Uitleg bij ' + v.vraag }, 'i');
+    const info = uEl('div', { class: 'vraag-info', id: infoId }, v.info);
+    info.hidden = true;
+    knop.addEventListener('click', () => {
+      info.hidden = !info.hidden;
+      knop.setAttribute('aria-expanded', String(!info.hidden));
+    });
+    label.appendChild(knop);
+    tekst.appendChild(info);
+  }
+  if (v.patroon) {
+    const w = uEl('div', { class: 'vraag-waarschuwing', 'data-patroon': v.id }, v.patroonHint);
+    w.hidden = true;
+    tekst.appendChild(w);
+  }
   rij.appendChild(tekst);
 
   const invoer = uEl('div', { class: 'vraag-invoer' });
@@ -1422,6 +1585,13 @@ function scBijwerken() {
   });
 
   document.getElementById('uitvoer-tekst').textContent = scBouwTekst();
+  document.querySelectorAll('[data-patroon]').forEach(w => {
+    const v = alleVragen.find(x => x.id === w.dataset.patroon);
+    const a = antwoorden[v.id];
+    w.hidden = scLeeg(a) || v.patroon.test(String(a).trim());
+  });
+  scRenderSnelNee();
+  scRenderAfronden();
   if (!document.getElementById('pdf-waarschuwing').hidden) pdfToonWaarschuwing();
 
   const status = document.getElementById('status');
@@ -1468,45 +1638,122 @@ async function scKopieer() {
     ta.remove();
   }
   const knop = document.getElementById('knop-kopieer');
-  knop.textContent = gelukt ? 'Gekopieerd ✓' : 'Kopiëren mislukt';
+  if (gelukt) scKopieMomentopname = scMomentopname();
+  knop.textContent = gelukt ? 'Gekopieerd ✓' : 'Kopiëren lukte niet';
   knop.classList.toggle('gekopieerd', gelukt);
+  if (!gelukt) document.getElementById('hint-kopie').textContent = 'Selecteer de actielijst hierboven met de muis en kopieer met Ctrl+C.';
+  else scRenderAfronden();
   clearTimeout(scKopieer.timer);
   scKopieer.timer = setTimeout(() => {
-    knop.textContent = 'Kopieer naar klembord';
+    knop.textContent = 'Kopieer actielijst voor Joris';
     knop.classList.remove('gekopieerd');
   }, 2500);
 }
 
-// Geen confirm(): eerste klik vraagt om bevestiging, tweede klik binnen 4 seconden wist.
+// Stappen bij Afronden: een stap is klaar zolang er na het kopiëren/opslaan niets is veranderd.
+let scKopieMomentopname = null;
+let scPdfNaam = '';
+function scRenderAfronden() {
+  const nu = scMomentopname();
+  const leeg = nu === scStandaardMomentopname;
+  const kopieKlaar = !leeg && nu === scKopieMomentopname;
+  const pdfKlaar = !leeg && nu === scPdfMomentopname;
+  document.getElementById('stap-kopie').classList.toggle('klaar', kopieKlaar);
+  document.getElementById('stap-pdf').classList.toggle('klaar', pdfKlaar);
+  document.querySelector('#stap-kopie .stap-nr').textContent = kopieKlaar ? '✓' : '1';
+  document.querySelector('#stap-pdf .stap-nr').textContent = pdfKlaar ? '✓' : '2';
+  document.getElementById('hint-kopie').textContent = kopieKlaar ? 'Gekopieerd. Plak hem in Joris met Ctrl+V.'
+    : scKopieMomentopname && !leeg ? 'Gewijzigd na het kopiëren: kopieer opnieuw.' : 'Plak hem daarna in Joris met Ctrl+V.';
+  document.getElementById('hint-pdf').textContent = pdfKlaar ? 'Opgeslagen' + (scPdfNaam ? ' als ' + scPdfNaam : '') + '.'
+    : scPdfMomentopname && !leeg ? 'Gewijzigd na het opslaan: sla opnieuw op.' : 'Het formulier wordt opgeslagen als PDF.';
+}
+
+// "Overige ja/nee-vragen op Nee": alleen vragen waarbij Nee geen actie oplevert en geen
+// andere vragen laat verschijnen (zoals Mondelinge behandeling).
+const NEE_STUURT = new Set();
+for (const x of [...FORMULIER.blokken, ...alleVragen]) {
+  if (!x.toonAls) continue;
+  (Array.isArray(x.toonAls) ? x.toonAls : [x.toonAls]).forEach(c =>
+    Object.keys(c).forEach(k => { if (c[k] === 'nee') NEE_STUURT.add(k); }));
+}
+function scNeeKandidaten() {
+  return alleVragen.filter(v => v.type === 'janee' && zichtbaar.has(v.id) && scLeeg(antwoorden[v.id])
+    && !v.nee && !NEE_STUURT.has(v.id));
+}
+function scRenderSnelNee() {
+  const n = scNeeKandidaten().length;
+  document.getElementById('snel-nee').hidden = n < 2;
+  document.getElementById('knop-nee').textContent = 'Overige ' + n + ' ja/nee-vragen op Nee zetten';
+}
+function scSnelNee() {
+  scNeeKandidaten().forEach(v => { antwoorden[v.id] = 'nee'; });
+  scRenderFormulier();
+  scBijwerken();
+}
+
+// Volgende zaak: waarschuwt als het formulier nog niet is opgeslagen; daarna 10 seconden "Ongedaan maken".
+let scVorige = null;
 function scWis() {
-  const knop = document.getElementById('knop-wis');
-  if (!knop.classList.contains('bevestig')) {
-    knop.classList.add('bevestig');
-    knop.textContent = 'Zeker? Klik nogmaals';
-    clearTimeout(scWis.timer);
-    scWis.timer = setTimeout(() => {
-      knop.classList.remove('bevestig');
-      knop.textContent = 'Nieuwe screening';
-    }, 4000);
-    return;
-  }
-  clearTimeout(scWis.timer);
-  knop.classList.remove('bevestig');
-  knop.textContent = 'Nieuwe screening';
+  if (scNietOpgeslagen()) { scToonWisWaarschuwing(); return; }
+  scLeegmaken();
+}
+function scToonWisWaarschuwing() {
+  const paneel = document.getElementById('pdf-waarschuwing');
+  paneel.innerHTML = '';
+  paneel.appendChild(uEl('strong', null, 'Dit formulier is nog niet opgeslagen.'));
+  paneel.appendChild(uEl('p', null, 'Ga je door naar de volgende zaak, dan is deze screening weg.'));
+  const knoppen = uEl('div', { class: 'pdf-waarschuwing-knoppen' });
+  const opslaan = uEl('button', { type: 'button', class: 'knop knop-primair', id: 'pdf-eerst' }, 'Eerst opslaan');
+  opslaan.addEventListener('click', () => { paneel.hidden = true; pdfOpslaan(); });
+  const toch = uEl('button', { type: 'button', class: 'knop knop-secundair', id: 'wis-toch' }, 'Toch volgende zaak');
+  toch.addEventListener('click', () => { paneel.hidden = true; scLeegmaken(); });
+  knoppen.appendChild(opslaan);
+  knoppen.appendChild(toch);
+  paneel.appendChild(knoppen);
+  paneel.hidden = false;
+}
+function scLeegmaken() {
+  scVorige = { antwoorden: { ...antwoorden }, kopie: scKopieMomentopname, pdf: scPdfMomentopname, pdfNaam: scPdfNaam };
   scStandaard();
+  scKopieMomentopname = null;
+  scPdfNaam = '';
   zlZoek = ''; zlMelding = '';
   document.getElementById('pdf-waarschuwing').hidden = true;
   scRenderFormulier();
   scBijwerken();
   window.scrollTo({ top: 0, behavior: 'smooth' });
+  const balk = document.getElementById('ongedaan');
+  balk.hidden = false;
+  clearTimeout(scLeegmaken.timer);
+  scLeegmaken.timer = setTimeout(() => { balk.hidden = true; scVorige = null; }, 10000);
 }
+function scOngedaan() {
+  if (!scVorige) return;
+  antwoorden = scVorige.antwoorden;
+  scKopieMomentopname = scVorige.kopie;
+  scPdfMomentopname = scVorige.pdf;
+  scPdfNaam = scVorige.pdfNaam;
+  scVorige = null;
+  document.getElementById('ongedaan').hidden = true;
+  scRenderFormulier();
+  scBijwerken();
+}
+
+function scZetTekstGroot(aan) {
+  document.documentElement.classList.toggle('groot', aan);
+  const knop = document.getElementById('knop-tekst');
+  knop.setAttribute('aria-pressed', String(aan));
+  knop.textContent = aan ? 'A− Gewone tekst' : 'A+ Grotere tekst';
+  lsZet(LS_TEKST_GROOT, aan);
+}
+const LS_TEKST_GROOT = 'griffiescreening_tekst_groot';
 
 // =====================================================================
 // OPSLAAN ALS PDF — de PDF wordt in de browser gemaakt en gedownload
 // =====================================================================
 function pdfOpslaan() {
   if (scOpenVragen().length) { pdfToonWaarschuwing(); return; }
-  pdfDownload();
+  pdfBewaar();
 }
 
 function pdfToonWaarschuwing() {
@@ -1526,7 +1773,7 @@ function pdfToonWaarschuwing() {
   paneel.appendChild(ul);
   const knoppen = uEl('div', { class: 'pdf-waarschuwing-knoppen' });
   const toch = uEl('button', { type: 'button', class: 'knop knop-primair', id: 'pdf-toch' }, 'Toch opslaan');
-  toch.addEventListener('click', () => { paneel.hidden = true; pdfDownload(); });
+  toch.addEventListener('click', () => { paneel.hidden = true; pdfBewaar(); });
   const terug = uEl('button', { type: 'button', class: 'knop knop-secundair', id: 'pdf-terug' }, 'Verder invullen');
   terug.addEventListener('click', () => { paneel.hidden = true; scNaarEersteOpen(); });
   knoppen.appendChild(toch);
@@ -1584,17 +1831,42 @@ function pdfOpgeslagenOp() {
   return uDatumNL(uVandaagISO()) + ' om ' + String(nu.getHours()).padStart(2, '0') + ':' + String(nu.getMinutes()).padStart(2, '0');
 }
 
-function pdfDownload() {
+// In Edge/Chrome: een gewoon "Opslaan als"-venster, zodat de PDF meteen in het dossier komt.
+// De browser onthoudt zelf de laatst gekozen map (via 'id'); wij bewaren niets.
+// Andere browsers: gewoon downloaden.
+async function pdfBewaar() {
   const naam = pdfBestandsnaam() + '.pdf';
-  const a = uEl('a', { href: URL.createObjectURL(new Blob([pdfMaak()], { type: 'application/pdf' })), download: naam });
+  const bytes = pdfMaak();
+  const momentopname = scMomentopname();
+  if (typeof window.showSaveFilePicker === 'function') {
+    let handle;
+    try {
+      handle = await window.showSaveFilePicker({ id: 'screening-pdf', suggestedName: naam,
+        types: [{ description: 'PDF-bestand', accept: { 'application/pdf': ['.pdf'] } }] });
+    } catch (e) {
+      if (e.name === 'AbortError') return;   // geannuleerd: niets opgeslagen
+      handle = null;
+    }
+    if (handle) {
+      try {
+        const w = await handle.createWritable();
+        await w.write(bytes);
+        await w.close();
+        pdfGelukt(momentopname, handle.name);
+        return;
+      } catch (e) { /* schrijven lukte niet: val terug op downloaden */ }
+    }
+  }
+  const a = uEl('a', { href: URL.createObjectURL(new Blob([bytes], { type: 'application/pdf' })), download: naam });
   document.body.appendChild(a);
   a.click();
   setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 1000);
-  scPdfMomentopname = scMomentopname();
-  const knop = document.getElementById('knop-pdf');
-  knop.textContent = 'PDF opgeslagen ✓';
-  clearTimeout(pdfDownload.timer);
-  pdfDownload.timer = setTimeout(() => { knop.textContent = 'Opslaan als PDF'; }, 2500);
+  pdfGelukt(momentopname, naam + ' in je map Downloads');
+}
+function pdfGelukt(momentopname, waar) {
+  scPdfMomentopname = momentopname;
+  scPdfNaam = waar;
+  scRenderAfronden();
 }
 
 // ---------------------------------------------------------------------
@@ -1820,17 +2092,19 @@ const RL_STAPPEN = [
   { titel: 'Kies de zaak', doel: '[data-blok="0"]', view: 'screening',
     tekst: '<p>Vul zaaknummer, rolnummer, rechter en screener in. Heb je een zakenlijst geïmporteerd, dan kies je de zaak bovenaan en wordt de rest ingevuld.</p>' },
   { titel: 'Beantwoord de vragen', doel: '[data-blok="1"]', view: 'screening',
-    tekst: '<p>Vervolgvragen verschijnen vanzelf. Een magenta stip betekent dat een vraag nog open staat.</p>' },
+    tekst: '<p>Vervolgvragen verschijnen vanzelf. Een magenta stip betekent dat een vraag nog open staat. Een <strong>i</strong>-knopje geeft uitleg.</p><p>Is alleen een paar dingen bijzonder? Dan zet één knop bij de actielijst de overige ja/nee-vragen op Nee.</p>' },
   { titel: 'De actielijst groeit mee', doel: '.uitvoer', view: 'screening',
     tekst: '<p>Hier zie je direct welke acties de griffie moet uitvoeren, en hoeveel vragen nog openstaan.</p>' },
-  { titel: 'Kopiëren naar Joris', doel: '#knop-kopieer', view: 'screening',
-    tekst: '<p>Eén klik zet de actielijst op het klembord. Plak hem met Ctrl+V in Joris.</p>' },
-  { titel: 'Altijd de PDF opslaan', doel: '#knop-pdf', view: 'screening', privacy: true,
-    tekst: '<p>Sla het ingevulde formulier op als PDF. Je krijgt eerst te zien of er nog vragen openstaan. De PDF komt in je map Downloads; bewaar hem daarna op de afgesproken plek.</p>' },
+  { titel: 'Afronden in drie stappen', doel: '.afronden', view: 'screening',
+    tekst: '<p>1. Kopieer de actielijst en plak hem in Joris met Ctrl+V.<br>2. Sla het formulier op in het dossier.<br>3. Begin aan de volgende zaak.</p><p>Elke stap krijgt een groen vinkje als hij klaar is.</p>' },
+  { titel: 'Sla het formulier altijd op', doel: '#knop-pdf', view: 'screening', privacy: true,
+    tekst: '<p>Sla het ingevulde formulier op als PDF. Je krijgt eerst te zien of er nog vragen openstaan. Daarna kies je de map van het dossier; de bestandsnaam staat al klaar.</p>' },
   { titel: 'Instellingen', doel: '.app-nav-btn[data-view="instellingen"]', view: 'screening',
-    tekst: '<p>Importeer hier de zakenlijst (CSV) en beheer de namen van rechters en screeners. Na de rondleiding vraagt het formulier om het namenbestand van je team.</p>' },
+    tekst: '<p>Hier kies je de zakenlijst uit Joris en beheer je de namen van rechters en screeners.</p>' },
   { titel: 'Handleiding', doel: '.app-nav-btn[data-view="handleiding"]', view: 'screening',
-    tekst: '<p>In de handleiding lees je alles nog eens na. Daar kun je deze rondleiding ook opnieuw starten.</p>' },
+    tekst: '<p>In de handleiding lees je alles nog eens na. Daar kun je ook een spiekbriefje afdrukken en deze rondleiding opnieuw starten.</p>' },
+  { titel: 'Nog één ding: de namenlijst',
+    tekst: '<p>Na deze rondleiding vraagt het formulier om de namenlijst van je team. Dan kun je rechter en screener uit een lijst kiezen.</p><p>Heeft een collega de namenlijst al in de teammap gezet? Kies dan <strong>Bestaande namenlijst openen</strong>. Daarna klik je bij elke start alleen nog op de naam van het bestand.</p>' },
 ];
 let rlIndex = 0;
 let rlTerugFocus = null;
@@ -1932,7 +2206,48 @@ document.getElementById('rondleiding').addEventListener('keydown', e => {
     e.preventDefault();
   }
 });
-window.addEventListener('beforeprint', pdfBouwAfdruk);
+let afdrukSpiek = false;
+window.addEventListener('beforeprint', () => { if (!afdrukSpiek) pdfBouwAfdruk(); });
+window.addEventListener('afterprint', () => { afdrukSpiek = false; document.getElementById('afdruk').classList.remove('spiek'); });
+
+function spiekBouw() {
+  const af = document.getElementById('afdruk');
+  af.innerHTML = '';
+  af.className = 'spiek';
+  const el = (tag, cls, inhoud) => {
+    const e = uEl(tag, cls ? { class: cls } : null);
+    (Array.isArray(inhoud) ? inhoud : [inhoud]).forEach(d => e.appendChild(typeof d === 'string' ? document.createTextNode(d) : d));
+    return e;
+  };
+  const knopje = t => el('span', 'knopje', t);
+  af.appendChild(el('h1', null, 'Screeningsformulier kanton: zo werkt het'));
+  af.appendChild(el('p', 'afdruk-meta', 'Open het formulier via ' + location.href.split('#')[0]));
+  const stappen = [
+    ['Klik bij het openen op de naam van de namenlijst (bijvoorbeeld ', knopje('📂 screening-namenlijst.json'), ').'],
+    ['Kies de zaak: typ bovenaan het rolnummer of de naam van een partij. Of vul zaaknummer en rolnummer zelf in.'],
+    ['Beantwoord de vragen. Alleen wat bijzonder is? Klik dan op ', knopje('Overige ja/nee-vragen op Nee zetten'), '.'],
+    ['Klik op ', knopje('Kopieer actielijst voor Joris'), ' en plak de lijst in Joris met Ctrl+V.'],
+    ['Klik op ', knopje('Formulier opslaan in het dossier'), ' en kies de map van het dossier. De naam staat al klaar.'],
+    ['Klik op ', knopje('Volgende zaak'), ' om met de volgende zaak te beginnen.'],
+  ];
+  const ol = uEl('ol');
+  stappen.forEach((s, i) => ol.appendChild(el('li', null, [el('span', 'nr', String(i + 1)), el('div', null, s)])));
+  af.appendChild(ol);
+  af.appendChild(el('div', 'let-op', [el('strong', null, 'Let op: '),
+    'alles wat je invult blijft op je eigen computer. Collega’s kunnen het niet zien, en sluit je de pagina dan is het weg. Sla daarom altijd het formulier op in het dossier (stap 5).']));
+  const tips = uEl('ul', { class: 'tips' });
+  ['Zet het formulier in je favorieten: druk op Ctrl+D als het formulier open is.',
+   'Of maak er een app van in Edge: klik rechtsboven op ··· → Apps → Deze site als app installeren.',
+   'Letters te klein? Klik rechtsboven in het formulier op A+ Grotere tekst.',
+   'Een i-knopje naast een vraag geeft uitleg.'].forEach(t => tips.appendChild(el('li', null, t)));
+  af.appendChild(el('h2', null, 'Handig om te weten'));
+  af.appendChild(tips);
+}
+function spiekAfdrukken() {
+  afdrukSpiek = true;
+  spiekBouw();
+  window.print();
+}
 window.addEventListener('resize', rlPlaats);
 window.addEventListener('scroll', rlPlaats, { passive: true });
 // Ankerlinks in de handleiding: scrollen zonder de adresbalk te wijzigen.
@@ -1944,6 +2259,11 @@ document.querySelectorAll('.app-nav-btn').forEach(b => b.addEventListener('click
 document.getElementById('zl-bestand').addEventListener('change', zlBestandGekozen);
 document.getElementById('zl-wis').addEventListener('click', zlWis);
 document.getElementById('knop-pdf').addEventListener('click', pdfOpslaan);
+document.getElementById('knop-nee').addEventListener('click', scSnelNee);
+document.getElementById('knop-ongedaan').addEventListener('click', scOngedaan);
+document.getElementById('knop-tekst').addEventListener('click', () => scZetTekstGroot(!document.documentElement.classList.contains('groot')));
+document.getElementById('hdl-spiek').addEventListener('click', spiekAfdrukken);
+scZetTekstGroot(!!lsLees(LS_TEKST_GROOT, false));
 document.getElementById('nm-rechters').addEventListener('input', nmGewijzigd);
 document.getElementById('nm-screeners').addEventListener('input', nmGewijzigd);
 document.getElementById('nm-export').addEventListener('click', nmExporteer);
