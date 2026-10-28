@@ -587,8 +587,8 @@
       <ol>
         <li>Klik op <span class="ui">Kopieer naar klembord</span> en plak de actielijst in Joris (Ctrl+V).</li>
         <li>Klik op <span class="ui">Opslaan als PDF</span>. Zijn er nog vragen open, dan zie je welke. Kies <span class="ui">Verder invullen</span> of <span class="ui">Toch opslaan</span>. Open vragen staan dan als <em>niet ingevuld</em> in de PDF.</li>
-        <li>Het afdrukvenster opent. Kies bij de printer <span class="ui">Opslaan als PDF</span> (of <span class="ui">Microsoft Print to PDF</span>). De bestandsnaam is al ingevuld, bijvoorbeeld <em>Screening CV EXPL 26-1234 2026-10-28</em>.</li>
-        <li>Sla de PDF op de afgesproken plek op.</li>
+        <li>De PDF wordt gedownload met een bestandsnaam als <em>Screening CV EXPL 26-1234 2026-10-28.pdf</em>. Je vindt hem in je map Downloads, tenzij je browser vraagt waar je hem wilt opslaan.</li>
+        <li>Verplaats of bewaar de PDF op de afgesproken plek, zoals het digitale dossier.</li>
         <li>Klik op <span class="ui">Nieuwe screening</span> om met de volgende zaak te beginnen. Ter beveiliging moet je twee keer klikken.</li>
       </ol>
     </div>
@@ -647,7 +647,7 @@
 // =====================================================================
 // VERSIE
 // =====================================================================
-const SCREENING_VERSIE = '2026.10.7';
+const SCREENING_VERSIE = '2026.10.8';
 
 // =====================================================================
 // FORMULIER — vragen en acties
@@ -1502,11 +1502,11 @@ function scWis() {
 }
 
 // =====================================================================
-// OPSLAAN ALS PDF (via het afdrukvenster)
+// OPSLAAN ALS PDF — de PDF wordt in de browser gemaakt en gedownload
 // =====================================================================
 function pdfOpslaan() {
   if (scOpenVragen().length) { pdfToonWaarschuwing(); return; }
-  pdfAfdrukken();
+  pdfDownload();
 }
 
 function pdfToonWaarschuwing() {
@@ -1526,7 +1526,7 @@ function pdfToonWaarschuwing() {
   paneel.appendChild(ul);
   const knoppen = uEl('div', { class: 'pdf-waarschuwing-knoppen' });
   const toch = uEl('button', { type: 'button', class: 'knop knop-primair', id: 'pdf-toch' }, 'Toch opslaan');
-  toch.addEventListener('click', () => { paneel.hidden = true; pdfAfdrukken(); });
+  toch.addEventListener('click', () => { paneel.hidden = true; pdfDownload(); });
   const terug = uEl('button', { type: 'button', class: 'knop knop-secundair', id: 'pdf-terug' }, 'Verder invullen');
   terug.addEventListener('click', () => { paneel.hidden = true; scNaarEersteOpen(); });
   knoppen.appendChild(toch);
@@ -1579,13 +1579,200 @@ function pdfBestandsnaam() {
     .replace(/[\\/:*?"<>|]+/g, '-');
 }
 
-// De browser gebruikt de paginatitel als voorgestelde bestandsnaam bij "Opslaan als PDF".
-function pdfAfdrukken() {
-  pdfBouwAfdruk();
+function pdfOpgeslagenOp() {
+  const nu = new Date();
+  return uDatumNL(uVandaagISO()) + ' om ' + String(nu.getHours()).padStart(2, '0') + ':' + String(nu.getMinutes()).padStart(2, '0');
+}
+
+function pdfDownload() {
+  const naam = pdfBestandsnaam() + '.pdf';
+  const a = uEl('a', { href: URL.createObjectURL(new Blob([pdfMaak()], { type: 'application/pdf' })), download: naam });
+  document.body.appendChild(a);
+  a.click();
+  setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 1000);
   scPdfMomentopname = scMomentopname();
-  const oudeTitel = document.title;
-  document.title = pdfBestandsnaam();
-  try { window.print(); } finally { document.title = oudeTitel; }
+  const knop = document.getElementById('knop-pdf');
+  knop.textContent = 'PDF opgeslagen ✓';
+  clearTimeout(pdfDownload.timer);
+  pdfDownload.timer = setTimeout(() => { knop.textContent = 'Opslaan als PDF'; }, 2500);
+}
+
+// ---------------------------------------------------------------------
+// PDF-MAKER — kleine eigen PDF-schrijver, zodat er geen bibliotheek of
+// netwerkverzoek nodig is. Gebruikt de standaardletters van PDF (Helvetica en
+// Courier, tekenset WinAnsi); breedtes worden gemeten met Arial, dat dezelfde
+// maten heeft als Helvetica.
+// ---------------------------------------------------------------------
+const PDF_PAGINA = { b: 595.28, h: 841.89 };             // A4 in punten
+const PDF_MARGE = { links: 48, rechts: 48, boven: 54, onder: 60 };
+const PDF_KLEUR = {
+  indigo: [0.082, 0.122, 0.427], magenta: [0.667, 0, 0.38],
+  tekst: [0.13, 0.13, 0.13], grijs: [0.38, 0.38, 0.38], lijn: [0.82, 0.82, 0.82],
+};
+const PDF_LETTERS = { regular: 'F1', vet: 'F2', schuin: 'F3', mono: 'F4' };
+// Tekens 0x80–0x9F van WinAnsi (Windows-1252)
+const PDF_CP1252 = { '€': 128, '‚': 130, 'ƒ': 131, '„': 132, '…': 133, '†': 134, '‡': 135, 'ˆ': 136, '‰': 137,
+  'Š': 138, '‹': 139, 'Œ': 140, 'Ž': 142, '‘': 145, '’': 146, '“': 147, '”': 148, '•': 149, '–': 150, '—': 151,
+  '˜': 152, '™': 153, 'š': 154, '›': 155, 'œ': 156, 'ž': 158, 'Ÿ': 159 };
+
+function pdfWinAnsi(s) {
+  let uit = '';
+  for (const c of String(s)) {
+    const code = c.charCodeAt(0);
+    if (c === '\t' || c === '\n' || c === '\r') uit += ' ';
+    else if ((code >= 32 && code < 127) || (code >= 160 && code <= 255)) uit += c;
+    else if (PDF_CP1252[c]) uit += String.fromCharCode(PDF_CP1252[c]);
+    else if (c === '✓') uit += 'v';
+    else uit += '?';
+  }
+  return uit;
+}
+function pdfStr(s) { return '(' + pdfWinAnsi(s).replace(/[\\()]/g, m => '\\' + m) + ')'; }
+
+let pdfMeetCanvas = null;
+function pdfBreedte(tekst, letter, grootte) {
+  if (letter === 'mono') return tekst.length * 0.6 * grootte;
+  if (!pdfMeetCanvas) pdfMeetCanvas = document.createElement('canvas').getContext('2d');
+  pdfMeetCanvas.font = (letter === 'vet' ? 'bold ' : letter === 'schuin' ? 'italic ' : '') + grootte +
+    'px Arial, "Liberation Sans", Helvetica, sans-serif';
+  return pdfMeetCanvas.measureText(tekst).width;
+}
+
+// Breekt tekst af op woorden zodat elke regel binnen maxB past; harde regeleinden blijven.
+function pdfAfbreken(tekst, letter, grootte, maxB) {
+  const regels = [];
+  for (const alinea of String(tekst).split(/\r?\n/)) {
+    let regel = '';
+    for (const woord of alinea.split(' ')) {
+      const poging = regel ? regel + ' ' + woord : woord;
+      if (pdfBreedte(poging, letter, grootte) <= maxB) { regel = poging; continue; }
+      if (regel) regels.push(regel);
+      regel = woord;
+      while (pdfBreedte(regel, letter, grootte) > maxB && regel.length > 1) {
+        let n = regel.length - 1;
+        while (n > 1 && pdfBreedte(regel.slice(0, n), letter, grootte) > maxB) n--;
+        regels.push(regel.slice(0, n));
+        regel = regel.slice(n);
+      }
+    }
+    regels.push(regel);
+  }
+  return regels;
+}
+
+function pdfMaak() {
+  const B = PDF_PAGINA.b - PDF_MARGE.links - PDF_MARGE.rechts;
+  const paginas = [];
+  let ops, y;
+  const nieuwePagina = () => { ops = []; paginas.push(ops); y = PDF_PAGINA.h - PDF_MARGE.boven; };
+  const ruimte = nodig => { if (y - nodig < PDF_MARGE.onder) nieuwePagina(); };
+  const kleur = k => k.map(n => n.toFixed(3)).join(' ');
+  const tekst = (s, x, yy, letter, grootte, k) =>
+    ops.push('BT /' + PDF_LETTERS[letter] + ' ' + grootte + ' Tf ' + kleur(k) + ' rg ' +
+      x.toFixed(2) + ' ' + yy.toFixed(2) + ' Td ' + pdfStr(s) + ' Tj ET');
+  const lijn = (x1, y1, x2, y2) =>
+    ops.push(kleur(PDF_KLEUR.lijn) + ' RG 0.5 w ' + x1.toFixed(2) + ' ' + y1.toFixed(2) + ' m ' +
+      x2.toFixed(2) + ' ' + y2.toFixed(2) + ' l S');
+  const x0 = PDF_MARGE.links;
+
+  nieuwePagina();
+  tekst('Screeningsformulier kanton', x0, y - 18, 'vet', 18, PDF_KLEUR.indigo);
+  y -= 34;
+  tekst('Opgeslagen op ' + pdfOpgeslagenOp(), x0, y, 'regular', 10, PDF_KLEUR.grijs);
+  y -= 14;
+
+  // Vragen en antwoorden per blok, in twee kolommen
+  const kolB = B * 0.52, gr = 10, rh = 13, pad = 5;
+  for (const blok of FORMULIER.blokken) {
+    const vragen = blok.vragen.filter(v => zichtbaar.has(v.id));
+    if (!vragen.length) continue;
+    ruimte(26 + rh + 2 * pad);
+    y -= 14;
+    tekst(blok.titel, x0, y - 12.5, 'vet', 12.5, PDF_KLEUR.indigo);
+    y -= 20;
+    for (const v of vragen) {
+      const w = antwoorden[v.id];
+      const leeg = scLeeg(w);
+      const antwoord = leeg ? (v.optioneel ? '–' : 'niet ingevuld') : pdfAntwoordTekst(v, w);
+      const letterA = leeg && !v.optioneel ? 'schuin' : 'vet';
+      const kleurA = leeg && !v.optioneel ? PDF_KLEUR.magenta : PDF_KLEUR.tekst;
+      const links = pdfAfbreken(v.vraag, 'regular', gr, kolB - 12);
+      const rechts = pdfAfbreken(antwoord, letterA, gr, B - kolB - 6);
+      const hoogte = Math.max(links.length, rechts.length) * rh + 2 * pad;
+      ruimte(hoogte);
+      links.forEach((r, i) => tekst(r, x0 + 4, y - pad - 9.5 - i * rh, 'regular', gr, PDF_KLEUR.tekst));
+      rechts.forEach((r, i) => tekst(r, x0 + kolB, y - pad - 9.5 - i * rh, letterA, gr, kleurA));
+      y -= hoogte;
+      lijn(x0, y, x0 + B, y);
+    }
+  }
+
+  // Actielijst in vaste breedte, zoals hij in Joris wordt geplakt
+  ruimte(60);
+  y -= 22;
+  tekst('Actielijst griffie', x0, y - 12.5, 'vet', 12.5, PDF_KLEUR.indigo);
+  y -= 24;
+  const mono = 9, mh = 12;
+  const maxTekens = Math.floor((B - 8) / (0.6 * mono));
+  for (const regel of scBouwTekst().split('\n')) {
+    const stukken = [];
+    let rest = regel;
+    while (rest.length > maxTekens) {
+      let knip = rest.lastIndexOf(' ', maxTekens);
+      if (knip < 10) knip = maxTekens;
+      stukken.push(rest.slice(0, knip));
+      rest = '  ' + rest.slice(knip).replace(/^ /, '');
+    }
+    stukken.push(rest);
+    for (const s of stukken) {
+      ruimte(mh);
+      if (s) tekst(s, x0 + 4, y - 9, 'mono', mono, PDF_KLEUR.tekst);
+      y -= mh;
+    }
+  }
+
+  // Voettekst met paginanummer
+  const voet = pdfBestandsnaam();
+  paginas.forEach((p, i) => {
+    ops = p;
+    lijn(x0, PDF_MARGE.onder - 22, x0 + B, PDF_MARGE.onder - 22);
+    tekst(voet, x0, PDF_MARGE.onder - 36, 'regular', 8.5, PDF_KLEUR.grijs);
+    const nr = 'Pagina ' + (i + 1) + ' van ' + paginas.length;
+    tekst(nr, x0 + B - pdfBreedte(nr, 'regular', 8.5), PDF_MARGE.onder - 36, 'regular', 8.5, PDF_KLEUR.grijs);
+  });
+
+  // PDF-bestand opbouwen: elk teken < 256, dus tekenpositie = byte-positie
+  const objecten = [];
+  const obj = inhoud => { objecten.push(inhoud); return objecten.length; };
+  const catalogus = obj(null), paginaBoom = obj(null);
+  const letters = { F1: 'Helvetica', F2: 'Helvetica-Bold', F3: 'Helvetica-Oblique', F4: 'Courier' };
+  const letterRef = Object.entries(letters).map(([k, naam]) =>
+    '/' + k + ' ' + obj('<< /Type /Font /Subtype /Type1 /BaseFont /' + naam + ' /Encoding /WinAnsiEncoding >>') + ' 0 R').join(' ');
+  const kinderen = paginas.map(p => {
+    const stroom = p.join('\n');
+    const inhoud = obj('<< /Length ' + stroom.length + ' >>\nstream\n' + stroom + '\nendstream');
+    return obj('<< /Type /Page /Parent ' + paginaBoom + ' 0 R /MediaBox [0 0 ' + PDF_PAGINA.b + ' ' + PDF_PAGINA.h +
+      '] /Resources << /Font << ' + letterRef + ' >> >> /Contents ' + inhoud + ' 0 R >>');
+  });
+  objecten[catalogus - 1] = '<< /Type /Catalog /Pages ' + paginaBoom + ' 0 R >>';
+  objecten[paginaBoom - 1] = '<< /Type /Pages /Kids [' + kinderen.map(k => k + ' 0 R').join(' ') + '] /Count ' + kinderen.length + ' >>';
+  const d = new Date(), tw = n => String(n).padStart(2, '0');
+  const info = obj('<< /Title ' + pdfStr(voet) + ' /Producer (Screeningsformulier kanton ' + SCREENING_VERSIE + ') /CreationDate (D:' +
+    d.getFullYear() + tw(d.getMonth() + 1) + tw(d.getDate()) + tw(d.getHours()) + tw(d.getMinutes()) + tw(d.getSeconds()) + ') >>');
+
+  let uit = '%PDF-1.4\n%\xE2\xE3\xCF\xD3\n';
+  const posities = objecten.map((inhoud, i) => {
+    const pos = uit.length;
+    uit += (i + 1) + ' 0 obj\n' + inhoud + '\nendobj\n';
+    return pos;
+  });
+  const xref = uit.length;
+  uit += 'xref\n0 ' + (objecten.length + 1) + '\n0000000000 65535 f \n' +
+    posities.map(pos => String(pos).padStart(10, '0') + ' 00000 n \n').join('') +
+    'trailer\n<< /Size ' + (objecten.length + 1) + ' /Root ' + catalogus + ' 0 R /Info ' + info + ' 0 R >>\nstartxref\n' + xref + '\n%%EOF\n';
+  const bytes = new Uint8Array(uit.length);
+  for (let i = 0; i < uit.length; i++) bytes[i] = uit.charCodeAt(i);
+  return bytes;
 }
 
 // =====================================================================
@@ -1639,7 +1826,7 @@ const RL_STAPPEN = [
   { titel: 'Kopiëren naar Joris', doel: '#knop-kopieer', view: 'screening',
     tekst: '<p>Eén klik zet de actielijst op het klembord. Plak hem met Ctrl+V in Joris.</p>' },
   { titel: 'Altijd de PDF opslaan', doel: '#knop-pdf', view: 'screening', privacy: true,
-    tekst: '<p>Sla het ingevulde formulier op als PDF. Je krijgt eerst te zien of er nog vragen openstaan. Kies daarna in het afdrukvenster <strong>Opslaan als PDF</strong>; de bestandsnaam staat al klaar.</p>' },
+    tekst: '<p>Sla het ingevulde formulier op als PDF. Je krijgt eerst te zien of er nog vragen openstaan. De PDF komt in je map Downloads; bewaar hem daarna op de afgesproken plek.</p>' },
   { titel: 'Instellingen', doel: '.app-nav-btn[data-view="instellingen"]', view: 'screening',
     tekst: '<p>Importeer hier de zakenlijst (CSV) en beheer de namen van rechters en screeners. Na de rondleiding vraagt het formulier om het namenbestand van je team.</p>' },
   { titel: 'Handleiding', doel: '.app-nav-btn[data-view="handleiding"]', view: 'screening',
@@ -1745,6 +1932,7 @@ document.getElementById('rondleiding').addEventListener('keydown', e => {
     e.preventDefault();
   }
 });
+window.addEventListener('beforeprint', pdfBouwAfdruk);
 window.addEventListener('resize', rlPlaats);
 window.addEventListener('scroll', rlPlaats, { passive: true });
 // Ankerlinks in de handleiding: scrollen zonder de adresbalk te wijzigen.
