@@ -701,7 +701,7 @@
     <div class="blok-inhoud">
       <ol>
         <li><strong>Kies de zaak.</strong> Heb je een zakenlijst geïmporteerd, typ dan bovenaan een rolnummer, zaaknummer of partijnaam en kies de zaak. Zaaknummer, rolnummer en rechter worden dan ingevuld. Anders vul je ze zelf in. Bij het rolnummer staat <span class="ui">CV EXPL</span> er al voor.</li>
-        <li><strong>Kies rechter en screener</strong> uit de keuzelijst. De screener wordt onthouden voor de volgende keer.</li>
+        <li><strong>Kies de screener</strong> uit de keuzelijst. De screener wordt onthouden voor de volgende keer. De rechter is nog niet bekend? Laat dat veld dan leeg; het hoeft niet ingevuld te worden.</li>
         <li><strong>Beantwoord de vragen.</strong> Vervolgvragen verschijnen vanzelf, bijvoorbeeld het adres bij een descente. Kies je bij <span class="ui">Mondelinge behandeling</span> voor nee, dan volgen de vragen over de tweede schriftelijke ronde. Staat er een <span class="ui">i</span>-knopje naast een vraag, dan krijg je daarmee uitleg.</li>
         <li><strong>Alleen een paar dingen bijzonder?</strong> Beantwoord die vragen en klik daarna bij de actielijst op <span class="ui">Overige ja/nee-vragen op Nee zetten</span>. Vragen waarbij Nee juist een actie oplevert (zoals <span class="ui">AT akkoord?</span> of <span class="ui">Spoedeisend?</span>), blijven open zodat je ze bewust beantwoordt.</li>
         <li><strong>Houd de actielijst rechts in de gaten.</strong> Die groeit mee met je antwoorden. Een magenta stip bij een vraag betekent dat die nog niet beantwoord is. Bovenaan de actielijst zie je hoeveel vragen nog openstaan.</li>
@@ -787,7 +787,7 @@
 // =====================================================================
 // VERSIE
 // =====================================================================
-const SCREENING_VERSIE = '2026.10.10';
+const SCREENING_VERSIE = '2026.10.11';
 
 // =====================================================================
 // FORMULIER — vragen en acties
@@ -832,7 +832,7 @@ const FORMULIER = {
         { id: 'zaaknummer', vraag: 'Zaaknummer', type: 'tekst', uitvoer: 'kop' },
         { id: 'rolnummer', vraag: 'Rolnummer', type: 'tekst', uitvoer: 'kop', voorvoegsel: 'CV EXPL',
           patroon: /^\d{2}-\d{1,6}$/, patroonHint: 'Een rolnummer ziet eruit als 26-1234. Controleer of het klopt.' },
-        { id: 'rechter', vraag: 'Rechter', type: 'naam', lijst: 'rechters', uitvoer: 'kop' },
+        { id: 'rechter', vraag: 'Rechter', type: 'naam', lijst: 'rechters', uitvoer: 'kop', optioneel: true },
         { id: 'screener', vraag: 'Screener', type: 'naam', lijst: 'screeners', onthouden: true, uitvoer: 'kop' },
         { id: 'datum', vraag: 'Datum screening', type: 'datum', uitvoer: 'kop' },
         { id: 'moeilijkheid', vraag: 'Moeilijkheidsgraad', type: 'keuze', uitvoer: 'kop',
@@ -1956,7 +1956,7 @@ const RL_STAPPEN = [
   { titel: 'Belangrijk: je gegevens blijven op deze computer', privacy: true,
     tekst: '<p>Alles wat je invult, blijft alleen in deze browser. Er wordt niets verstuurd of centraal opgeslagen.</p><ul><li><strong>Collega\'s kunnen je screening niet inzien.</strong></li><li><strong>Sluit of ververs je de pagina, dan is de screening weg.</strong></li></ul><p>Sla daarom bij elke zaak de <strong>PDF</strong> op, op de plek die in jullie team is afgesproken. De PDF is het enige blijvende verslag.</p>' },
   { titel: 'Kies de zaak', doel: '[data-blok="0"]', view: 'screening',
-    tekst: '<p>Vul zaaknummer, rolnummer, rechter en screener in. Heb je een zakenlijst geïmporteerd, dan kies je de zaak bovenaan en wordt de rest ingevuld.</p>' },
+    tekst: '<p>Vul zaaknummer, rolnummer en screener in, en de rechter als die al bekend is. Heb je een zakenlijst geïmporteerd, dan kies je de zaak bovenaan en wordt de rest ingevuld.</p>' },
   { titel: 'Beantwoord de vragen', doel: '[data-blok="1"]', view: 'screening',
     tekst: '<p>Vervolgvragen verschijnen vanzelf. Een magenta stip betekent dat een vraag nog open staat. Een <strong>i</strong>-knopje geeft uitleg.</p><p>Is alleen een paar dingen bijzonder? Dan zet één knop bij de actielijst de overige ja/nee-vragen op Nee.</p>' },
   { titel: 'De actielijst groeit mee', doel: '.uitvoer', view: 'screening',
