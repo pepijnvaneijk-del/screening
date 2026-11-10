@@ -296,6 +296,83 @@
   .zaakkiezer label { display: block; font-weight: 700; margin-bottom: 6px; }
   .zaakkiezer input[type=text] { width: 100%; }
   .zaakkiezer-melding { margin-top: 6px; font-size: 13px; }
+  .zaakkiezer .knop { font-size: 14px; padding: 7px 12px; }
+  .zaakkiezer .melding { margin-top: 8px; }
+
+  /* === Screeningsronde: map van de ronde en eigen zaken === */
+  .ronde-kop { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 12px; }
+  .ronde-kop strong { color: var(--indigo); }
+  .ronde-kop + * { margin-top: 10px; }
+  .eigen-kop { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 6px 12px; margin-bottom: 8px; }
+  .zaakkiezer .eigen-kop label { display: inline-flex; align-items: center; gap: 8px; margin: 0; }
+  .eigen-kop select { width: 230px; font-size: 14px; padding: 5px 8px; }
+  .zl-teller { font-weight: 700; }
+  .zaak-lijst { list-style: none; display: grid; gap: 4px; max-height: 430px; overflow-y: auto; padding: 3px; margin: -3px; }
+  .zaak-lijst .hint { padding: 4px 0; }
+  .zaak-rij {
+    width: 100%;
+    text-align: left;
+    font: inherit;
+    font-size: 14px;
+    display: grid;
+    grid-template-columns: 18px 1fr auto;
+    gap: 8px;
+    align-items: center;
+    padding: 7px 10px;
+    border: 1px solid #7C82B0;
+    border-radius: 8px;
+    background: var(--wit);
+    color: var(--tekst);
+    cursor: pointer;
+  }
+  .zaak-rij:hover { border-color: var(--indigo); background: var(--indigo-50); }
+  .zaak-rij:focus-visible { outline: 2px solid var(--magenta); outline-offset: 1px; }
+  .zaak-rij.huidig { border: 2px solid var(--indigo); background: var(--indigo-50); padding: 6px 9px; font-weight: 700; }
+  .zaak-rij.klaar { color: var(--grijs); }
+  .zaak-rij .vink { color: var(--groen); font-weight: 700; text-align: center; }
+  .zaak-rij .zaak-rol { display: block; font-weight: 700; }
+  .zaak-rij .zaak-partijen { display: block; font-size: 13px; color: var(--grijs); font-weight: 400; }
+  .zaak-rij.huidig .vink { color: var(--indigo); }
+  .zaak-rij .wie { font-size: 13px; color: var(--grijs); white-space: nowrap; font-weight: 400; }
+  .zaak-rij.klaar .wie { color: var(--groen); font-weight: 600; }
+  .zl-lijst-onder { margin-top: 6px; }
+  .zl-lijst-onder .linkknop, .ronde-kop .linkknop, .vd .terug { padding: 8px 0; min-height: 36px; }
+  .zl-lijst-meer { font-size: 13px; color: var(--grijs); margin-left: 8px; }
+  @media (max-width: 600px) {
+    .zaak-rij { grid-template-columns: 18px 1fr; }
+    .zaak-rij .wie { grid-column: 2; white-space: normal; }
+    .vd-tabel tr:first-child { display: none; }
+    .vd-tabel tr { display: grid; grid-template-columns: auto 1fr; gap: 2px 10px; padding: 8px 0; border-bottom: 1px solid var(--lijn); }
+    .vd-tabel td { border: 0; padding: 2px 10px; }
+    .vd-tabel td.partijen { min-width: 0; grid-column: 1 / -1; }
+    .vd-tabel td:nth-child(n+5) { grid-column: 1 / -1; }
+    .vd-tabel select { min-width: 0; }
+    .vd-tabel td[data-label]::before { content: attr(data-label); display: block; font-size: 12px; font-weight: 700; color: var(--indigo); margin-bottom: 2px; }
+  }
+  .zaakkiezer .zaak-waarschuwing { margin: 10px 0 0; color: var(--tekst); }
+
+  /* === Zaken verdelen (beheerder) === */
+  .wrap-smal.vd .blok { max-width: none; }
+  .vd h3 { font-size: 18px; color: var(--indigo); margin-top: 8px; }
+  .vd .terug { justify-self: start; }
+  .vd-screeners { display: flex; flex-wrap: wrap; gap: 8px 20px; }
+  .vd-screeners label, .vd-optie { display: inline-flex; align-items: center; gap: 8px; font-weight: 600; }
+  .vd input[type=checkbox] { width: 18px; height: 18px; accent-color: var(--indigo); }
+  .vd-tellers { display: flex; flex-wrap: wrap; gap: 6px; }
+  .vd-teller { padding: 4px 12px; border-radius: 999px; background: var(--indigo-50); color: var(--indigo); font-weight: 700; font-size: 14px; }
+  .vd-teller.leeg { background: var(--magenta-50); color: var(--magenta); }
+  .vd-tabel { border-collapse: collapse; width: 100%; font-size: 14px; }
+  .vd-tabel th, .vd-tabel td { text-align: left; padding: 6px 10px; border-bottom: 1px solid var(--lijn); vertical-align: middle; }
+  .vd-tabel th { color: var(--indigo); background: var(--indigo-50); white-space: nowrap; }
+  .vd-tabel tr:last-child td { border-bottom: none; }
+  .vd-tabel td.nr { color: var(--grijs); width: 1%; }
+  .vd-tabel td.rol { white-space: nowrap; font-weight: 700; }
+  .vd-tabel td.partijen { min-width: 220px; }
+  .vd-tabel select { width: 100%; min-width: 160px; font-size: 14px; padding: 5px 8px; }
+  .vd-tabel tr.open td { background: var(--magenta-50); }
+  .vd-tabel tr.open td:first-child { box-shadow: inset 4px 0 0 var(--magenta); }
+  .vd .pdf-waarschuwing { margin: 0; }
+  .alleen-voorlezen { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 
   /* === Instellingen === */
   .wrap-smal { max-width: 1180px; margin: 0 auto; padding: 24px 28px 60px; }
@@ -589,7 +666,7 @@
         <li class="stap" id="stap-pdf">
           <span class="stap-nr" aria-hidden="true">2</span>
           <div class="stap-inhoud">
-            <button type="button" class="knop knop-primair" id="knop-pdf">Formulier opslaan in het dossier</button>
+            <button type="button" class="knop knop-primair" id="knop-pdf">Formulier opslaan als PDF</button>
             <div class="stap-hint" id="hint-pdf">Het formulier wordt opgeslagen als PDF.</div>
           </div>
         </li>
@@ -625,7 +702,17 @@
         <p class="hint">Controleer welke kolom wat bevat. De herkenning gaat op de kolomnamen; pas het aan als het niet klopt.</p>
         <div class="koppeling" id="zl-koppeling"></div>
         <div class="tabel-houder"><table class="voorbeeld" id="zl-voorbeeld"></table></div>
-        <button type="button" class="knop knop-secundair" id="zl-wis" style="justify-self:start">Zakenlijst wissen</button>
+        <button type="button" class="knop knop-secundair" id="zl-wis" style="justify-self:start">Zakenlijst wissen (ook de map van de ronde)</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="blok" id="vd-blok">
+    <h2 class="blok-titel">Zaken verdelen</h2>
+    <div class="blok-inhoud">
+      <p>Werken jullie met een screeningsronde? Dan verdeelt de beheerder de zaken over de screeners en zet de verdeling in de map van de ronde in de teammap. Elke screener kiest in het formulier die map en ziet dan meteen de eigen zaken.</p>
+      <div class="knoprij">
+        <button type="button" class="knop knop-secundair" id="vd-open">Zaken verdelen (alleen voor de beheerder)</button>
       </div>
     </div>
   </section>
@@ -658,6 +745,53 @@
   </section>
 </main>
 
+<main class="wrap-smal vd" id="view-verdelen" hidden>
+  <section class="blok">
+    <h2 class="blok-titel" id="vd-titel" tabindex="-1">Zaken verdelen</h2>
+    <div class="blok-inhoud">
+      <button type="button" class="linkknop terug" id="vd-terug">← Terug naar Instellingen</button>
+      <p>Verdeel de zaken van een screeningsronde over de screeners. Sla de verdeling daarna op in de map van de ronde in de teammap, bijvoorbeeld <em>Screening 2026 week 46</em>. Kiest een screener die map in het formulier, dan ziet de screener meteen de eigen zaken.</p>
+      <p class="hint">Er wordt niets bewaard tot je op <span class="ui">Verdeling opslaan</span> klikt. Sluit je deze pagina eerder, dan is de verdeling weg.</p>
+
+      <h3>1. Kies de uitdraai uit Joris</h3>
+      <p class="hint">Een CSV-bestand met de zaken van deze ronde. Wil je een verdeling aanpassen, kies dan het bestand <strong>verdeling.csv</strong> uit de map van de ronde.</p>
+      <label class="knop knop-secundair bestandknop">Uitdraai uit Joris kiezen
+        <input type="file" id="vd-bestand" accept=".csv,.txt,text/csv">
+      </label>
+      <div class="melding" id="vd-bestand-melding" role="status"></div>
+
+      <div id="vd-werk" class="blok-inhoud" style="padding:0" hidden>
+        <details class="beheer">
+          <summary>Kolommen controleren</summary>
+          <div class="beheer-inhoud">
+            <p class="hint">De herkenning gaat op de kolomnamen. Klopt een kolom niet, kies dan zelf de juiste. Let op: de verdeling begint dan opnieuw.</p>
+            <div class="koppeling" id="vd-koppeling"></div>
+          </div>
+        </details>
+
+        <h3 id="vd-wie-kop">2. Wie screenen er deze keer?</h3>
+        <div class="vd-screeners" id="vd-screeners" role="group" aria-labelledby="vd-wie-kop"></div>
+        <label class="vd-optie"><input type="checkbox" id="vd-eiser" checked> Zaken van dezelfde eiser bij één screener houden</label>
+        <div class="knoprij">
+          <button type="button" class="knop knop-primair" id="vd-verdeel">Verdeel eerlijk</button>
+        </div>
+        <p class="hint"><span class="ui">Verdeel eerlijk</span> verdeelt alle zaken opnieuw. Daarna kun je per zaak de rechter en de screener nog aanpassen.</p>
+        <div class="melding" id="vd-verdeel-melding" role="status"></div>
+        <div class="vd-tellers" id="vd-tellers" role="status" aria-atomic="true"></div>
+        <div class="tabel-houder"><table class="vd-tabel" id="vd-tabel"></table></div>
+
+        <h3>3. Verdeling opslaan</h3>
+        <p class="hint">Sla de verdeling op in de map van de screeningsronde in de teammap. Laat de bestandsnaam met <strong>verdeling</strong> beginnen, dan vindt het formulier hem.</p>
+        <div class="knoprij">
+          <button type="button" class="knop knop-primair" id="vd-opslaan">Verdeling opslaan</button>
+        </div>
+        <div class="pdf-waarschuwing" id="vd-waarschuwing" role="alert" hidden></div>
+        <div class="melding" id="vd-melding" role="status"></div>
+      </div>
+    </div>
+  </section>
+</main>
+
 <main class="wrap-smal hdl" id="view-handleiding" hidden>
   <section class="blok">
     <h2 class="blok-titel">Handleiding</h2>
@@ -666,6 +800,7 @@
       <nav class="hdl-inhoud" aria-label="Inhoud handleiding">
         <a href="#hdl-privacy">Waar blijven je gegevens?</a>
         <a href="#hdl-screenen">Een zaak screenen</a>
+        <a href="#hdl-ronde">Werken met een screeningsronde</a>
         <a href="#hdl-afronden">Afronden: kopiëren en PDF</a>
         <a href="#hdl-instellingen">Instellingen</a>
         <a href="#hdl-openen">Snel openen</a>
@@ -687,11 +822,12 @@
         <li><strong>Collega's kunnen jouw screening niet inzien.</strong> Er is geen centrale opslag.</li>
         <li><strong>Een screening verdwijnt</strong> zodra je de pagina sluit of ververst, of op <span class="ui">Nieuwe screening</span> klikt. Terughalen kan dan niet meer.</li>
       </ul>
-      <p><strong>Sla daarom bij elke screening de PDF op</strong> en bewaar die op de plek die in jullie team is afgesproken, zoals het digitale dossier. De PDF is het enige blijvende verslag van de screening. Plak daarnaast de actielijst in Joris, zodat de griffie ermee aan de slag kan.</p>
+      <p><strong>Sla daarom bij elke screening de PDF op</strong> en bewaar die op de plek die in jullie team is afgesproken, zoals de map van de screeningsronde in de teammap. De PDF is het enige blijvende verslag van de screening. Plak daarnaast de actielijst in Joris, zodat de griffie ermee aan de slag kan.</p>
       <h3>Wat wordt er wel bewaard?</h3>
       <ul>
         <li>Alleen een paar voorkeuren op deze computer: de laatst gekozen screener en of je grotere tekst wilt.</li>
         <li>Zaakgegevens worden nooit bewaard. Ook de geïmporteerde zakenlijst niet: die is weg als je de pagina sluit.</li>
+        <li>Werk je met een screeningsronde? Dan staan de verdeling en de opgeslagen PDF's als gewone bestanden in de map van de ronde in de teammap. Het formulier zelf bewaart niets: na het sluiten kies je de map opnieuw.</li>
       </ul>
     </div>
   </section>
@@ -700,7 +836,7 @@
     <h2 class="blok-titel">Een zaak screenen</h2>
     <div class="blok-inhoud">
       <ol>
-        <li><strong>Kies de zaak.</strong> Heb je een zakenlijst geïmporteerd, typ dan bovenaan een rolnummer, zaaknummer of partijnaam en kies de zaak. Zaaknummer, rolnummer en rechter worden dan ingevuld. Anders vul je ze zelf in. Bij het rolnummer staat <span class="ui">CV EXPL</span> er al voor.</li>
+        <li><strong>Kies de zaak.</strong> Werk je met een screeningsronde, klik dan bovenaan op <span class="ui">Map van de ronde kiezen</span> en daarna op je zaak (zie <a href="#hdl-ronde">Werken met een screeningsronde</a>). Heb je een zakenlijst geïmporteerd, typ dan bovenaan een rolnummer, zaaknummer of partijnaam en kies de zaak. Zaaknummer, rolnummer en rechter worden dan ingevuld. Anders vul je ze zelf in. Bij het rolnummer staat <span class="ui">CV EXPL</span> er al voor.</li>
         <li><strong>Kies de screener</strong> uit de keuzelijst. De screener wordt onthouden voor de volgende keer. De rechter is nog niet bekend? Laat dat veld dan leeg; het hoeft niet ingevuld te worden.</li>
         <li><strong>Beantwoord de vragen.</strong> Vervolgvragen verschijnen vanzelf, bijvoorbeeld het adres bij een descente. Kies je bij <span class="ui">Mondelinge behandeling</span> voor nee, dan volgen de vragen over de tweede schriftelijke ronde. Staat er een <span class="ui">i</span>-knopje naast een vraag, dan krijg je daarmee uitleg.</li>
         <li><strong>Alleen een paar dingen bijzonder?</strong> Beantwoord die vragen en klik daarna bij de actielijst op <span class="ui">Overige ja/nee-vragen op Nee zetten</span>. Vragen waarbij Nee juist een actie oplevert (zoals <span class="ui">AT akkoord?</span> of <span class="ui">Spoedeisend?</span>), blijven open zodat je ze bewust beantwoordt.</li>
@@ -710,13 +846,36 @@
     </div>
   </section>
 
+  <section class="blok" id="hdl-ronde">
+    <h2 class="blok-titel">Werken met een screeningsronde</h2>
+    <div class="blok-inhoud">
+      <p>De beheerder verdeelt de zaken van een ronde over de screeners. Voor elke ronde staat er een map in de teammap, bijvoorbeeld <em>Screening 2026 week 46</em>. Daarin staan de verdeling en alle opgeslagen formulieren van die ronde.</p>
+      <ol>
+        <li><strong>Kies de map.</strong> Klik bovenaan het formulier op <span class="ui">Map van de ronde kiezen</span> en kies de map van deze ronde in de teammap. Doe dit elke keer dat je het formulier opent. Edge vraagt of het formulier die map mag gebruiken en er bestanden in mag opslaan. Geef daarvoor toestemming.</li>
+        <li><strong>Kies je naam</strong> bij <span class="ui">Zaken voor</span>. Je ziet dan alleen de zaken die aan jou zijn toegewezen. Bovenaan staat hoe ver je bent, bijvoorbeeld <span class="ui">Jouw zaken: 3 van 9 klaar</span>.</li>
+        <li><strong>Klik op een zaak.</strong> Zaaknummer, rolnummer en rechter worden ingevuld. Een zaak met een groen vinkje ✓ is al klaar: daarvan staat het formulier al in de map.</li>
+        <li><strong>Sla het formulier op</strong> met <span class="ui">Formulier opslaan als PDF</span>. Het gaat meteen in de map van de ronde. Je hoeft geen map te kiezen.</li>
+        <li><strong>Klik op <span class="ui">Volgende zaak</span>.</strong> Je volgende zaak uit je lijst staat dan al klaar.</li>
+      </ol>
+      <h3>Een zaak van een collega overnemen</h3>
+      <p>Klik op <span class="ui">Alle zaken tonen</span>. Je ziet dan ook de zaken van anderen, met de naam van de screener erbij. Met <span class="ui">Alleen mijn zaken tonen</span> ga je terug naar je eigen lijst.</p>
+      <h3>Waarschuwingen</h3>
+      <p>Het formulier waarschuwt je in twee gevallen. Het is een waarschuwing, geen blokkade.</p>
+      <ul>
+        <li><strong>De zaak is ingedeeld bij een collega.</strong> Klopt dat, bijvoorbeeld omdat je iemand vervangt? Kies <span class="ui">Ja, ik neem hem over</span>. Anders kies je <span class="ui">Andere zaak kiezen</span>.</li>
+        <li><strong>De zaak is al gescreend.</strong> In de map staat al een formulier van deze zaak. Kies <span class="ui">Andere zaak kiezen</span>, of <span class="ui">Ja, opnieuw screenen</span> als je de zaak bewust nog een keer doet. Het eerdere formulier blijft dan bewaard.</li>
+      </ul>
+      <p class="hint">Het formulier onthoudt de map niet. Heb je het formulier gesloten, klik dan de volgende keer opnieuw op <span class="ui">Map van de ronde kiezen</span>. Verkeerde map gekozen? Klik op <span class="ui">andere map kiezen</span>.</p>
+    </div>
+  </section>
+
   <section class="blok" id="hdl-afronden">
     <h2 class="blok-titel">Afronden in drie stappen</h2>
     <div class="blok-inhoud">
       <p>Onder de actielijst staan drie stappen. Elke stap krijgt een groen vinkje als hij klaar is.</p>
       <ol>
         <li><span class="ui">Kopieer actielijst voor Joris</span>. Ga naar Joris en plak de lijst met Ctrl+V.</li>
-        <li><span class="ui">Formulier opslaan in het dossier</span>. Zijn er nog vragen open, dan zie je welke; kies <span class="ui">Verder invullen</span> of <span class="ui">Toch opslaan</span>. Daarna verschijnt een venster <em>Opslaan als</em>. Kies de map van het dossier; de bestandsnaam staat al klaar, bijvoorbeeld <em>Screening CV EXPL 26-1234 2026-10-28.pdf</em>. De volgende keer opent het venster weer in dezelfde map.</li>
+        <li><span class="ui">Formulier opslaan als PDF</span>. Zijn er nog vragen open, dan zie je welke; kies <span class="ui">Verder invullen</span> of <span class="ui">Toch opslaan</span>. Heb je de map van de ronde gekozen, dan gaat het formulier meteen in die map. Anders verschijnt een venster <em>Opslaan als</em>: kies de afgesproken map. De bestandsnaam staat al klaar, bijvoorbeeld <em>Screening CV EXPL 26-1234 2026-10-28.pdf</em>. De volgende keer opent het venster weer in dezelfde map.</li>
         <li><span class="ui">Volgende zaak</span> maakt het formulier leeg. Is het formulier nog niet opgeslagen, dan krijg je eerst een waarschuwing. Per ongeluk geklikt? Klik dan binnen 10 seconden op <span class="ui">Ongedaan maken</span>.</li>
       </ol>
       <p class="hint">Verander je iets na het kopiëren of opslaan, dan verdwijnt het vinkje. Kopieer of sla dan opnieuw op.</p>
@@ -732,6 +891,15 @@
       <p>Zet de namen onder elkaar, één per regel. Ze verschijnen dan als keuzelijst in het formulier.</p>
       <p>De keuzelijsten voor rechter en screener komen uit de namenlijst van het team. Die wordt bijgehouden door één beheerder. In <span class="ui">Instellingen</span> zie je wie dat is en welke namen erin staan. Mist er een naam, laat het de beheerder dan weten.</p>
       <p class="hint">Voor de beheerder: open in Instellingen <span class="ui">Namenlijst beheren</span>, pas de namen aan en klik op <span class="ui">Namenlijst opslaan</span>. Sla het bestand op als <strong>namen.js</strong> in de teammap, naast screening.html, en vervang het oude bestand.</p>
+      <h3>Zaken verdelen (voor de beheerder)</h3>
+      <ol>
+        <li>Maak in de teammap een map voor de ronde, bijvoorbeeld <em>Screening 2026 week 46</em>. Zet het jaar vooraan en gebruik twee cijfers voor de week (week 06), dan staan de mappen op volgorde.</li>
+        <li>Klik in <span class="ui">Instellingen</span> op <span class="ui">Zaken verdelen (alleen voor de beheerder)</span> en kies de uitdraai uit Joris (CSV-bestand).</li>
+        <li>Vink aan wie er deze keer screenen en klik op <span class="ui">Verdeel eerlijk</span>. Elke screener krijgt ongeveer evenveel zaken. Met <span class="ui">Zaken van dezelfde eiser bij één screener houden</span> gaan bijvoorbeeld alle zaken van één woningcorporatie naar dezelfde screener.</li>
+        <li>Pas per zaak zo nodig de screener of de rechter aan. Staat de rechter al in Joris, dan is die al ingevuld.</li>
+        <li>Klik op <span class="ui">Verdeling opslaan</span> en sla het bestand op in de map van de ronde. Laat de naam met <strong>verdeling</strong> beginnen, bijvoorbeeld <em>verdeling.csv</em>. Anders vindt het formulier hem niet.</li>
+      </ol>
+      <p class="hint">Iets omgooien tijdens de ronde? Kies in het verdeelscherm de opgeslagen verdeling, pas hem aan en sla hem opnieuw op in dezelfde map. Screeners zien de wijziging als ze weer naar het formulier gaan.</p>
     </div>
   </section>
 
@@ -753,11 +921,13 @@
       <h3>Ik heb de pagina per ongeluk gesloten. Is mijn screening terug te halen?</h3>
       <p>Nee. Er wordt niets bewaard, dus begin opnieuw. Om dat te voorkomen, vraagt de browser of je de pagina echt wilt verlaten als er een ingevuld formulier openstaat dat nog niet is opgeslagen. Sla het formulier dus op zodra je klaar bent.</p>
       <h3>Kan een collega mijn screening afmaken of bekijken?</h3>
-      <p>Alleen via het opgeslagen formulier (PDF) in het dossier of de actielijst in Joris. Het formulier zelf deelt niets.</p>
+      <p>Alleen via het opgeslagen formulier (PDF) in de map van de ronde of het dossier, of via de actielijst in Joris. Het formulier zelf deelt niets.</p>
       <h3>Er staan geen namen in de keuzelijst.</h3>
       <p>Dan kon het formulier de namenlijst niet vinden. Open het formulier via de teammap, niet via een kopie op je bureaublad. Lukt het dan nog niet, laat het de beheerder weten. Je kunt rechter en screener in de tussentijd zelf intypen.</p>
       <h3>Het kopiëren werkt niet.</h3>
       <p>Selecteer de tekst van de actielijst met de muis en kopieer met Ctrl+C.</p>
+      <h3>Ik krijg een waarschuwing dat de zaak al gescreend is.</h3>
+      <p>Dan staat er in de map van de ronde al een formulier van deze zaak, van jou of van een collega. In de melding staat wanneer het is opgeslagen; in de PDF zelf zie je wie de screener was. Kies <span class="ui">Andere zaak kiezen</span> als het dubbel werk zou zijn. Moet de zaak echt opnieuw, kies dan <span class="ui">Ja, opnieuw screenen</span>. Het nieuwe formulier krijgt dan een eigen naam met (2) erachter; het oude blijft staan.</p>
     </div>
   </section>
 </main>
@@ -787,7 +957,7 @@
 // =====================================================================
 // VERSIE
 // =====================================================================
-const SCREENING_VERSIE = '2026.10.11';
+const SCREENING_VERSIE = '2026.11.1';
 
 // =====================================================================
 // FORMULIER — vragen en acties
@@ -845,20 +1015,27 @@ const FORMULIER = {
         { id: 'atAkkoord', vraag: 'AT akkoord?', type: 'janee', uitleg: 'Ambtshalve toetsing',
           info: 'Ambtshalve toetsing: punten die de rechtbank uit zichzelf moet toetsen, ook als geen van de partijen erover begint of er een beroep op doet.',
           nee: 'Voorleggen aan JJM/JM: controle ambtshalve toetsing (AT niet akkoord)' },
-        { id: 'bewind', vraag: 'Sprake van bewindvoering bij gedaagde?', type: 'janee' },
+        { id: 'bewind', vraag: 'Sprake van bewindvoering bij gedaagde?', type: 'janee',
+          info: 'Staat de gedaagde onder (beschermings)bewind, dan beheert een bewindvoerder het geld en de bezittingen van de gedaagde en moet die bewindvoerder ook in de procedure worden opgeroepen. Tip: zoek de gedaagde op in het Centraal curatele- en bewindregister (via rechtspraak.nl).' },
         { id: 'bewindOpgeroepen', vraag: 'Is de bewindvoerder opgeroepen?', type: 'janee', toonAls: { bewind: 'ja' },
           nee: 'Voorleggen aan JJM: controle, bewindvoerder van gedaagde is niet opgeroepen' },
         { id: 'pers', vraag: 'Persgevoelig?', type: 'janee',
+          info: 'Persgevoelig: de zaak kan aandacht van de media trekken, bijvoorbeeld door een bekende partij, een maatschappelijk gevoelig onderwerp of veel gedupeerden. Bij ja worden de teamvoorzitter en de afdeling communicatie ingelicht, zodat zij niet overvallen worden.',
           ja: 'Teamvoorzitter en afdeling communicatie mailen: zaak is persgevoelig' },
-        { id: 'taal', vraag: 'Producties in vreemde taal?', type: 'janee' },
+        { id: 'taal', vraag: 'Producties in vreemde taal?', type: 'janee',
+          info: 'Producties zijn de bijlagen bij de dagvaarding of het antwoord. De procedure is in het Nederlands; staat een productie in een andere taal, dan kan de rechter om een vertaling vragen. Teksten in het Engels worden soms zonder vertaling geaccepteerd; overleg bij twijfel.' },
         { id: 'vertaling', vraag: 'Is er een vertaling?', type: 'janee', toonAls: { taal: 'ja' },
+          info: 'Kijk of de partij zelf een Nederlandse vertaling van die producties heeft meegestuurd. Zo niet, dan vraagt de griffie die op.',
           nee: 'Vertaling opvragen van de producties in vreemde taal' },
         { id: 'gevoegd', vraag: 'Gevoegde behandeling met andere zaak?', type: 'janee',
+          info: 'Gevoegde behandeling: twee of meer zaken die nauw met elkaar samenhangen (bijvoorbeeld dezelfde partijen of hetzelfde huurcontract) worden samen behandeld, op één zitting. Vul hieronder het zaaknummer van de andere zaak in.',
           ja: 'Gevoegd behandelen met zaak {gevoegdZaak}' },
         { id: 'gevoegdZaak', vraag: 'Zaaknummer andere zaak', type: 'tekst', toonAls: { gevoegd: 'ja' } },
         { id: 'mediation', vraag: 'Mediation?', type: 'janee',
+          info: 'Mediation naast rechtspraak: de rechter stelt partijen voor om met hulp van een mediator samen een oplossing te zoeken; de zaak bij de rechtbank wacht zolang. Denk aan zaken waarin partijen met elkaar verder moeten, zoals een lopende huur- of arbeidsrelatie. Meedoen is vrijwillig.',
           ja: 'Dossier naar het mediationbureau' },
         { id: 'verwijzen', vraag: 'Ambtshalve verwijzen?', type: 'janee',
+          info: 'Ambtshalve verwijzen: de rechter stuurt de zaak uit zichzelf door naar de juiste rechter, omdat deze kantonrechter hem niet mag behandelen. Bijvoorbeeld: de vordering is hoger dan € 25.000 en het is geen huur-, arbeids- of consumentenzaak (dan naar de civiele kamer van deze rechtbank), of de huurder, werknemer of consument woont in een ander arrondissement (dan naar die rechtbank).',
           ja: 'Voor vonnis voorleggen aan JJM (ambtshalve verwijzen)' },
         { id: 'pilot', vraag: 'Geschikt voor de pilot?', type: 'janee', uitvoer: 'opmerking',
           ja: 'Geschikt voor de pilot' },
@@ -879,6 +1056,7 @@ const FORMULIER = {
       toonAls: { mondeling: 'nee' },
       vragen: [
         { id: 'tweedeRonde', vraag: 'Soort ronde', type: 'keuze',
+          info: 'Repliek/dupliek: een volledige tweede schriftelijke ronde; eerst reageert eiser op het antwoord van gedaagde (repliek), daarna reageert gedaagde (dupliek). Akte/antwoordakte: een kortere ronde over punten die de rechter aanwijst; de ene partij schrijft een akte, de andere reageert met een antwoordakte.',
           opties: ['akte/antwoordakte', 'repliek/dupliek'],
           actie: 'Tweede schriftelijke ronde: {waarde}' },
         { id: 'atRonde', vraag: 'Extra AT-opdrachten?', type: 'janee',
@@ -903,6 +1081,7 @@ const FORMULIER = {
           acties: { anders: 'Zittingstijd inplannen: {zittingstijdMinuten} min' } },
         { id: 'zittingstijdMinuten', vraag: 'Zittingstijd (minuten)', type: 'getal', toonAls: { zittingstijd: 'anders' } },
         { id: 'descente', vraag: 'Descente?', type: 'janee',
+          info: 'Descente (plaatsopneming): de rechter gaat zelf ter plaatse kijken, bijvoorbeeld in een huurwoning met gebreken of bij een erfgrens. De zitting vindt dan (deels) op die plek plaats. Vul het adres in; de griffie regelt vervoer.',
           ja: 'Descente op {descenteAdres}: auto regelen' },
         { id: 'descenteAdres', vraag: 'Adres', type: 'tekst', toonAls: { descente: 'ja' } },
         { id: 'atZitting', vraag: 'Extra AT-opdrachten?', type: 'janee',
@@ -920,6 +1099,7 @@ const FORMULIER = {
         { id: 'deskundigenTekst', vraag: 'Welke deskundigen of getuigen?', type: 'tekst', meerregels: true, toonAls: { deskundigen: 'ja' } },
         { id: 'deskundigenNaar', vraag: 'Hoe?', type: 'keuze', opties: TERUGKOPPELING, toonAls: { deskundigen: 'ja' } },
         { id: 'spreek', vraag: 'Spreekaantekeningen?', type: 'janee',
+          info: 'Spreekaantekeningen: een korte geschreven tekst die een partij of gemachtigde op de zitting voorleest en daarna inlevert. Standaard staat in het vonnis dat dit mag. Kies nee als de rechter dat in deze zaak niet wil.',
           uitleg: 'Standaard staat in het vonnis dat beknopte aantekeningen gebruikt mogen worden',
           nee: 'Standaardtekst over beknopte spreekaantekeningen uit het vonnis verwijderen' },
         { id: 'spreekTermijn', vraag: 'Spreektijd', type: 'keuze', standaard: 'standaard', toonAls: { spreek: 'ja' },
@@ -928,8 +1108,10 @@ const FORMULIER = {
           uitleg: 'Wordt tussen haakjes achter de overweging over spreekaantekeningen gezet',
           actie: 'Achter de overweging over spreekaantekeningen toevoegen: ({waarde} minuten)' },
         { id: 'risico', vraag: 'Risicozitting?', type: 'janee',
+          info: 'Risicozitting: er zijn aanwijzingen dat iemand op de zitting agressief of bedreigend kan worden, bijvoorbeeld door dreigende taal in de stukken, eerdere incidenten of een ontruimingszaak met veel emotie. Bij ja worden de balie en de parketpolitie gewaarschuwd, zodat zij extra kunnen letten op de veiligheid.',
           ja: 'Balie en parketpolitie op de hoogte brengen (risicozitting)' },
         { id: 'zaal', vraag: 'Grotere zaal nodig?', type: 'janee',
+          info: 'Kies ja als er meer mensen komen dan in een gewone kantonzaal passen, bijvoorbeeld bij veel partijen, getuigen of deskundigen, een tolk, of belangstelling van publiek of pers. Vul hieronder de gewenste zaal in.',
           ja: 'Grotere zaal reserveren: {zaalNaam}' },
         { id: 'zaalNaam', vraag: 'Zaal', type: 'tekst', toonAls: { zaal: 'ja' } },
         { id: 'griffier', vraag: 'Griffier', type: 'keuze',
@@ -991,6 +1173,26 @@ function nmSchoon(lijst) {
   return lijst.map(x => String(x).trim()).filter(x => x && !gezien.has(x.toLowerCase()) && gezien.add(x.toLowerCase()));
 }
 function nmUitTekst(tekst) { return nmSchoon(tekst.split(/\r?\n/)); }
+
+// Zoekt een naam uit Joris (bijv. "mr. J. de Vries") op in de namenlijst: eerst precies (zonder
+// "mr.", leestekens en hoofdletters), anders op achternaam als die maar één keer voorkomt.
+// Geen match: ''.
+function nmZoekNaam(tekst, lijst) {
+  const schoon = s => String(s || '').toLowerCase()
+    .replace(/(^|\s)(mr|mw|mevr|dhr|drs|dr|prof|ing|ir)\.?(?=\s|$)/g, ' ')
+    .replace(/[^a-z0-9à-ÿ ]+/g, ' ').replace(/\s+/g, ' ').trim();
+  const doel = schoon(tekst);
+  if (!doel || !lijst || !lijst.length) return '';
+  const precies = lijst.filter(n => schoon(n) === doel);
+  if (precies.length === 1) return precies[0];
+  const achter = s => { const w = schoon(s).split(' '); return w[w.length - 1]; };
+  // Eerste voorletter of voornaam (tussenvoegsels tellen niet), of '' als die er niet is.
+  const TUSSEN = new Set(['de', 'den', 'der', 'van', 'het', 'ten', 'ter', 'te', 'la', 'le', 'in', 't']);
+  const voor = s => { const w = schoon(s).split(' ').slice(0, -1).filter(x => !TUSSEN.has(x)); return w.length ? w[0][0] : ''; };
+  const v = voor(tekst);
+  const zelfde = lijst.filter(n => achter(n) === achter(tekst) && (!v || !voor(n) || voor(n) === v));
+  return zelfde.length === 1 ? zelfde[0] : '';
+}
 
 function nmLaad() {
   const n = window.SCREENING_NAMEN;
@@ -1068,6 +1270,7 @@ async function nmOpslaan() {
   nmVulBeheer();
   scRenderFormulier();
   scBijwerken();
+  if (vdTabel) vdRender();
   nmMelding('Opgeslagen als ' + waar + '. Staat het bestand nog niet in de teammap naast screening.html, zet het daar dan neer. ' +
     'Collega’s zien de nieuwe namen de volgende keer dat ze het formulier openen.', 'goed');
 }
@@ -1110,7 +1313,7 @@ function scBepaalZichtbaar() {
 function scAlsTekst(vraag, w) {
   if (vraag && vraag.type === 'datum') return uDatumNL(w);
   const t = String(w).trim();
-  return vraag && vraag.voorvoegsel ? vraag.voorvoegsel + ' ' + t : t;
+  return vraag && vraag.voorvoegsel && /^\d/.test(t) ? vraag.voorvoegsel + ' ' + t : t;
 }
 function scVul(sjabloon, eigenId) {
   return sjabloon.replace(/\{(\w+)\}/g, (_, k) => {
@@ -1152,31 +1355,43 @@ function scOpenVragen() {
 // ZAKENLIJST (CSV-import) — alleen in het geheugen
 // =====================================================================
 // Velden die uit de zakenlijst gehaald kunnen worden. 'patroon' herkent de kolomnaam.
+// 'screener' staat alleen in een verdeling die de beheerder heeft gemaakt (Zaken verdelen).
 const ZL_VELDEN = [
-  { id: 'zaaknummer', label: 'Zaaknummer', patroon: /zaak\s*-?\s*(n(umme)?r|id)|^zaak$/i },
-  { id: 'rolnummer', label: 'Rolnummer', patroon: /rol/i },
+  { id: 'zaaknummer', label: 'Zaaknummer', patroon: /zaak\s*-?\s*(n(umme)?r|id)|^zaak$/i, precies: /^zaak\s*-?\s*(n(umme)?r\.?)$/i },
+  { id: 'rolnummer', label: 'Rolnummer', patroon: /rol/i, precies: /rol\s*-?\s*(n(umme)?r\.?)|^rol$/i },
   { id: 'rechter', label: 'Rechter', patroon: /rechter|behandelaar|magistra/i },
   { id: 'eiser', label: 'Eiser', patroon: /eiser|eisende|verzoeker/i },
   { id: 'gedaagde', label: 'Gedaagde', patroon: /gedaagde|verweerder|verwerende/i },
+  { id: 'screener', label: 'Screener (uit de verdeling)', patroon: /screener/i },
 ];
 let zlKoppen = [];      // kolomnamen uit de CSV
 let zlRijen = [];       // rijen (arrays) zonder kopregel
 let zlKoppeling = {};   // veld-id -> kolomindex (of -1)
 let zlZoek = '';        // tekst in het zoekveld van de zaakkiezer
 let zlMelding = '';     // melding onder de zaakkiezer
+let zlToonAlle = false;      // bij een verdeling: ook de zaken van collega's tonen
+let zlBevestigd = new Set(); // waarschuwingen die de screener heeft weggeklikt ("Ja, ik neem hem over")
 
 function zlDecodeer(buffer) {
   // Exports uit Excel/zaaksystemen zijn vaak Windows-1252; probeer eerst UTF-8.
   let tekst;
+  const b = new Uint8Array(buffer.slice ? buffer.slice(0, 2) : buffer);
+  if (b[0] === 0xFF && b[1] === 0xFE) return new TextDecoder('utf-16le').decode(buffer).replace(/^\uFEFF/, '');
+  if (b[0] === 0xFE && b[1] === 0xFF) return new TextDecoder('utf-16be').decode(buffer).replace(/^\uFEFF/, '');
   try { tekst = new TextDecoder('utf-8', { fatal: true }).decode(buffer); }
   catch (e) { tekst = new TextDecoder('windows-1252').decode(buffer); }
   return tekst.replace(/^﻿/, '');
 }
 
 function zlParseCSV(tekst) {
-  const eerste = tekst.split(/\r?\n/).find(r => r.trim()) || '';
-  const scheiders = [';', '\t', ','];
-  const sch = scheiders.reduce((best, s) => eerste.split(s).length > eerste.split(best).length ? s : best, ';');
+  // Scheidingsteken: het teken waarbij de meeste van de eerste 30 regels hetzelfde aantal velden (> 1) hebben.
+  const regels = tekst.split(/\r\n|\r|\n/).filter(r => r.trim()).slice(0, 30);
+  const score = sch => {
+    const tel = {};
+    regels.forEach(r => { const n = r.split(sch).length; if (n > 1) tel[n] = (tel[n] || 0) + 1; });
+    return Math.max(0, ...Object.values(tel));
+  };
+  const sch = [';', '\t', ','].reduce((best, k) => score(k) > score(best) ? k : best, ';');
   const rijen = [];
   let rij = [], veld = '', inQuotes = false;
   for (let i = 0; i < tekst.length; i++) {
@@ -1185,7 +1400,7 @@ function zlParseCSV(tekst) {
       if (c === '"' && tekst[i + 1] === '"') { veld += '"'; i++; }
       else if (c === '"') inQuotes = false;
       else veld += c;
-    } else if (c === '"') inQuotes = true;
+    } else if (c === '"' && veld.trim() === '') { inQuotes = true; veld = ''; }
     else if (c === sch) { rij.push(veld); veld = ''; }
     else if (c === '\n' || c === '\r') {
       if (c === '\r' && tekst[i + 1] === '\n') i++;
@@ -1196,72 +1411,214 @@ function zlParseCSV(tekst) {
   return rijen.map(r => r.map(v => v.trim())).filter(r => r.some(v => v !== ''));
 }
 
-function zlImporteer(tekst) {
+// Leest een tabel uit CSV-tekst: kopregel, rijen en welke kolom bij welk veld hoort.
+function zlLeesTabel(tekst) {
   const rijen = zlParseCSV(tekst);
   // Kopregel = eerste regel met het meest voorkomende aantal kolommen (slaat titelregels over).
-  const tel = {};
-  rijen.slice(0, 30).forEach(r => { tel[r.length] = (tel[r.length] || 0) + 1; });
-  const aantal = Number(Object.keys(tel).sort((a, b) => tel[b] - tel[a] || b - a)[0]);
-  const kopIndex = rijen.findIndex(r => r.length === aantal);
-  if (kopIndex < 0 || aantal < 2 || rijen.length - kopIndex < 2) {
+  // Kopregel: bij voorkeur de eerste regel waarin minstens twee kolomnamen herkend worden;
+  // anders de eerste regel met het meest voorkomende aantal kolommen (slaat titelregels over).
+  const herkend = r => ZL_VELDEN.filter(v => r.some(k => v.patroon.test(k))).length;
+  let kopIndex = rijen.slice(0, 30).findIndex(r => r.filter(Boolean).length >= 2 && herkend(r) >= 2);
+  if (kopIndex < 0) {
+    const tel = {};
+    rijen.slice(0, 30).forEach(r => { tel[r.length] = (tel[r.length] || 0) + 1; });
+    const aantal = Number(Object.keys(tel).sort((a, b) => tel[b] - tel[a] || b - a)[0]);
+    kopIndex = aantal >= 2 ? rijen.findIndex(r => r.length === aantal) : -1;
+  }
+  if (kopIndex < 0 || rijen.length - kopIndex < 2) {
     throw new Error('Geen bruikbare tabel gevonden. Kies een CSV-bestand met een kopregel en minstens één zaak.');
   }
-  zlKoppen = rijen[kopIndex];
-  zlRijen = rijen.slice(kopIndex + 1);
+  const koppen = rijen[kopIndex];
+  // Per veld de best passende kolom: precies de naam wint, kolommen als "Roldatum", "Rolnummer oud"
+  // of "Gemachtigde eiser" alleen als er niets beters is.
+  const BIJZAAK = /datum|zitting|oud|vorig|extern|gemachtigde|advocaat|controle/i;
   const gebruikt = new Set();
-  zlKoppeling = {};
+  const koppeling = {};
   for (const v of ZL_VELDEN) {
-    const i = zlKoppen.findIndex((k, idx) => !gebruikt.has(idx) && v.patroon.test(k));
-    zlKoppeling[v.id] = i;
-    if (i >= 0) gebruikt.add(i);
+    let beste = -1, besteScore = 0;
+    koppen.forEach((k, idx) => {
+      if (gebruikt.has(idx) || !v.patroon.test(k)) return;
+      const naam = k.trim().toLowerCase();
+      const sc = naam === v.id || naam === v.label.toLowerCase() ? 4 : (v.precies && v.precies.test(k) ? 2 : 1) + (BIJZAAK.test(k) ? 0 : 1);
+      if (sc > besteScore) { beste = idx; besteScore = sc; }
+    });
+    koppeling[v.id] = beste;
+    if (beste >= 0) gebruikt.add(beste);
   }
+  if (koppeling.rolnummer < 0 && koppeling.zaaknummer < 0) {
+    throw new Error('In dit bestand is geen kolom met rolnummers of zaaknummers gevonden. Controleer of je de goede uitdraai hebt gekozen.');
+  }
+  // Voet- en tussenregels ("Totaal: 15 zaken", "Rechter: mr. X") zijn geen zaken.
+  const vulling = r => r.filter(Boolean).length;
+  const data = rijen.slice(kopIndex + 1).filter(r =>
+    !(koppen.length >= 3 && vulling(r) < 2) && !/^(totaal|aantal|pagina|afgedrukt)\b/i.test(r.find(Boolean) || ''));
+  if (!data.length) throw new Error('Geen zaken gevonden onder de kopregel.');
+  return { koppen, rijen: data, koppeling };
 }
 
-function zlZaken() {
-  const waarde = (r, id) => (zlKoppeling[id] >= 0 ? (r[zlKoppeling[id]] || '').trim() : '');
-  return zlRijen.map(r => {
+function zlImporteer(tekst) {
+  const t = zlLeesTabel(tekst);
+  zlKoppen = t.koppen;
+  zlRijen = t.rijen;
+  zlKoppeling = t.koppeling;
+}
+
+function zlZakenUit(rijen, koppeling) {
+  const waarde = (r, id) => (koppeling[id] >= 0 ? (r[koppeling[id]] || '').trim() : '');
+  return rijen.map(r => {
     const z = {};
     for (const v of ZL_VELDEN) z[v.id] = waarde(r, v.id);
-    const partijen = [z.eiser, z.gedaagde].filter(Boolean).join(' / ');
-    z.label = [z.rolnummer, z.zaaknummer, partijen].filter(Boolean).join(' · ');
+    z.partijen = [z.eiser, z.gedaagde].filter(Boolean).join(' / ');
+    z.label = [z.rolnummer, z.zaaknummer, z.partijen].filter(Boolean).join(' · ');
     return z;
   }).filter(z => z.label);
 }
+function zlZaken() { return zlZakenUit(zlRijen, zlKoppeling); }
 
+// "10910000 \\ CV EXPL 26-1400" of "CV EXPL. 26-1400" → "26-1400"; andere vormen alleen zonder voorvoegsel.
+function zlRolNormaal(rol) {
+  const m = /cv\s*-?\s*expl\.?\s*(\d{2}-\d{1,6})\b/i.exec(String(rol || ''));
+  return m ? m[1] : zlRolZonderVoorvoegsel(String(rol || ''));
+}
 function zlRolZonderVoorvoegsel(rol) {
-  return rol.replace(/^\s*cv\s*-?\s*expl\.?\s*/i, '');
+  return rol.replace(/^(\s*cv\s*-?\s*expl\.?\s*)+/i, '');
+}
+// Sleutel om zaken te vergelijken: rolnummer (of zaaknummer) zonder CV EXPL, spaties en hoofdletters.
+function zlSleutel(t) {
+  return zlRolNormaal(t).replace(/[\\/:*?"<>|]+/g, '-').replace(/\s+/g, '').toLowerCase();
+}
+function zlZaakSleutels(z) { return [z.rolnummer, z.zaaknummer].map(zlSleutel).filter(Boolean); }
+function scZaakSleutels() { return [antwoorden.rolnummer, antwoorden.zaaknummer].map(zlSleutel).filter(Boolean); }
+function zlZelfde(a, b) { return String(a || '').trim().toLowerCase() === String(b || '').trim().toLowerCase(); }
+function zlMetVerdeling() { return zlKoppeling.screener >= 0 && zlZaken().some(z => z.screener); }
+function zlRechterVan(z) { return z.rechter ? (nmZoekNaam(z.rechter, namen.rechters) || z.rechter) : ''; }
+
+// De zaak uit de lijst die nu in het formulier staat (gekozen of zelf ingetypt).
+function zlHuidigeZaak(zaken) {
+  const rol = zlSleutel(antwoorden.rolnummer), zaak = zlSleutel(antwoorden.zaaknummer);
+  if (!rol && !zaak) return null;
+  const treffers = zaken.filter(z => (rol && zlSleutel(z.rolnummer) === rol) || (zaak && zlSleutel(z.zaaknummer) === zaak));
+  return treffers.find(z => z.screener && zlZelfde(z.screener, antwoorden.screener)) || treffers[0] || null;
+}
+
+function zlVulZaak(z) {
+  // Rechter van de vorige gekozen zaak niet laten staan bij een andere zaak.
+  const vorige = zlHuidigeZaak(zlZaken());
+  if (vorige && antwoorden.rechter && antwoorden.rechter === zlRechterVan(vorige)) antwoorden.rechter = '';
+  antwoorden.zaaknummer = z.zaaknummer || '';
+  antwoorden.rolnummer = z.rolnummer ? zlRolNormaal(z.rolnummer) : '';
+  if (z.rechter) antwoorden.rechter = zlRechterVan(z);
 }
 
 function zlKiesZaak(z) {
-  if (z.zaaknummer) antwoorden.zaaknummer = z.zaaknummer;
-  if (z.rolnummer) antwoorden.rolnummer = zlRolZonderVoorvoegsel(z.rolnummer);
-  if (z.rechter) antwoorden.rechter = z.rechter;
-  zlMelding = '✓ Ingevuld vanuit de zakenlijst';
+  const metToetsenbord = document.activeElement && document.activeElement.classList.contains('zaak-rij');
+  zlVulZaak(z);
+  zlMelding = '✓ Ingevuld vanuit de ' + (zlMetVerdeling() ? 'verdeling' : 'zakenlijst');
   scRenderFormulier();
   scBijwerken();
+  zlFocusNaKeuze(metToetsenbord);
+  if (rdMap) rdVernieuw();   // kijken of een collega deze zaak intussen heeft opgeslagen
+}
+// Na het opnieuw opbouwen niet terugvallen naar het begin van de pagina: waarschuwing, of de gekozen zaak.
+function zlFocusNaKeuze(ookZonderWaarschuwing) {
+  const w = document.getElementById('zaak-waarschuwing');
+  if (w) { w.focus({ preventScroll: true }); return; }
+  if (!ookZonderWaarschuwing) return;
+  const rij = document.querySelector('#zl-lijst .zaak-rij[aria-current]') || document.getElementById('zaak-zoek');
+  if (rij) rij.focus({ preventScroll: true });
+}
+
+// PDF's per zaak, uit de map van de ronde (rdKlaar) en uit deze sessie (scSessieKlaar):
+// sleutel -> [{ naam, tijd, bron: 'map' | 'sessie' }]. Bestanden die de huidige screening zelf
+// heeft opgeslagen (scEigenPdfs) tellen niet mee voor de waarschuwing.
+let scSessieKlaar = new Map();
+let scEigenPdfs = new Set();   // plek|naam van PDF's die de huidige screening zelf schreef (zie pdfPlek)
+function pdfPlek(naam, inMap) { return (inMap ? 'map' + rdMapNr : 'los') + '|' + naam; }
+function zlKlaarVoor(sleutels, ookEigen) {
+  const gevonden = new Map();
+  for (const s of sleutels) {
+    for (const bron of [rdKlaar, scSessieKlaar]) {
+      for (const x of bron.get(s) || []) {
+        if (!ookEigen && scEigenPdfs.has(x.plek)) continue;
+        const oud = gevonden.get(x.plek);
+        if (!oud || (oud.bron !== 'map' && x.bron === 'map')) gevonden.set(x.plek, x);
+      }
+    }
+  }
+  return [...gevonden.values()].sort((a, b) => b.tijd - a.tijd)[0] || null;
+}
+
+function uTijdNL(ms) {
+  const d = new Date(ms);
+  return d.getDate() + '-' + (d.getMonth() + 1) + '-' + d.getFullYear() + ' om ' +
+    String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0');
+}
+
+// Waarschuwingen voor de zaak die nu in het formulier staat.
+function zlWaarschuwingen(huidig) {
+  const sleutels = scZaakSleutels();
+  if (!sleutels.length) return [];
+  const uit = [];
+  const ik = String(antwoorden.screener || '').trim();
+  if (huidig && huidig.screener && ik && !zlZelfde(huidig.screener, ik)) {
+    uit.push({ id: 'ander|' + sleutels[0] + '|' + ik.toLowerCase(), soort: 'ander',
+      tekst: 'Deze zaak is ingedeeld bij ' + huidig.screener + '.' });
+  }
+  const klaar = zlKlaarVoor(sleutels, false);
+  if (klaar) {
+    uit.push({ id: 'klaar|' + klaar.naam, soort: 'klaar', tekst: klaar.bron === 'map'
+      ? 'Voor deze zaak staat al een screening in de map: ' + klaar.naam + (klaar.tijd ? ' (opgeslagen op ' + uTijdNL(klaar.tijd) + ').' : '.')
+      : 'Voor deze zaak staat al een screening: die is op ' + uTijdNL(klaar.tijd) + ' opgeslagen als ' + klaar.naam + '.' });
+  }
+  return uit.filter(w => !zlBevestigd.has(w.id));
+}
+
+function zlAndereZaak() {
+  antwoorden.zaaknummer = '';
+  antwoorden.rolnummer = '';
+  antwoorden.rechter = '';
+  zlMelding = '';
+  zlZoek = '';
+  scRenderFormulier();
+  scBijwerken();
+  const doel = document.querySelector('#zl-lijst .zaak-rij:not(.klaar), #zl-lijst .zaak-rij, #zaak-zoek, [data-vraag="zaaknummer"] input');
+  if (doel) doel.focus();
+}
+
+// Na "Volgende zaak": de eerstvolgende eigen zaak die nog niet klaar is (na de vorige, rondom).
+function zlVolgendeEigen(vorigeSleutels) {
+  const ik = String(antwoorden.screener || '').trim();
+  if (!ik || !zlMetVerdeling()) return null;
+  const eigen = zlZaken().filter(z => zlZelfde(z.screener, ik));
+  const i = eigen.findIndex(z => zlZaakSleutels(z).some(s => vorigeSleutels.includes(s)));
+  const volgorde = i >= 0 ? [...eigen.slice(i + 1), ...eigen.slice(0, i)] : eigen;
+  return volgorde.find(z => !zlKlaarVoor(zlZaakSleutels(z), true)) || null;
+}
+
+// Kolomkeuze (Instellingen en verdeelscherm).
+function zlRenderKoppeling(container, koppen, koppeling, prefix, opWijziging) {
+  container.innerHTML = '';
+  for (const v of ZL_VELDEN) {
+    const l = uEl('label', null, v.label);
+    const s = uEl('select', { id: prefix + v.id });
+    s.appendChild(uEl('option', { value: '-1' }, '(niet gebruiken)'));
+    koppen.forEach((k, i) => s.appendChild(uEl('option', { value: String(i) }, k || 'Kolom ' + (i + 1))));
+    s.value = String(koppeling[v.id]);
+    s.addEventListener('change', () => { koppeling[v.id] = Number(s.value); opWijziging(); });
+    l.appendChild(s);
+    container.appendChild(l);
+  }
 }
 
 function zlRenderInstellingen() {
   const details = document.getElementById('zl-details');
   details.hidden = !zlRijen.length;
   if (!zlRijen.length) return;
-  const koppeling = document.getElementById('zl-koppeling');
-  koppeling.innerHTML = '';
-  for (const v of ZL_VELDEN) {
-    const l = uEl('label', null, v.label);
-    const s = uEl('select', { id: 'zl-kol-' + v.id });
-    s.appendChild(uEl('option', { value: '-1' }, '(niet gebruiken)'));
-    zlKoppen.forEach((k, i) => s.appendChild(uEl('option', { value: String(i) }, k || 'Kolom ' + (i + 1))));
-    s.value = String(zlKoppeling[v.id]);
-    s.addEventListener('change', () => {
-      zlKoppeling[v.id] = Number(s.value);
-      zlRenderVoorbeeld();
-      scRenderFormulier();
-      scBijwerken();
-    });
-    l.appendChild(s);
-    koppeling.appendChild(l);
-  }
+  zlRenderKoppeling(document.getElementById('zl-koppeling'), zlKoppen, zlKoppeling, 'zl-kol-', () => {
+    zlRenderVoorbeeld();
+    scRenderFormulier();
+    scBijwerken();
+  });
   zlRenderVoorbeeld();
 }
 
@@ -1291,6 +1648,7 @@ async function zlBestandGekozen(e) {
   if (!bestand) return;
   try {
     zlImporteer(zlDecodeer(await bestand.arrayBuffer()));
+    zlBevestigd = new Set();
     const n = zlZaken().length;
     melding.className = 'melding goed';
     melding.textContent = n + (n === 1 ? ' zaak' : ' zaken') + ' ingelezen uit ' + bestand.name + '.';
@@ -1307,6 +1665,8 @@ async function zlBestandGekozen(e) {
 
 function zlWis() {
   zlKoppen = []; zlRijen = []; zlKoppeling = {}; zlZoek = ''; zlMelding = '';
+  zlToonAlle = false; zlBevestigd = new Set();
+  rdMap = null; rdKlaar = new Map(); rdVerdeling = ''; rdVerdelingTijd = 0; rdFout = '';
   const melding = document.getElementById('zl-melding');
   melding.className = 'melding';
   melding.textContent = 'Zakenlijst gewist.';
@@ -1315,32 +1675,578 @@ function zlWis() {
   scBijwerken();
 }
 
+// Bovenaan het blok Zaak: map van de ronde, eigen zaken of zoekveld. De onderdelen die bij elk
+// antwoord veranderen (lijst, teller, waarschuwing) vult zlRenderStatus vanuit scBijwerken.
 function zlRenderKiezer() {
   const div = uEl('div', { class: 'zaakkiezer' });
   const zaken = zlZaken();
-  if (!zaken.length) {
-    div.appendChild(document.createTextNode('Tip: importeer een zakenlijst via '));
+  const verdeling = zlMetVerdeling();
+  if (rdKanMap()) {
+    const kop = uEl('div', { class: 'ronde-kop' });
+    if (rdMap) {
+      kop.appendChild(uEl('span', null, 'Map van de ronde:'));
+      kop.appendChild(uEl('strong', null, rdMap.name));
+      const ander = uEl('button', { type: 'button', class: 'linkknop', id: 'rd-ander' }, 'andere map kiezen');
+      ander.addEventListener('click', rdKiesMap);
+      kop.appendChild(ander);
+    } else {
+      kop.appendChild(uEl('span', null, 'Werk je met een screeningsronde?'));
+      const kies = uEl('button', { type: 'button', class: 'knop knop-secundair', id: 'rd-kies' }, 'Map van de ronde kiezen');
+      kies.addEventListener('click', rdKiesMap);
+      kop.appendChild(kies);
+    }
+    div.appendChild(kop);
+  }
+  if (verdeling) {
+    const kop = uEl('div', { class: 'eigen-kop' });
+    const l = uEl('label', { for: 'zl-ik' }, 'Zaken voor');
+    const s = uEl('select', { id: 'zl-ik' });
+    s.appendChild(uEl('option', { value: '' }, '— kies je naam —'));
+    const gezien = new Set();
+    for (const z of zaken) {
+      if (!z.screener || gezien.has(z.screener.toLowerCase())) continue;
+      gezien.add(z.screener.toLowerCase());
+      s.appendChild(uEl('option', { value: z.screener }, z.screener));
+    }
+    s.addEventListener('change', () => {
+      antwoorden.screener = s.value;
+      lsZet(LS_SCREENER, s.value);
+      zlToonAlle = false;
+      scRenderFormulier();
+      scBijwerken();
+      const terug = document.getElementById('zl-ik');
+      if (terug) terug.focus();
+    });
+    l.appendChild(s);
+    kop.appendChild(l);
+    kop.appendChild(uEl('span', { class: 'zl-teller', id: 'zl-teller' }));
+    div.appendChild(kop);
+    div.appendChild(uEl('ul', { class: 'zaak-lijst', id: 'zl-lijst', 'aria-label': 'Zaken in de verdeling' }));
+    const onder = uEl('div', { class: 'zl-lijst-onder' });
+    const alle = uEl('button', { type: 'button', class: 'linkknop', id: 'zl-alle' });
+    alle.addEventListener('click', () => { zlToonAlle = !zlToonAlle; scBijwerken(); });
+    onder.appendChild(alle);
+    onder.appendChild(uEl('span', { class: 'zl-lijst-meer', id: 'zl-meer' }));
+    div.appendChild(onder);
+  } else if (zaken.length) {
+    div.appendChild(uEl('label', { for: 'zaak-zoek' }, 'Zaak kiezen uit de zakenlijst (' + zaken.length + ')'));
+    const invoer = uEl('input', { type: 'text', id: 'zaak-zoek', list: 'zaak-lijst',
+      placeholder: 'Typ rolnummer, zaaknummer of partij' });
+    invoer.value = zlZoek;
+    const lijst = uEl('datalist', { id: 'zaak-lijst' });
+    zaken.forEach(z => lijst.appendChild(uEl('option', { value: z.label })));
+    invoer.addEventListener('input', () => {
+      zlZoek = invoer.value;
+      const z = zaken.find(z => z.label === invoer.value);
+      if (z) zlKiesZaak(z);
+    });
+    div.appendChild(invoer);
+    div.appendChild(lijst);
+  } else if (rdMap) {
+    div.appendChild(uEl('p', { class: 'hint' }, 'In deze map staat geen verdeling. Vul de zaak hieronder zelf in; de PDF komt wel in deze map.'));
+  } else {
+    const tip = uEl('div', { class: 'zaakkiezer-tip' });
+    tip.appendChild(document.createTextNode((rdKanMap() ? 'Of importeer' : 'Tip: importeer') + ' een zakenlijst via '));
     const link = uEl('button', { type: 'button', class: 'linkknop' }, 'Instellingen');
     link.addEventListener('click', () => toonView('instellingen'));
-    div.appendChild(link);
-    div.appendChild(document.createTextNode(' om hier een zaak te kiezen.'));
-    return div;
+    tip.appendChild(link);
+    tip.appendChild(document.createTextNode(' om hier een zaak te kiezen.'));
+    div.appendChild(tip);
   }
-  div.appendChild(uEl('label', { for: 'zaak-zoek' }, 'Zaak kiezen uit de zakenlijst (' + zaken.length + ')'));
-  const invoer = uEl('input', { type: 'text', id: 'zaak-zoek', list: 'zaak-lijst',
-    placeholder: 'Typ rolnummer, zaaknummer of partij' });
-  invoer.value = zlZoek;
-  const lijst = uEl('datalist', { id: 'zaak-lijst' });
-  zaken.forEach(z => lijst.appendChild(uEl('option', { value: z.label })));
-  invoer.addEventListener('input', () => {
-    zlZoek = invoer.value;
-    const z = zaken.find(z => z.label === invoer.value);
-    if (z) zlKiesZaak(z);
-  });
-  div.appendChild(invoer);
-  div.appendChild(lijst);
   if (zlMelding) div.appendChild(uEl('div', { class: 'zaakkiezer-melding' }, zlMelding));
+  div.appendChild(uEl('div', { id: 'zl-status' }));
   return div;
+}
+
+function zlRenderStatus() {
+  const status = document.getElementById('zl-status');
+  if (!status) return;
+  const zaken = zlZaken();
+  const huidig = zlHuidigeZaak(zaken);
+  const lijst = document.getElementById('zl-lijst');
+  if (lijst) zlRenderLijst(lijst, zaken, huidig);
+
+  const ws = zlWaarschuwingen(huidig);
+  const sleutel = rdFout + '#' + ws.map(w => w.id).join('#');
+  if (status.dataset.sleutel === sleutel) return;   // niets veranderd: niet opnieuw laten voorlezen
+  status.dataset.sleutel = sleutel;
+  status.innerHTML = '';
+  if (rdFout) status.appendChild(uEl('div', { class: 'melding fout', role: 'status' }, rdFout));
+  if (!ws.length) return;
+  const paneel = uEl('div', { class: 'pdf-waarschuwing zaak-waarschuwing', id: 'zaak-waarschuwing', role: 'alert', tabindex: '-1' });
+  paneel.appendChild(uEl('strong', null, '⚠ Let op'));
+  const ul = uEl('ul');
+  ws.forEach(w => ul.appendChild(uEl('li', null, w.tekst)));
+  paneel.appendChild(ul);
+  const ander = ws.some(w => w.soort === 'ander'), klaar = ws.some(w => w.soort === 'klaar');
+  paneel.appendChild(uEl('p', null, ander && klaar ? 'Wil je deze zaak toch screenen?'
+    : ander ? 'Weet je zeker dat jij deze zaak screent?' : 'Wil je deze zaak nog een keer screenen?'));
+  const knoppen = uEl('div', { class: 'pdf-waarschuwing-knoppen' });
+  const kies = uEl('button', { type: 'button', class: 'knop knop-primair', id: 'zaak-ander' }, 'Andere zaak kiezen');
+  kies.addEventListener('click', zlAndereZaak);
+  const toch = uEl('button', { type: 'button', class: 'knop knop-secundair', id: 'zaak-toch' },
+    ander && klaar ? 'Ja, toch screenen' : ander ? 'Ja, ik neem hem over' : 'Ja, opnieuw screenen');
+  toch.addEventListener('click', () => {
+    ws.forEach(w => zlBevestigd.add(w.id));
+    scBijwerken();
+    const rij = document.querySelector('#zl-lijst .zaak-rij[aria-current]');
+    const open = scOpenVragen()[0];
+    const veld = open && document.querySelector('[data-vraag="' + open.id + '"] input, [data-vraag="' + open.id + '"] select, [data-vraag="' + open.id + '"] textarea');
+    (rij || veld || document.getElementById('formulier')).focus({ preventScroll: !rij });
+  });
+  knoppen.appendChild(kies);
+  knoppen.appendChild(toch);
+  paneel.appendChild(knoppen);
+  status.appendChild(paneel);
+}
+
+function zlRenderLijst(lijst, zaken, huidig) {
+  const ik = String(antwoorden.screener || '').trim();
+  const kiezer = document.getElementById('zl-ik');
+  if (kiezer) {
+    // Het Screener-veld hieronder en "Zaken voor" zijn hetzelfde antwoord.
+    kiezer.querySelectorAll('option[data-tijdelijk]').forEach(o => o.remove());
+    let optie = [...kiezer.options].find(o => o.value && zlZelfde(o.value, ik));
+    if (!optie && ik) { optie = uEl('option', { value: ik, 'data-tijdelijk': '' }, ik); kiezer.appendChild(optie); }
+    kiezer.value = optie ? optie.value : '';
+  }
+  const eigen = ik ? zaken.filter(z => zlZelfde(z.screener, ik)) : [];
+  const toon = zlToonAlle ? zaken : eigen;
+  const focusOp = lijst.contains(document.activeElement) ? document.activeElement.dataset.sleutel : null;
+  lijst.innerHTML = '';
+  for (const z of toon) {
+    const klaar = zlKlaarVoor(zlZaakSleutels(z), true);
+    const isHuidig = z === huidig;
+    const b = uEl('button', { type: 'button', class: 'zaak-rij' + (klaar ? ' klaar' : '') + (isHuidig ? ' huidig' : ''),
+      'data-sleutel': zlZaakSleutels(z)[0] || z.label });
+    if (isHuidig) b.setAttribute('aria-current', 'true');
+    b.appendChild(uEl('span', { class: 'vink', 'aria-hidden': 'true' }, klaar ? '✓' : isHuidig ? '▸' : ''));
+    const tekst = uEl('span');
+    tekst.appendChild(uEl('span', { class: 'zaak-rol' }, z.rolnummer || z.zaaknummer));
+    if (z.partijen) tekst.appendChild(uEl('span', { class: 'zaak-partijen' }, z.partijen));
+    b.appendChild(tekst);
+    const wie = [zlToonAlle ? (z.screener || 'niet ingedeeld') : '', klaar ? 'klaar' : ''].filter(Boolean).join(' · ');
+    b.appendChild(uEl('span', { class: 'wie' }, wie));
+    b.addEventListener('click', () => zlKiesZaak(z));
+    const li = uEl('li');
+    li.appendChild(b);
+    lijst.appendChild(li);
+  }
+  if (!toon.length) {
+    lijst.appendChild(uEl('li', { class: 'hint' }, ik ? 'Er zijn in deze verdeling geen zaken aan jou toegewezen.'
+      : 'Kies hierboven je naam; dan zie je jouw zaken.'));
+  }
+  if (focusOp) {
+    const terug = [...lijst.querySelectorAll('.zaak-rij')].find(b => b.dataset.sleutel === focusOp);
+    if (terug) terug.focus({ preventScroll: true });
+  }
+  const nKlaar = eigen.filter(z => zlKlaarVoor(zlZaakSleutels(z), true)).length;
+  document.getElementById('zl-teller').textContent = eigen.length ? 'Jouw zaken: ' + nKlaar + ' van ' + eigen.length + ' klaar' : '';
+  document.getElementById('zl-alle').textContent = zlToonAlle ? 'Alleen mijn zaken tonen' : 'Alle zaken tonen (' + zaken.length + ')';
+  document.getElementById('zl-meer').textContent = toon.length > 8 ? 'Scroll in de lijst voor meer zaken.' : '';
+}
+
+// =====================================================================
+// SCREENINGSRONDE — map in de teammap met de verdeling en alle PDF's van de ronde
+// =====================================================================
+// De screener kiest één keer de map van de ronde (bijv. "Screening 2026 week 46"). Het formulier
+// leest daaruit de verdeling, slaat PDF's er direct in op en ziet aan de bestandsnamen welke zaken
+// al gescreend zijn, ook door collega's. De map wordt alleen in het geheugen onthouden: na sluiten
+// kies je hem opnieuw (het venster opent dan wel op de vorige plek).
+const RD_PDF = /^Screening (.+?) \d{4}-\d{2}-\d{2}(?: \(\d+\))?\.pdf$/i;
+const RD_VERDELING = /^verdeling.*\.csv$/i;
+let rdMap = null;          // gekozen map (FileSystemDirectoryHandle)
+let rdKlaar = new Map();   // sleutel -> [{ naam, tijd, bron: 'map' }] van PDF's in de map
+let rdVerdeling = '';      // naam en tijdstempel van de ingelezen verdeling
+let rdVerdelingTijd = 0;
+let rdFout = '';
+let rdLezen = null;        // lopende leesactie
+let rdMapNr = 0;           // telt op bij elke gekozen map, zodat bestanden per map uit elkaar te houden zijn
+let rdOverslaan = false;   // opslaan in de map mislukt: volgende keer zelf een plek kiezen
+
+function rdKanMap() { return typeof window.showDirectoryPicker === 'function'; }
+
+async function rdKiesMap() {
+  let map;
+  try {
+    map = await window.showDirectoryPicker({ id: 'screening-ronde', mode: 'readwrite' });
+  } catch (e) {
+    if (e.name === 'AbortError') return;
+    rdFout = 'De map kon niet worden geopend. ' + (e.message || '');
+    scBijwerken();
+    return;
+  }
+  if (rdVerdeling) { zlKoppen = []; zlRijen = []; zlKoppeling = {}; }   // verdeling van de vorige map vergeten
+  rdMap = map;
+  rdMapNr++;
+  rdOverslaan = false;
+  rdKlaar = new Map();
+  rdVerdeling = ''; rdVerdelingTijd = 0; rdFout = '';
+  zlToonAlle = false;
+  zlBevestigd = new Set();
+  await rdVernieuw(true);
+  const doel = document.getElementById('zl-ik') || document.getElementById('rd-ander');
+  if (doel) doel.focus({ preventScroll: true });
+}
+
+// Leest de map (opnieuw): welke PDF's staan er, en is de verdeling veranderd?
+async function rdVernieuw(nieuweMap) {
+  while (rdLezen) await rdLezen.catch(() => {});
+  rdLezen = rdLees(!!nieuweMap);
+  try { await rdLezen; } finally { rdLezen = null; }
+}
+
+async function rdLees(nieuweMap) {
+  const map = rdMap, nr = rdMapNr;
+  if (!map) return;
+  const klaar = new Map();
+  let verdeling = null;
+  try {
+    for await (const [naam, h] of map.entries()) {
+      if (h.kind !== 'file') continue;
+      const m = RD_PDF.exec(naam);
+      if (!m && !RD_VERDELING.test(naam)) continue;
+      // Eén bestand dat even niet te lezen is (net verplaatst, in gebruik) mag de rest niet tegenhouden.
+      let bestand = null;
+      try { bestand = await h.getFile(); } catch (e) { if (!m) continue; }
+      if (m) {
+        const s = zlSleutel(m[1]);
+        if (!klaar.has(s)) klaar.set(s, []);
+        klaar.get(s).push({ naam, plek: 'map' + nr + '|' + naam, tijd: bestand ? bestand.lastModified : 0, bron: 'map' });
+      } else if (!verdeling || bestand.lastModified > verdeling.bestand.lastModified) {
+        verdeling = { naam, bestand };
+      }
+    }
+  } catch (e) {
+    if (map === rdMap) {
+      rdFout = 'De map ' + map.name + ' kon niet worden gelezen. Kies de map opnieuw.';
+      scBijwerken();
+    }
+    return;
+  }
+  if (map !== rdMap) return;   // intussen een andere map gekozen
+  rdKlaar = klaar;
+  rdFout = '';
+  let opbouwen = nieuweMap;
+  if (verdeling && (nieuweMap || verdeling.naam !== rdVerdeling || verdeling.bestand.lastModified !== rdVerdelingTijd)) {
+    try {
+      const tekst = zlDecodeer(await verdeling.bestand.arrayBuffer());
+      if (map !== rdMap) return;
+      zlImporteer(tekst);
+      rdVerdeling = verdeling.naam;
+      rdVerdelingTijd = verdeling.bestand.lastModified;
+      const n = zlZaken().length;
+      const melding = document.getElementById('zl-melding');
+      melding.className = 'melding goed';
+      melding.textContent = n + (n === 1 ? ' zaak' : ' zaken') + ' gelezen uit ' + verdeling.naam + ' in de map ' + map.name + '.';
+      zlRenderInstellingen();
+    } catch (e) {
+      rdFout = 'De verdeling ' + verdeling.naam + ' kon niet worden gelezen. ' + e.message;
+    }
+    opbouwen = true;
+  }
+  if (opbouwen) zlVervangKiezer();
+  scBijwerken();
+}
+
+// Alleen het kiesblok bovenaan opnieuw opbouwen, zodat de cursor in een veld blijft staan.
+function zlVervangKiezer() {
+  const oud = document.querySelector('.zaakkiezer');
+  if (oud) oud.replaceWith(zlRenderKiezer()); else scRenderFormulier();
+}
+
+async function rdBestaat(naam) {
+  try { await rdMap.getFileHandle(naam); return true; }
+  catch (e) {
+    if (e.name === 'NotFoundError') return false;
+    if (e.name === 'TypeMismatchError') return true;   // er staat een map met die naam
+    throw e;
+  }
+}
+
+// =====================================================================
+// ZAKEN VERDELEN — voor de beheerder. Alleen in het geheugen tot "Verdeling opslaan".
+// =====================================================================
+let vdTabel = null;          // { koppen, rijen, koppeling } uit het gekozen bestand
+let vdZaken = [];            // zaken met (aanpasbare) rechter en screener
+let vdGekozen = new Set();   // screeners die deze keer meedoen
+let vdOpgeslagen = '';       // stand bij inlezen of bij de laatste keer opslaan
+let vdDubbel = 0;            // aantal dubbele regels dat bij inlezen is samengevoegd
+
+function vdStand() { return vdZaken.map(z => z.rechter + '|' + z.screener).join('\n'); }
+function vdNietOpgeslagen() { return vdZaken.length > 0 && vdStand() !== vdOpgeslagen; }
+function vdUniek(lijst) {
+  const gezien = new Set();
+  return lijst.map(n => String(n || '').trim()).filter(n => n && !gezien.has(n.toLowerCase()) && gezien.add(n.toLowerCase()));
+}
+function vdMelding(tekst, soort, id) {
+  const m = document.getElementById(id || 'vd-melding');
+  m.className = 'melding' + (soort ? ' ' + soort : '');
+  m.textContent = tekst;
+}
+
+async function vdBestandGekozen(e) {
+  const bestand = e.target.files[0];
+  if (!bestand) return;
+  const melding = document.getElementById('vd-bestand-melding');
+  try {
+    vdTabel = zlLeesTabel(zlDecodeer(await bestand.arrayBuffer()));
+    vdOpbouwen();
+    melding.className = 'melding goed';
+    melding.textContent = vdZaken.length + (vdZaken.length === 1 ? ' zaak' : ' zaken') + ' ingelezen uit ' + bestand.name + '.' +
+      (vdDubbel ? ' ' + vdDubbel + (vdDubbel === 1 ? ' dubbele regel' : ' dubbele regels') + ' (zelfde zaak) samengevoegd.' : '');
+  } catch (err) {
+    vdTabel = null;
+    vdZaken = [];
+    melding.className = 'melding fout';
+    melding.textContent = err.message;
+  }
+  e.target.value = '';
+  vdMelding('');
+  vdMelding('', '', 'vd-verdeel-melding');
+  document.getElementById('vd-waarschuwing').hidden = true;
+  vdRender();
+}
+
+// Zaken uit het bestand halen; rechter en screener zo mogelijk koppelen aan de namenlijst.
+function vdOpbouwen(behoud) {
+  const oud = new Map();
+  if (behoud) vdZaken.forEach(z => zlZaakSleutels(z).forEach(s => oud.set(s, z)));
+  const opgeslagen = vdOpgeslagen, wasGewijzigd = vdNietOpgeslagen();
+  // Dezelfde zaak op meer regels (bijv. één regel per gedaagde): samenvoegen tot één zaak.
+  const perSleutel = new Map();
+  vdDubbel = 0;
+  const uniek = [];
+  for (const z of zlZakenUit(vdTabel.rijen, vdTabel.koppeling)) {
+    const k = zlZaakSleutels(z)[0];
+    const eerder = k && perSleutel.get(k);
+    if (eerder) {
+      vdDubbel++;
+      if (z.gedaagde && !eerder.gedaagde.split(', ').includes(z.gedaagde)) eerder.gedaagde = [eerder.gedaagde, z.gedaagde].filter(Boolean).join(', ');
+      eerder.partijen = [eerder.eiser, eerder.gedaagde].filter(Boolean).join(' / ');
+      continue;
+    }
+    if (k) perSleutel.set(k, z);
+    uniek.push(z);
+  }
+  vdZaken = uniek.map(z => ({
+    ...z,
+    rechter: zlRechterVan(z),
+    screener: z.screener ? (nmZoekNaam(z.screener, namen.screeners) || z.screener) : '',
+  }));
+  if (behoud) {
+    // Kolom anders gekoppeld: wat al was ingedeeld, blijft ingedeeld.
+    vdZaken.forEach(z => {
+      const v = zlZaakSleutels(z).map(s => oud.get(s)).find(Boolean);
+      if (v) { z.screener = v.screener; z.rechter = v.rechter || z.rechter; }
+    });
+    vdOpgeslagen = wasGewijzigd ? opgeslagen : vdStand();
+    return;
+  }
+  const inBestand = vdUniek(vdZaken.map(z => z.screener));
+  if (inBestand.length) vdGekozen = new Set(inBestand);   // bestaande verdeling: die screeners aanvinken
+  vdOpgeslagen = vdStand();
+}
+
+function vdScreenersGekozen() {
+  return vdUniek([...namen.screeners, ...vdGekozen]).filter(n => [...vdGekozen].some(g => zlZelfde(g, n)));
+}
+function vdScreenerOpties() {
+  return vdUniek([...namen.screeners, ...vdGekozen, ...vdZaken.map(z => z.screener)]);
+}
+
+// Eiser zonder hoofdletters, leestekens en B.V./N.V., zodat "Energie B.V." en "Energie BV" één groep zijn.
+function vdEiserSleutel(eiser) {
+  return String(eiser || '').toLowerCase().replace(/[.,'"()&\-\/]/g, ' ')
+    .replace(/\b(b ?v|n ?v)\b/g, ' ').replace(/\s+/g, ' ').trim();
+}
+
+// Verdeel eerlijk: groepen (per eiser, of per zaak) van groot naar klein naar de screener met de
+// minste zaken. Niemand krijgt meer dan zijn eerlijke deel (afgerond naar boven); past een groep
+// niet, dan gaat de rest als nieuwe groep terug in de rij.
+function vdVerdeel() {
+  const wie = vdScreenersGekozen();
+  if (!wie.length) { vdMelding('Vink eerst aan wie er deze keer screenen.', 'fout', 'vd-verdeel-melding'); return; }
+  const plafond = Math.ceil(vdZaken.length / wie.length);
+  const aantal = new Map(wie.map(n => [n, 0]));
+  let groepen;
+  if (document.getElementById('vd-eiser').checked) {
+    const per = new Map();
+    vdZaken.forEach((z, i) => {
+      const k = vdEiserSleutel(z.eiser) || '#' + i;
+      if (!per.has(k)) per.set(k, []);
+      per.get(k).push(z);
+    });
+    groepen = [...per.values()];
+  } else {
+    groepen = vdZaken.map(z => [z]);
+  }
+  while (groepen.length) {
+    groepen.sort((a, b) => b.length - a.length);   // stabiel: bij gelijke grootte de volgorde van de lijst
+    const groep = groepen.shift();
+    const naam = wie.reduce((best, n) => aantal.get(n) < aantal.get(best) ? n : best, wie[0]);
+    const past = Math.max(1, plafond - aantal.get(naam));
+    groep.slice(0, past).forEach(z => { z.screener = naam; });
+    aantal.set(naam, aantal.get(naam) + Math.min(past, groep.length));
+    if (groep.length > past) groepen.push(groep.slice(past));
+  }
+  document.getElementById('vd-waarschuwing').hidden = true;
+  vdRenderTabel();
+  vdMelding('Verdeeld over ' + wie.join(', ') + '. Controleer de lijst hieronder en pas zo nodig per zaak aan.', 'goed', 'vd-verdeel-melding');
+  vdMelding('');
+}
+
+function vdRender() {
+  document.getElementById('vd-werk').hidden = !vdTabel;
+  if (!vdTabel) return;
+  zlRenderKoppeling(document.getElementById('vd-koppeling'), vdTabel.koppen, vdTabel.koppeling, 'vd-kol-', () => {
+    const id = document.activeElement && document.activeElement.id;
+    vdOpbouwen(true);
+    vdRender();
+    if (id && document.getElementById(id)) document.getElementById(id).focus();
+  });
+  vdRenderScreeners();
+  vdRenderTabel();
+}
+
+function vdRenderScreeners() {
+  const div = document.getElementById('vd-screeners');
+  div.innerHTML = '';
+  if (!namen.screeners.length) {
+    const l = uEl('label', { class: 'beheer-veld' }, 'Namen van de screeners, gescheiden door komma’s');
+    const invoer = uEl('input', { type: 'text', id: 'vd-screeners-tekst', placeholder: 'Bijv. Anne, Bram, Cor' });
+    invoer.value = [...vdGekozen].join(', ');
+    invoer.addEventListener('input', () => {
+      vdGekozen = new Set(vdUniek(invoer.value.split(',')));
+      vdRenderTabel();
+    });
+    l.appendChild(invoer);
+    div.appendChild(l);
+    return;
+  }
+  for (const naam of vdUniek([...namen.screeners, ...vdGekozen])) {
+    const l = uEl('label');
+    const c = uEl('input', { type: 'checkbox', value: naam });
+    c.checked = [...vdGekozen].some(g => zlZelfde(g, naam));
+    c.addEventListener('change', () => {
+      [...vdGekozen].forEach(g => { if (zlZelfde(g, naam)) vdGekozen.delete(g); });
+      if (c.checked) vdGekozen.add(naam);
+      vdRenderTellers();
+    });
+    l.appendChild(c);
+    l.appendChild(document.createTextNode(naam));
+    div.appendChild(l);
+  }
+}
+
+function vdKeuzeCel(klasse, label, leeg, opties, waarde, opWijziging) {
+  const td = uEl('td', { 'data-label': klasse === 'vd-rechter' ? 'Rechter' : 'Screener' });
+  const s = uEl('select', { class: klasse, 'aria-label': label });
+  s.appendChild(uEl('option', { value: '' }, leeg));
+  const lijst = opties.slice();
+  if (waarde && !lijst.includes(waarde)) lijst.push(waarde);
+  lijst.forEach(n => s.appendChild(uEl('option', { value: n }, n)));
+  s.value = waarde || '';
+  s.addEventListener('change', () => opWijziging(s.value));
+  td.appendChild(s);
+  return td;
+}
+
+function vdRenderTabel() {
+  const t = document.getElementById('vd-tabel');
+  t.innerHTML = '';
+  const kop = uEl('tr');
+  kop.appendChild(uEl('th', null)).appendChild(uEl('span', { class: 'alleen-voorlezen' }, 'Nr.'));
+  ['Rolnummer', 'Zaaknummer', 'Partijen', 'Rechter', 'Screener'].forEach(k => kop.appendChild(uEl('th', null, k)));
+  t.appendChild(kop);
+  const screeners = vdScreenerOpties();
+  vdZaken.forEach((z, i) => {
+    const tr = uEl('tr', { 'data-i': String(i), class: z.screener ? '' : 'open' });
+    const naam = z.rolnummer || z.zaaknummer || 'zaak ' + (i + 1);
+    tr.appendChild(uEl('td', { class: 'nr' }, String(i + 1)));
+    tr.appendChild(uEl('td', { class: 'rol' }, z.rolnummer));
+    tr.appendChild(uEl('td', null, z.zaaknummer));
+    tr.appendChild(uEl('td', { class: 'partijen' }, z.partijen));
+    tr.appendChild(vdKeuzeCel('vd-rechter', 'Rechter bij ' + naam, '— nog niet bekend —', namen.rechters, z.rechter,
+      w => { z.rechter = w; }));
+    tr.appendChild(vdKeuzeCel('vd-screener', 'Screener bij ' + naam, '— nog niet ingedeeld —', screeners, z.screener,
+      w => { z.screener = w; tr.className = w ? '' : 'open'; vdRenderTellers(); }));
+    t.appendChild(tr);
+  });
+  vdRenderTellers();
+}
+
+function vdRenderTellers() {
+  const div = document.getElementById('vd-tellers');
+  div.innerHTML = '';
+  for (const n of vdUniek([...vdScreenersGekozen(), ...vdZaken.map(z => z.screener)])) {
+    div.appendChild(uEl('span', { class: 'vd-teller' }, n + ': ' + vdZaken.filter(z => zlZelfde(z.screener, n)).length));
+  }
+  const zonder = vdZaken.filter(z => !z.screener).length;
+  if (zonder) div.appendChild(uEl('span', { class: 'vd-teller leeg' }, 'Nog niet ingedeeld: ' + zonder));
+}
+
+function vdCSV() {
+  const veld = v => /[;"\r\n]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v;
+  const regels = ['Rolnummer;Zaaknummer;Eiser;Gedaagde;Rechter;Screener'];
+  vdZaken.forEach(z => regels.push([z.rolnummer, z.zaaknummer, z.eiser, z.gedaagde, z.rechter, z.screener]
+    .map(x => veld(String(x || ''))).join(';')));
+  return '﻿' + regels.join('\r\n') + '\r\n';   // BOM: Excel opent het dan met de goede tekens
+}
+
+async function vdOpslaan(toch) {
+  const paneel = document.getElementById('vd-waarschuwing');
+  const zonder = vdZaken.filter(z => !z.screener).length;
+  if (zonder && !toch) {
+    paneel.innerHTML = '';
+    paneel.appendChild(uEl('strong', null, zonder === 1 ? 'Nog 1 zaak zonder screener.' : 'Nog ' + zonder + ' zaken zonder screener.'));
+    const welke = vdZaken.filter(z => !z.screener).map(z => z.rolnummer || z.zaaknummer);
+    paneel.appendChild(uEl('p', null, 'Het gaat om ' + welke.join(', ') + ' (roze gemarkeerd). Die zaken staan bij niemand in de eigen lijst. Wil je toch opslaan?'));
+    const knoppen = uEl('div', { class: 'pdf-waarschuwing-knoppen' });
+    const ja = uEl('button', { type: 'button', class: 'knop knop-secundair', id: 'vd-toch' }, 'Toch opslaan');
+    ja.addEventListener('click', () => vdOpslaan(true));
+    const nee = uEl('button', { type: 'button', class: 'knop knop-primair', id: 'vd-terug-verdelen' }, 'Verder verdelen');
+    nee.addEventListener('click', () => {
+      paneel.hidden = true;
+      const open = document.querySelector('#vd-tabel tr.open select.vd-screener');
+      if (open) open.focus();
+    });
+    knoppen.appendChild(nee);
+    knoppen.appendChild(ja);
+    paneel.appendChild(knoppen);
+    paneel.hidden = false;
+    return;
+  }
+  paneel.hidden = true;
+  const inhoud = vdCSV();
+  let waar, naam = 'verdeling.csv';
+  if (typeof window.showSaveFilePicker === 'function') {
+    try {
+      const handle = await window.showSaveFilePicker({ id: 'screening-verdeling', suggestedName: 'verdeling.csv',
+        types: [{ description: 'Verdeling screeningsronde (CSV)', accept: { 'text/csv': ['.csv'] } }] });
+      const w = await handle.createWritable();
+      await w.write(inhoud);
+      await w.close();
+      naam = waar = handle.name;
+    } catch (e) {
+      if (e.name === 'AbortError') return;
+      vdMelding('Opslaan lukte niet: ' + e.message, 'fout');
+      return;
+    }
+  } else {
+    const a = uEl('a', { href: URL.createObjectURL(new Blob([inhoud], { type: 'text/csv' })), download: naam });
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 1000);
+    waar = naam + ' in je map Downloads';
+  }
+  vdOpgeslagen = vdStand();
+  document.getElementById('vd-opslaan').focus();
+  vdMelding('Opgeslagen als ' + waar + '. Staat het bestand in de map van de screeningsronde in de teammap? ' +
+    'Dan zien de screeners hun zaken zodra ze die map kiezen in het formulier.' +
+    (RD_VERDELING.test(naam) ? '' : ' Let op: de naam begint niet met "verdeling", dus het formulier vindt hem niet.'),
+    RD_VERDELING.test(naam) ? 'goed' : 'fout');
+  if (rdMap) rdVernieuw();
 }
 
 // =====================================================================
@@ -1458,6 +2364,7 @@ function scBijwerken() {
   });
   scRenderSnelNee();
   scRenderAfronden();
+  zlRenderStatus();
   if (!document.getElementById('pdf-waarschuwing').hidden) pdfToonWaarschuwing();
 
   const status = document.getElementById('status');
@@ -1531,7 +2438,8 @@ function scRenderAfronden() {
   document.getElementById('hint-kopie').textContent = kopieKlaar ? 'Gekopieerd. Plak hem in Joris met Ctrl+V.'
     : scKopieMomentopname && !leeg ? 'Gewijzigd na het kopiëren: kopieer opnieuw.' : 'Plak hem daarna in Joris met Ctrl+V.';
   document.getElementById('hint-pdf').textContent = pdfKlaar ? 'Opgeslagen' + (scPdfNaam ? ' als ' + scPdfNaam : '') + '.'
-    : scPdfMomentopname && !leeg ? 'Gewijzigd na het opslaan: sla opnieuw op.' : 'Het formulier wordt opgeslagen als PDF.';
+    : scPdfMomentopname && !leeg ? 'Gewijzigd na het opslaan: sla opnieuw op.'
+    : rdMap ? 'Het formulier komt als PDF in de map ' + rdMap.name + '.' : 'Het formulier wordt opgeslagen als PDF.';
 }
 
 // "Overige ja/nee-vragen op Nee": alleen vragen waarbij Nee geen actie oplevert en geen
@@ -1579,11 +2487,19 @@ function scToonWisWaarschuwing() {
   paneel.hidden = false;
 }
 function scLeegmaken() {
-  scVorige = { antwoorden: { ...antwoorden }, kopie: scKopieMomentopname, pdf: scPdfMomentopname, pdfNaam: scPdfNaam };
+  const vorigeSleutels = scZaakSleutels();
+  scVorige = { antwoorden: { ...antwoorden }, kopie: scKopieMomentopname, pdf: scPdfMomentopname, pdfNaam: scPdfNaam,
+    standaard: scStandaardMomentopname, eigenPdfs: scEigenPdfs, bevestigd: zlBevestigd };
   scStandaard();
   scKopieMomentopname = null;
   scPdfNaam = '';
+  scEigenPdfs = new Set();
+  zlBevestigd = new Set();
   zlZoek = ''; zlMelding = '';
+  // Werk je met een verdeling, dan staat je volgende eigen zaak meteen klaar. Met een map eerst
+  // opnieuw kijken wat collega's intussen hebben opgeslagen.
+  if (rdMap) rdVernieuw().then(() => scZetVolgende(vorigeSleutels));
+  else scZetVolgende(vorigeSleutels, true);
   document.getElementById('pdf-waarschuwing').hidden = true;
   scRenderFormulier();
   scBijwerken();
@@ -1593,12 +2509,27 @@ function scLeegmaken() {
   clearTimeout(scLeegmaken.timer);
   scLeegmaken.timer = setTimeout(() => { balk.hidden = true; scVorige = null; }, 10000);
 }
+function scZetVolgende(vorigeSleutels, direct) {
+  if (scMomentopname() !== scStandaardMomentopname) return;   // intussen al iets ingevuld of ongedaan gemaakt
+  const volgende = zlVolgendeEigen(vorigeSleutels);
+  if (!volgende) return;
+  zlVulZaak(volgende);
+  zlMelding = '✓ Je volgende zaak is klaargezet.';
+  scStandaardMomentopname = scMomentopname();
+  if (direct) return;   // scLeegmaken bouwt het formulier daarna zelf op
+  scRenderFormulier();
+  scBijwerken();
+}
 function scOngedaan() {
   if (!scVorige) return;
   antwoorden = scVorige.antwoorden;
   scKopieMomentopname = scVorige.kopie;
   scPdfMomentopname = scVorige.pdf;
   scPdfNaam = scVorige.pdfNaam;
+  scStandaardMomentopname = scVorige.standaard;
+  scEigenPdfs = scVorige.eigenPdfs;
+  zlBevestigd = scVorige.bevestigd;
+  zlMelding = '';
   scVorige = null;
   document.getElementById('ongedaan').hidden = true;
   scRenderFormulier();
@@ -1701,9 +2632,36 @@ function pdfOpgeslagenOp() {
 // De browser onthoudt zelf de laatst gekozen map (via 'id'); wij bewaren niets.
 // Andere browsers: gewoon downloaden.
 async function pdfBewaar() {
-  const naam = pdfBestandsnaam() + '.pdf';
+  const basis = pdfBestandsnaam();
+  const naam = basis + '.pdf';
   const bytes = pdfMaak();
   const momentopname = scMomentopname();
+  // Map van de screeningsronde gekozen: direct daarin opslaan, zonder venster. Een bestand met
+  // dezelfde naam dat niet door deze screening is gemaakt, wordt niet overschreven.
+  if (pdfBewaar.bezig) return;   // dubbelklik: niet twee keer opslaan
+  pdfBewaar.bezig = true;
+  try { await pdfBewaarIn(basis, naam, bytes, momentopname); } finally { pdfBewaar.bezig = false; }
+}
+async function pdfBewaarIn(basis, naam, bytes, momentopname) {
+  if (rdMap && !rdOverslaan) {
+    try {
+      let doel = naam, n = 2;
+      while (!scEigenPdfs.has(pdfPlek(doel, true)) && await rdBestaat(doel)) doel = basis + ' (' + n++ + ').pdf';
+      const fh = await rdMap.getFileHandle(doel, { create: true });
+      const w = await fh.createWritable();
+      await w.write(bytes);
+      await w.close();
+      pdfGelukt(momentopname, pdfPlek(doel, true), doel, doel + ' in de map ' + rdMap.name);
+      rdVernieuw();
+      return;
+    } catch (e) {
+      // Niet meteen een venster openen (dat kan Edge na het wachten weigeren): eerst melden.
+      rdOverslaan = true;
+      rdFout = 'Opslaan in de map ' + rdMap.name + ' lukte niet. Klik nog een keer op "Formulier opslaan als PDF" en kies zelf waar je hem opslaat.';
+      scBijwerken();
+      return;
+    }
+  }
   if (typeof window.showSaveFilePicker === 'function') {
     let handle;
     try {
@@ -1718,7 +2676,7 @@ async function pdfBewaar() {
         const w = await handle.createWritable();
         await w.write(bytes);
         await w.close();
-        pdfGelukt(momentopname, handle.name);
+        pdfGelukt(momentopname, pdfPlek(handle.name, false), handle.name, handle.name);
         return;
       } catch (e) { /* schrijven lukte niet: val terug op downloaden */ }
     }
@@ -1727,12 +2685,20 @@ async function pdfBewaar() {
   document.body.appendChild(a);
   a.click();
   setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 1000);
-  pdfGelukt(momentopname, naam + ' in je map Downloads');
+  pdfGelukt(momentopname, pdfPlek(naam, false), naam, naam + ' in je map Downloads');
 }
-function pdfGelukt(momentopname, waar) {
+function pdfGelukt(momentopname, plek, naam, waar) {
+  if (rdOverslaan) rdFout = '';
   scPdfMomentopname = momentopname;
   scPdfNaam = waar;
-  scRenderAfronden();
+  // Onthouden (alleen zolang de pagina open is) dat deze zaak klaar is: ✓ in de lijst en een
+  // waarschuwing als iemand hem op deze computer nog eens kiest.
+  scEigenPdfs.add(plek);
+  for (const s of scZaakSleutels()) {
+    if (!scSessieKlaar.has(s)) scSessieKlaar.set(s, []);
+    scSessieKlaar.get(s).push({ naam, plek, tijd: Date.now(), bron: 'sessie' });
+  }
+  scBijwerken();
 }
 
 // ---------------------------------------------------------------------
@@ -1916,11 +2882,12 @@ function pdfMaak() {
 // =====================================================================
 // NAVIGATIE
 // =====================================================================
-const VIEWS = ['screening', 'instellingen', 'handleiding'];
+const VIEWS = ['screening', 'instellingen', 'handleiding', 'verdelen'];
 function toonView(naam) {
   VIEWS.forEach(v => { document.getElementById('view-' + v).hidden = v !== naam; });
+  const navNaam = naam === 'verdelen' ? 'instellingen' : naam;   // verdeelscherm hoort bij Instellingen
   document.querySelectorAll('.app-nav-btn').forEach(b => {
-    const actief = b.dataset.view === naam;
+    const actief = b.dataset.view === navNaam;
     b.classList.toggle('actief', actief);
     if (actief) b.setAttribute('aria-current', 'page'); else b.removeAttribute('aria-current');
   });
@@ -1940,7 +2907,7 @@ function scNietOpgeslagen() {
   return nu !== scStandaardMomentopname && nu !== scPdfMomentopname;
 }
 window.addEventListener('beforeunload', e => {
-  if (!scNietOpgeslagen()) return;
+  if (!scNietOpgeslagen() && !vdNietOpgeslagen()) return;
   e.preventDefault();
   e.returnValue = '';   // browser toont zijn eigen melding "Pagina verlaten?"
 });
@@ -1956,17 +2923,17 @@ const RL_STAPPEN = [
   { titel: 'Belangrijk: je gegevens blijven op deze computer', privacy: true,
     tekst: '<p>Alles wat je invult, blijft alleen in deze browser. Er wordt niets verstuurd of centraal opgeslagen.</p><ul><li><strong>Collega\'s kunnen je screening niet inzien.</strong></li><li><strong>Sluit of ververs je de pagina, dan is de screening weg.</strong></li></ul><p>Sla daarom bij elke zaak de <strong>PDF</strong> op, op de plek die in jullie team is afgesproken. De PDF is het enige blijvende verslag.</p>' },
   { titel: 'Kies de zaak', doel: '[data-blok="0"]', view: 'screening',
-    tekst: '<p>Vul zaaknummer, rolnummer en screener in, en de rechter als die al bekend is. Heb je een zakenlijst geïmporteerd, dan kies je de zaak bovenaan en wordt de rest ingevuld.</p>' },
+    tekst: '<p>Werk je met een screeningsronde? Klik dan bovenaan op <strong>Map van de ronde kiezen</strong>, kies je naam en klik op je zaak. De rest wordt ingevuld.</p><p>Anders vul je zaaknummer, rolnummer en screener zelf in, en de rechter als die al bekend is.</p>' },
   { titel: 'Beantwoord de vragen', doel: '[data-blok="1"]', view: 'screening',
     tekst: '<p>Vervolgvragen verschijnen vanzelf. Een magenta stip betekent dat een vraag nog open staat. Een <strong>i</strong>-knopje geeft uitleg.</p><p>Is alleen een paar dingen bijzonder? Dan zet één knop bij de actielijst de overige ja/nee-vragen op Nee.</p>' },
   { titel: 'De actielijst groeit mee', doel: '.uitvoer', view: 'screening',
     tekst: '<p>Hier zie je direct welke acties de griffie moet uitvoeren, en hoeveel vragen nog openstaan.</p>' },
   { titel: 'Afronden in drie stappen', doel: '.afronden', view: 'screening',
-    tekst: '<p>1. Kopieer de actielijst en plak hem in Joris met Ctrl+V.<br>2. Sla het formulier op in het dossier.<br>3. Begin aan de volgende zaak.</p><p>Elke stap krijgt een groen vinkje als hij klaar is.</p>' },
+    tekst: '<p>1. Kopieer de actielijst en plak hem in Joris met Ctrl+V.<br>2. Sla het formulier op als PDF.<br>3. Begin aan de volgende zaak.</p><p>Elke stap krijgt een groen vinkje als hij klaar is.</p>' },
   { titel: 'Sla het formulier altijd op', doel: '#knop-pdf', view: 'screening', privacy: true,
-    tekst: '<p>Sla het ingevulde formulier op als PDF. Je krijgt eerst te zien of er nog vragen openstaan. Daarna kies je de map van het dossier; de bestandsnaam staat al klaar.</p>' },
+    tekst: '<p>Sla het ingevulde formulier op als PDF. Je krijgt eerst te zien of er nog vragen openstaan.</p><p>Heb je de map van de ronde gekozen, dan gaat het formulier meteen in die map. Anders kies je zelf de afgesproken map; de bestandsnaam staat al klaar.</p>' },
   { titel: 'Instellingen', doel: '.app-nav-btn[data-view="instellingen"]', view: 'screening',
-    tekst: '<p>Hier kies je de zakenlijst uit Joris en zie je welke rechters en screeners in de keuzelijst staan.</p>' },
+    tekst: '<p>Hier kies je de zakenlijst uit Joris en zie je welke rechters en screeners in de keuzelijst staan. De beheerder verdeelt hier ook de zaken van een screeningsronde.</p>' },
   { titel: 'Handleiding', doel: '.app-nav-btn[data-view="handleiding"]', view: 'screening',
     tekst: '<p>In de handleiding lees je alles nog eens na. Daar kun je ook een spiekbriefje afdrukken en deze rondleiding opnieuw starten.</p>' },
 ];
@@ -2089,10 +3056,10 @@ function spiekBouw() {
     : location.href.split('#')[0];
   af.appendChild(el('p', 'afdruk-meta', 'Open het formulier via ' + adres));
   const stappen = [
-    ['Kies de zaak: typ bovenaan het rolnummer of de naam van een partij. Of vul zaaknummer en rolnummer zelf in.'],
+    ['Kies de zaak: klik bovenaan op ', knopje('Map van de ronde kiezen'), ', kies je naam en klik op je zaak. Geen ronde? Typ het rolnummer of vul zaaknummer en rolnummer zelf in.'],
     ['Beantwoord de vragen. Alleen wat bijzonder is? Klik dan op ', knopje('Overige ja/nee-vragen op Nee zetten'), '.'],
     ['Klik op ', knopje('Kopieer actielijst voor Joris'), ' en plak de lijst in Joris met Ctrl+V.'],
-    ['Klik op ', knopje('Formulier opslaan in het dossier'), ' en kies de map van het dossier. De naam staat al klaar.'],
+    ['Klik op ', knopje('Formulier opslaan als PDF'), '. Met de map van de ronde gaat het formulier daar meteen in; anders kies je zelf de map. De naam staat al klaar.'],
     ['Klik op ', knopje('Volgende zaak'), ' om met de volgende zaak te beginnen.'],
   ];
   const ol = uEl('ol');
@@ -2115,7 +3082,7 @@ function spiekAfdrukken() {
 window.addEventListener('resize', rlPlaats);
 window.addEventListener('scroll', rlPlaats, { passive: true });
 // Ankerlinks in de handleiding: scrollen zonder de adresbalk te wijzigen.
-document.querySelectorAll('.hdl-inhoud a').forEach(a => a.addEventListener('click', e => {
+document.querySelectorAll('.hdl a[href^="#hdl-"]').forEach(a => a.addEventListener('click', e => {
   e.preventDefault();
   document.querySelector(a.getAttribute('href')).scrollIntoView({ behavior: 'smooth', block: 'start' });
 }));
@@ -2129,6 +3096,18 @@ document.getElementById('knop-tekst').addEventListener('click', () => scZetTekst
 document.getElementById('hdl-spiek').addEventListener('click', spiekAfdrukken);
 scZetTekstGroot(!!lsLees(LS_TEKST_GROOT, false));
 document.getElementById('nm-opslaan').addEventListener('click', nmOpslaan);
+document.getElementById('vd-open').addEventListener('click', () => {
+  toonView('verdelen');
+  window.scrollTo({ top: 0 });
+  document.getElementById('vd-titel').focus({ preventScroll: true });
+});
+document.getElementById('vd-terug').addEventListener('click', () => toonView('instellingen'));
+document.getElementById('vd-bestand').addEventListener('change', vdBestandGekozen);
+document.getElementById('vd-verdeel').addEventListener('click', vdVerdeel);
+document.getElementById('vd-opslaan').addEventListener('click', () => vdOpslaan(false));
+// Terug in het formulier (bijv. na Joris): de map opnieuw lezen, want een collega kan intussen
+// een zaak hebben opgeslagen of de beheerder kan de verdeling hebben aangepast.
+window.addEventListener('focus', () => { if (rdMap) rdVernieuw(); });
 nmLaad();
 nmRender();
 nmVulBeheer();
