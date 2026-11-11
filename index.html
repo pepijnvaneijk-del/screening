@@ -957,7 +957,7 @@
 // =====================================================================
 // VERSIE
 // =====================================================================
-const SCREENING_VERSIE = '2026.11.2';
+const SCREENING_VERSIE = '2026.11.3';
 
 // =====================================================================
 // FORMULIER — vragen en acties
@@ -1006,6 +1006,7 @@ const FORMULIER = {
         { id: 'screener', vraag: 'Screener', type: 'naam', lijst: 'screeners', onthouden: true, uitvoer: 'kop' },
         { id: 'datum', vraag: 'Datum screening', type: 'datum', uitvoer: 'kop' },
         { id: 'moeilijkheid', vraag: 'Moeilijkheidsgraad', type: 'keuze', uitvoer: 'kop',
+          info: 'Schat zelf in hoe bewerkelijk de zaak is. Let bijvoorbeeld op het aantal geschilpunten, de aard van de rechtsvraag, de partijen en het belang van de zaak. Hoe meer daarvan zwaar weegt, hoe hoger de letter.',
           opties: ['A – standaard', 'B – niet complex', 'C – complex', 'D – zeer complex'] },
       ],
     },
