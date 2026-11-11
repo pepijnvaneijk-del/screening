@@ -957,7 +957,7 @@
 // =====================================================================
 // VERSIE
 // =====================================================================
-const SCREENING_VERSIE = '2026.11.1';
+const SCREENING_VERSIE = '2026.11.2';
 
 // =====================================================================
 // FORMULIER — vragen en acties
@@ -1037,7 +1037,8 @@ const FORMULIER = {
         { id: 'verwijzen', vraag: 'Ambtshalve verwijzen?', type: 'janee',
           info: 'Ambtshalve verwijzen: de rechter stuurt de zaak uit zichzelf door naar de juiste rechter, omdat deze kantonrechter hem niet mag behandelen. Bijvoorbeeld: de vordering is hoger dan € 25.000 en het is geen huur-, arbeids- of consumentenzaak (dan naar de civiele kamer van deze rechtbank), of de huurder, werknemer of consument woont in een ander arrondissement (dan naar die rechtbank).',
           ja: 'Voor vonnis voorleggen aan JJM (ambtshalve verwijzen)' },
-        { id: 'pilot', vraag: 'Geschikt voor de pilot?', type: 'janee', uitvoer: 'opmerking',
+        { id: 'pilot', vraag: 'Geschikt voor de pilot regiegesprek?', type: 'janee', uitvoer: 'opmerking',
+          info: 'Het gaat om de pilot regiegesprek. Of een zaak daarvoor geschikt is, beslis je zelf als screener.',
           ja: 'Geschikt voor de pilot' },
         { id: 'anders', vraag: 'Andere bijzonderheden?', type: 'janee', uitvoer: 'opmerking',
           ja: '{andersTekst}' },
