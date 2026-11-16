@@ -530,6 +530,8 @@
   .app-header-rechts { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; }
   .tekstknop { font-size: 13px; padding: 6px 12px; }
   .tekstknop[aria-pressed="true"] { background: var(--indigo); color: var(--wit); }
+  a.tekstknop { text-decoration: none; display: inline-block; }
+  .app-header-rechts .knoprij { justify-content: flex-end; }
   .vraag-uitleg, .hint, .stap-hint, .status { font-size: 14px; }
 
   /* === Uitleg-knopje bij een vraag === */
@@ -627,7 +629,10 @@
       <h1>Screeningsformulier</h1>
     </div>
     <div class="app-header-rechts">
-      <button type="button" class="knop knop-secundair tekstknop" id="knop-tekst" aria-pressed="false">A+ Grotere tekst</button>
+      <div class="knoprij">
+        <a class="knop knop-secundair tekstknop" id="knop-feedback" hidden>Vraag of idee?</a>
+        <button type="button" class="knop knop-secundair tekstknop" id="knop-tekst" aria-pressed="false">A+ Grotere tekst</button>
+      </div>
       <div class="app-header-versie" id="versie"></div>
     </div>
   </div>
@@ -731,6 +736,8 @@
         <div class="beheer-inhoud">
           <p class="hint">Hier past de beheerder de namenlijst aan. Er verandert pas iets als je op <span class="ui">Namenlijst opslaan</span> klikt en het bestand <strong>namen.js</strong> opslaat in de teammap, naast screening.html. Collega's zien de nieuwe namen de volgende keer dat ze het formulier openen.</p>
           <label class="beheer-veld">Beheerder<input type="text" id="nm-beheerder" placeholder="Jouw naam"></label>
+          <label class="beheer-veld">Mailadres voor vragen en ideeën<input type="text" id="nm-feedback" inputmode="email" autocomplete="off" placeholder="bijv. naam@organisatie.nl"></label>
+          <p class="hint">Vul je hier een mailadres in, dan verschijnt rechtsboven in het formulier de knop <span class="ui">Vraag of idee?</span>. Leeg laten: geen knop.</p>
           <div class="namen">
             <label>Rechters (één per regel)<textarea id="nm-rechters" spellcheck="false"></textarea></label>
             <label>Screeners (één per regel)<textarea id="nm-screeners" spellcheck="false"></textarea></label>
@@ -924,6 +931,8 @@
       <p>Alleen via het opgeslagen formulier (PDF) in de map van de ronde of het dossier, of via de actielijst in Joris. Het formulier zelf deelt niets.</p>
       <h3>Er staan geen namen in de keuzelijst.</h3>
       <p>Dan kon het formulier de namenlijst niet vinden. Open het formulier via de teammap, niet via een kopie op je bureaublad. Lukt het dan nog niet, laat het de beheerder weten. Je kunt rechter en screener in de tussentijd zelf intypen.</p>
+      <h3>Ik heb een vraag of een idee over het formulier.</h3>
+      <p>Klik rechtsboven op <span class="ui">Vraag of idee?</span>. Er opent een nieuwe e-mail aan de beheerder. Noem daarin geen zaakgegevens. Staat de knop er niet, laat het de beheerder dan op een andere manier weten.</p>
       <h3>Het kopiëren werkt niet.</h3>
       <p>Selecteer de tekst van de actielijst met de muis en kopieer met Ctrl+C.</p>
       <h3>Ik krijg een waarschuwing dat de zaak al gescreend is.</h3>
@@ -957,7 +966,7 @@
 // =====================================================================
 // VERSIE
 // =====================================================================
-const SCREENING_VERSIE = '2026.11.4';
+const SCREENING_VERSIE = '2026.11.10';
 
 // =====================================================================
 // FORMULIER — vragen en acties
@@ -1024,7 +1033,7 @@ const FORMULIER = {
           info: 'Persgevoelig: de zaak kan aandacht van de media trekken, bijvoorbeeld door een bekende partij, een maatschappelijk gevoelig onderwerp of veel gedupeerden. Bij ja worden de teamvoorzitter en de afdeling communicatie ingelicht, zodat zij niet overvallen worden.',
           ja: 'Teamvoorzitter en afdeling communicatie mailen: zaak is persgevoelig' },
         { id: 'taal', vraag: 'Producties in vreemde taal?', type: 'janee',
-          info: 'Producties zijn de bijlagen bij de dagvaarding of het antwoord. De procedure is in het Nederlands; staat een productie in een andere taal, dan kan de rechter om een vertaling vragen. Teksten in het Engels worden soms zonder vertaling geaccepteerd; overleg bij twijfel.' },
+          info: 'Kies ja als een of meer producties in een andere taal dan het Nederlands zijn en je vindt dat er een vertaling nodig is. Engelse teksten kunnen soms zonder vertaling; overleg bij twijfel.' },
         { id: 'vertaling', vraag: 'Is er een vertaling?', type: 'janee', toonAls: { taal: 'ja' },
           info: 'Kijk of de partij zelf een Nederlandse vertaling van die producties heeft meegestuurd. Zo niet, dan vraagt de griffie die op.',
           nee: 'Vertaling opvragen van de producties in vreemde taal' },
@@ -1033,10 +1042,10 @@ const FORMULIER = {
           ja: 'Gevoegd behandelen met zaak {gevoegdZaak}' },
         { id: 'gevoegdZaak', vraag: 'Zaaknummer andere zaak', type: 'tekst', toonAls: { gevoegd: 'ja' } },
         { id: 'mediation', vraag: 'Mediation?', type: 'janee',
-          info: 'Mediation naast rechtspraak: de rechter stelt partijen voor om met hulp van een mediator samen een oplossing te zoeken; de zaak bij de rechtbank wacht zolang. Denk aan zaken waarin partijen met elkaar verder moeten, zoals een lopende huur- of arbeidsrelatie. Meedoen is vrijwillig.',
+          info: 'Kies ja als je de zaak geschikt vindt voor Mediation naast rechtspraak: partijen zoeken dan met hulp van een mediator samen een oplossing, terwijl de zaak bij de rechtbank wacht. Denk aan zaken waarin partijen met elkaar verder moeten, zoals een lopende huur- of arbeidsrelatie. Meedoen is voor partijen vrijwillig.',
           ja: 'Dossier naar het mediationbureau' },
         { id: 'verwijzen', vraag: 'Ambtshalve verwijzen?', type: 'janee',
-          info: 'Ambtshalve verwijzen: de rechter stuurt de zaak uit zichzelf door naar de juiste rechter, omdat deze kantonrechter hem niet mag behandelen. Bijvoorbeeld: de vordering is hoger dan € 25.000 en het is geen huur-, arbeids- of consumentenzaak (dan naar de civiele kamer van deze rechtbank), of de huurder, werknemer of consument woont in een ander arrondissement (dan naar die rechtbank).',
+          info: 'Check zowel de absolute als de relatieve bevoegdheid. Absoluut: gaat het om een aardzaak, of is het financieel belang niet hoger dan € 25.000? Relatief: is er een aanknopingspunt voor de bevoegdheid van deze rechtbank? Is een van beide niet het geval, dan ambtshalve verwijzen.',
           ja: 'Voor vonnis voorleggen aan JJM (ambtshalve verwijzen)' },
         { id: 'pilot', vraag: 'Geschikt voor de pilot regiegesprek?', type: 'janee', uitvoer: 'opmerking',
           info: 'Het gaat om de pilot regiegesprek. Of een zaak daarvoor geschikt is, beslis je zelf als screener.',
@@ -1102,7 +1111,7 @@ const FORMULIER = {
         { id: 'deskundigenTekst', vraag: 'Welke deskundigen of getuigen?', type: 'tekst', meerregels: true, toonAls: { deskundigen: 'ja' } },
         { id: 'deskundigenNaar', vraag: 'Hoe?', type: 'keuze', opties: TERUGKOPPELING, toonAls: { deskundigen: 'ja' } },
         { id: 'spreek', vraag: 'Spreekaantekeningen?', type: 'janee',
-          info: 'Spreekaantekeningen: een korte geschreven tekst die een partij of gemachtigde op de zitting voorleest en daarna inlevert. Standaard staat in het vonnis dat dit mag. Kies nee als de rechter dat in deze zaak niet wil.',
+          info: 'Standaard staat in het vonnis dat dit mag. Kies alleen nee als je in deze zaak geen aanleiding ziet om partijen die gelegenheid te geven. Dat is een uitzondering.',
           uitleg: 'Standaard staat in het vonnis dat beknopte aantekeningen gebruikt mogen worden',
           nee: 'Standaardtekst over beknopte spreekaantekeningen uit het vonnis verwijderen' },
         { id: 'spreekTermijn', vraag: 'Spreektijd', type: 'keuze', standaard: 'standaard', toonAls: { spreek: 'ja' },
@@ -1201,10 +1210,25 @@ function nmLaad() {
   const n = window.SCREENING_NAMEN;
   if (!n || n.soort !== 'griffie-screening-namen') { nmInfo = null; return; }
   namen = { rechters: nmSchoon(n.rechters), screeners: nmSchoon(n.screeners) };
-  nmInfo = { beheerder: String(n.beheerder || '').trim(), bijgewerkt: String(n.bijgewerkt || '') };
+  nmInfo = { beheerder: String(n.beheerder || '').trim(), bijgewerkt: String(n.bijgewerkt || ''),
+    feedback: /^[^\s@]+@[^\s@]+$/.test(String(n.feedback || '').trim()) ? String(n.feedback).trim() : '' };
+}
+
+// Knop "Vraag of idee?": opent een nieuwe e-mail aan het adres uit namen.js, met het versienummer.
+// Zonder adres blijft de knop verborgen. Er gaan nooit zaakgegevens mee.
+function nmRenderFeedback() {
+  const knop = document.getElementById('knop-feedback');
+  const adres = nmInfo && nmInfo.feedback;
+  knop.hidden = !adres;
+  if (!adres) { knop.removeAttribute('href'); return; }
+  const onderwerp = 'Screeningsformulier (versie ' + SCREENING_VERSIE + '): vraag of idee';
+  const tekst = 'Beschrijf hieronder je vraag of idee. Noem geen zaakgegevens, zoals namen van partijen of rolnummers.\n\n';
+  knop.href = 'mailto:' + adres + '?subject=' + encodeURIComponent(onderwerp) + '&body=' + encodeURIComponent(tekst);
+  knop.title = 'Stuur een e-mail aan ' + (nmInfo.beheerder || 'de beheerder');
 }
 
 function nmRender() {
+  nmRenderFeedback();
   const wie = nmInfo && nmInfo.beheerder ? nmInfo.beheerder : 'de beheerder';
   document.getElementById('nm-status').textContent = nmInfo
     ? 'Deze lijst wordt beheerd door ' + wie + (nmInfo.bijgewerkt ? ' (bijgewerkt op ' + uDatumNL(nmInfo.bijgewerkt) + ')' : '') +
@@ -1219,6 +1243,7 @@ function nmRender() {
 
 function nmVulBeheer() {
   document.getElementById('nm-beheerder').value = nmInfo ? nmInfo.beheerder : '';
+  document.getElementById('nm-feedback').value = nmInfo ? nmInfo.feedback : '';
   document.getElementById('nm-rechters').value = namen.rechters.join('\n');
   document.getElementById('nm-screeners').value = namen.screeners.join('\n');
 }
@@ -1241,10 +1266,12 @@ async function nmOpslaan() {
     soort: 'griffie-screening-namen', versie: 1,
     beheerder: document.getElementById('nm-beheerder').value.trim(),
     bijgewerkt: uVandaagISO(),
+    feedback: document.getElementById('nm-feedback').value.trim(),
     rechters: nmUitTekst(document.getElementById('nm-rechters').value),
     screeners: nmUitTekst(document.getElementById('nm-screeners').value),
   };
   if (!data.rechters.length && !data.screeners.length) { nmMelding('Vul minstens één naam in.', 'fout'); return; }
+  if (data.feedback && !/^[^\s@]+@[^\s@]+$/.test(data.feedback)) { nmMelding('Het mailadres klopt niet. Controleer het of laat het veld leeg.', 'fout'); return; }
   const inhoud = nmBestandInhoud(data);
   let waar = 'namen.js';
   if (typeof window.showSaveFilePicker === 'function') {
